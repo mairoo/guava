@@ -72,3 +72,24 @@ mkdir -p src/{pages,components,store,styles,types}
         "lint": "next lint"
     },
 ```
+
+# pages -> app
+주요 변경 사항:
+
+pages/_app.tsx = app/layout.tsx + app/providers.tsx
+pages/index.tsx = app/page.tsx + HomeForm 컴포넌트
+
+- 'use client' 지시문 = 클라이언트 컴포넌트 명시
+- App Router 인덱스 페이지는 반드시 page.tsx 이름 (index.tsx 아님)
+- 
+```
+  app/
+  ├── (shop)/                # URL에 영향을 주지 않는 그룹화
+  │   ├── books/
+  │   │   └── page.tsx      # /books
+  │   └── authors/
+  │       └── page.tsx      # /authors
+  └── (marketing)/          
+  └── about/
+  └── page.tsx      # /about
+```

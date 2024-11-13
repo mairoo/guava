@@ -128,7 +128,12 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true
-    /* Skip type checking all .d.ts files. */
+    /* Skip type checking all .d.ts files. */,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts", // Next.js의 전역 타입 정의
