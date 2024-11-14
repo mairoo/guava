@@ -6,6 +6,7 @@
 npm init -y
 npm install next react react-dom @reduxjs/toolkit react-redux react-hook-form yup
 npm install -D typescript @types/react @types/node @types/react-dom tailwindcss postcss autoprefixer
+npm install classnames react-icons @headlessui/react@latest
 npx tsc --init
 npx tailwindcss init -p
 mkdir -p src/{pages,components,store,styles,types}
@@ -103,3 +104,4 @@ error.tsx
 not-found.tsx
 route.tsx
 template.tsx
+
