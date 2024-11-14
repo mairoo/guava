@@ -121,13 +121,22 @@ pages/index.tsx = app/page.tsx + HomeForm 컴포넌트
 
 ## Next.js App Router의 특별 파일 이름들 (변경 불가):
 
-layout.tsx
-page.tsx
-loading.tsx
-error.tsx
-not-found.tsx
-route.tsx
-template.tsx
+- layout.tsx
+- page.tsx
+- loading.tsx
+- error.tsx
+- not-found.tsx
+- route.tsx
+- template.tsx
+
+강제적인 의미가 있는 디렉토리 이름
+- app/ 또는 pages/ 라우팅
+- public/ 정적 파일
+- styles/ css 모듈
+- components/ UI 컴포넌트
+
+관용적인 디렉토리 이름
+- types/ : 여기 있는 타입 정의는 tsconfig.json include 설정에 의해 import 문 없이도 프로젝트 전역에서 사용 가능
 
 # 배포
 
@@ -165,8 +174,3 @@ npx shadcn@latest init
 ✔ Which style would you like to use? › Default
 ✔ Which color would you like to use as the base color? › Slate
 ✔ Would you like to use CSS variables for theming? … no / yes
-
-# 인증
-
-npm install next-auth
-npm install -D @types/next-auth
