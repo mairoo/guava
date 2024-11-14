@@ -99,6 +99,26 @@ pages/index.tsx = app/page.tsx + HomeForm 컴포넌트
   └── page.tsx      # /about
 ```
 
+권장하는 구조의 특징:
+
+1. app/components/
+   - 전역적으로 재사용되는 공통 컴포넌트
+   - 여러 라우트에서 공유되는 UI 컴포넌트
+   - 기본 폼, 레이아웃 컴포넌트 등
+
+2. app/shop/components/
+   - shop 기능에만 특화된 컴포넌트
+   - 다른 라우트에서는 사용되지 않는 컴포넌트
+   
+3. app/shop/_components/
+   - shop 내부에서만 사용되는 프라이빗 컴포넌트
+   - 언더스코어(_)를 사용하여 라우팅에서 제외
+
+이렇게 구성하면:
+- 컴포넌트의 재사용성과 역할이 명확해짐
+- 라우트별로 관련 컴포넌트를 구조화할 수 있음
+- 컴포넌트 간의 의존성 관리가 용이함
+
 ## Next.js App Router의 특별 파일 이름들 (변경 불가):
 
 layout.tsx
