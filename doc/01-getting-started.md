@@ -93,3 +93,13 @@ pages/index.tsx = app/page.tsx + HomeForm 컴포넌트
   └── about/
   └── page.tsx      # /about
 ```
+
+## Next.js App Router의 특별 파일 이름들 (변경 불가):
+
+layout.tsx
+page.tsx
+loading.tsx
+error.tsx
+not-found.tsx
+route.tsx
+template.tsx

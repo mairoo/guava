@@ -6,7 +6,7 @@ type FormData = {
     name: string
 }
 
-export function HomeForm() {
+export const HomeForm = () => {
     const {
         register,
         handleSubmit,
@@ -42,4 +42,4 @@ export function HomeForm() {
             </button>
         </form>
     )
-}
+};
