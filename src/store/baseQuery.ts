@@ -5,6 +5,8 @@ import {Mutex} from 'async-mutex';
 import {RootState} from '.';
 import {logout, setCredentials} from './slices/authSlice';
 
+const REFRESH_TOKEN_EXPIRY_BUFFER = 60 * 1000;
+
 const mutex = new Mutex();
 
 const baseQuery = fetchBaseQuery({
@@ -28,7 +30,9 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
         let result = await baseQuery(args, api, extraOptions);
 
         if (result.error && result.error.status === 401) {
-            if (!storage.getRememberMe()) {
+            const lastRefreshTime = storage.getLastRefreshTime();
+
+            if (!storage.getRememberMe() || (lastRefreshTime && Date.now() - lastRefreshTime < REFRESH_TOKEN_EXPIRY_BUFFER)) {
                 api.dispatch(logout());
                 return result;
             }
@@ -45,6 +49,7 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
                     if (refreshResult.data) {
                         const refreshResponse = refreshResult.data as Auth.LoginResponse;
                         api.dispatch(setCredentials(refreshResponse));
+                        storage.setLastRefreshTime(Date.now());
                         result = await baseQuery(args, api, extraOptions);
                     } else {
                         api.dispatch(logout());
