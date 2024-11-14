@@ -74,7 +74,10 @@ mkdir -p src/{pages,components,store,styles,types}
     },
 ```
 
-# pages -> app
+# 앱 라우팅
+
+## pages -> app
+
 주요 변경 사항:
 
 pages/_app.tsx = app/layout.tsx + app/providers.tsx
@@ -82,7 +85,8 @@ pages/index.tsx = app/page.tsx + HomeForm 컴포넌트
 
 - 'use client' 지시문 = 클라이언트 컴포넌트 명시
 - App Router 인덱스 페이지는 반드시 page.tsx 이름 (index.tsx 아님)
-- 
+-
+
 ```
   app/
   ├── (shop)/                # URL에 영향을 주지 않는 그룹화
@@ -105,7 +109,10 @@ not-found.tsx
 route.tsx
 template.tsx
 
+# 배포
+
 ## 번들 분석기
+
 npm install --save-dev @next/bundle-analyzer
 
 `next.config.js`
@@ -129,3 +136,12 @@ module.exports = withBundleAnalyzer(nextConfig)
 //국제화(i18n) 설정
 //리다이렉트/리라이트 설정
 ```
+
+## pm2 배포
+
+# shadcn/ui
+
+npx shadcn@latest init
+✔ Which style would you like to use? › Default
+✔ Which color would you like to use as the base color? › Slate
+✔ Would you like to use CSS variables for theming? … no / yes
