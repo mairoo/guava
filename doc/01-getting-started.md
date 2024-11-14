@@ -105,3 +105,27 @@ not-found.tsx
 route.tsx
 template.tsx
 
+## 번들 분석기
+npm install --save-dev @next/bundle-analyzer
+
+`next.config.js`
+
+```js
+/** @type {import('next').NextConfig} */
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+        enabled: process.env.ANALYZE === 'true',
+    })
+
+const nextConfig = {
+    reactStrictMode: true,
+}
+
+module.exports = withBundleAnalyzer(nextConfig)
+
+//
+//환경 변수 설정
+//웹팩 설정 커스터마이징
+//이미지 최적화 설정
+//국제화(i18n) 설정
+//리다이렉트/리라이트 설정
+```
