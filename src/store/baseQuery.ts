@@ -1,4 +1,4 @@
-import {LoginResponse} from '@/types/auth';
+import {Auth} from '@/types/auth';
 import {BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError} from '@reduxjs/toolkit/query/react';
 import {RootState} from '.';
 import {logout, setCredentials} from './slices/authSlice';
@@ -29,7 +29,7 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
             );
 
             if (refreshResult.data) {
-                const refreshResponse = refreshResult.data as LoginResponse;
+                const refreshResponse = refreshResult.data as Auth.LoginResponse;
                 // 새 토큰 저장
                 api.dispatch(setCredentials(refreshResponse));
                 // 원래 요청 재시도

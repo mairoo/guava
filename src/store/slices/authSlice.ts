@@ -1,7 +1,7 @@
-import {AuthState, LoginResponse} from '@/types/auth';
+import {Auth} from '@/types/auth';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-const initialState: AuthState = {
+const initialState: Auth.State.AuthState = {
     accessToken: null,
     tokenType: null,
     expiresIn: null,
@@ -11,7 +11,7 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setCredentials: (state, action: PayloadAction<LoginResponse>) => {
+        setCredentials: (state, action: PayloadAction<Auth.LoginResponse>) => {
             state.accessToken = action.payload.data.accessToken;
             state.tokenType = action.payload.data.tokenType;
             state.expiresIn = action.payload.data.expiresIn;
