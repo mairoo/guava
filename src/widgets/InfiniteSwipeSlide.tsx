@@ -1,7 +1,7 @@
 'use client'
 
+import {ChevronLeft, ChevronRight} from 'lucide-react';
 import React, {useCallback, useEffect, useState} from "react";
-import {LuChevronLeft, LuChevronRight} from "react-icons/lu";
 import {useSwipeable} from "react-swipeable";
 
 interface Image {
@@ -116,13 +116,13 @@ const InfiniteSwipeSlide = ({images}: InfiniteSwipeSlideProps) => {
                         onClick={prevSlide}
                         className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
-                        <LuChevronLeft className="w-6 h-6 text-gray-800"/>
+                        <ChevronLeft className="w-6 h-6 text-gray-800"/>
                     </button>
                     <button
                         onClick={nextSlide}
                         className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
-                        <LuChevronRight className="w-6 h-6 text-gray-800"/>
+                        <ChevronRight className="w-6 h-6 text-gray-800"/>
                     </button>
                     <div className="absolute bottom-4 left-0 right-0">
                         <div className="flex items-center justify-center space-x-2">

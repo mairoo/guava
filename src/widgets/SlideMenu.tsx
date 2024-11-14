@@ -1,8 +1,8 @@
 'use client'
 
+import {Dot} from 'lucide-react';
 import Link from "next/link";
 import React, {useCallback, useEffect, useState} from "react";
-import {MdCheck} from "react-icons/md";
 import {useSwipeable} from "react-swipeable";
 
 import DrawerHeading from "./DrawerHeading";
@@ -115,7 +115,7 @@ const SlideMenu = ({menu, onClick}: SlideMenuProps) => {
                                     onClick={onClick}
                                     key={i}
                                 >
-                                    <MdCheck/>
+                                    <Dot />
                                     {item.text}
                                 </Link>
                             ))}
