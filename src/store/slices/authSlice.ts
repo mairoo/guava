@@ -1,4 +1,5 @@
 import {Auth} from '@/types/auth';
+import storage from '@/utils/storage';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 const initialState: Auth.State.AuthState = {
@@ -20,7 +21,7 @@ export const authSlice = createSlice({
             state.accessToken = null;
             state.tokenType = null;
             state.expiresIn = null;
-            localStorage.removeItem('rememberMe');
+            storage.clearRememberMe();
         },
     },
 });

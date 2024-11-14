@@ -2,6 +2,7 @@
 
 import {useLoginMutation} from '@/store/apis/authApi';
 import {setCredentials} from '@/store/slices/authSlice';
+import storage from '@/utils/storage';
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 
@@ -24,7 +25,7 @@ const SignInPage = () => {
             const response = await login(formData).unwrap();
 
             if (formData.rememberMe) {
-                localStorage.setItem('rememberMe', 'true');
+                storage.setRememberMe(true);
             }
 
             if (response.status === 200) {

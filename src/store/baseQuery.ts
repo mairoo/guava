@@ -1,4 +1,5 @@
 import {Auth} from '@/types/auth';
+import storage from '@/utils/storage';
 import {BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError} from '@reduxjs/toolkit/query/react';
 import {Mutex} from 'async-mutex';
 import {RootState} from '.';
@@ -8,6 +9,7 @@ const mutex = new Mutex();
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:8080',
+    credentials: 'include', // 항상 쿠키 전송 (리프레시 토큰 전송)
     prepareHeaders: (headers, {getState}) => {
         const token = (getState() as RootState).auth.accessToken;
         const tokenType = (getState() as RootState).auth.tokenType;
@@ -18,7 +20,6 @@ const baseQuery = fetchBaseQuery({
 
         return headers;
     },
-    credentials: 'include',
 });
 
 export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
@@ -27,6 +28,11 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
         let result = await baseQuery(args, api, extraOptions);
 
         if (result.error && result.error.status === 401) {
+            if (!storage.getRememberMe()) {
+                api.dispatch(logout());
+                return result;
+            }
+
             if (!mutex.isLocked()) {
                 const release = await mutex.acquire();
                 try {
