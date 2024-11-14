@@ -165,3 +165,8 @@ npx shadcn@latest init
 ✔ Which style would you like to use? › Default
 ✔ Which color would you like to use as the base color? › Slate
 ✔ Would you like to use CSS variables for theming? … no / yes
+
+# 인증
+
+npm install next-auth
+npm install -D @types/next-auth
