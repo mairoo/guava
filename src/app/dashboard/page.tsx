@@ -12,10 +12,8 @@ const DashboardPage = () => {
   const handleRefresh = async () => {
     try {
       await refresh().unwrap();
-      alert('리프레시 완료');
       router.push('/dashboard'); //
     } catch (error) {
-      alert('리프레시 중 오류가 발생했습니다');
       console.error('Refresh error:', error);
     }
   };

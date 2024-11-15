@@ -17,7 +17,6 @@ export default function LogoutPage() {
       console.log('로그아웃되었습니다');
       router.push('/');
     } catch (error) {
-      console.log('로그아웃 중 오류가 발생했습니다');
       console.error('Logout error:', error);
     }
   };

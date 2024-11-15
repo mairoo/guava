@@ -37,13 +37,15 @@ export const baseQueryWithRetry: BaseQueryFn<
   await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
 
+  // 액세스 토큰 만료되어 자동 리프레시 시도
   if (result.error && result.error.status === 401) {
     const lastRefreshTime = storage.getLastRefreshTime();
 
+    // REFRESH_TOKEN_EXPIRY_BUFFER 이내에 리프레시했거나 remember me가 없으면 리프레시하지 않고 로그아웃
     if (
       !storage.getRememberMe() ||
       (lastRefreshTime &&
-        Date.now() - lastRefreshTime < REFRESH_TOKEN_EXPIRY_BUFFER)
+        Date.now() - lastRefreshTime <= REFRESH_TOKEN_EXPIRY_BUFFER)
     ) {
       api.dispatch(logout());
       return result;
@@ -51,6 +53,7 @@ export const baseQueryWithRetry: BaseQueryFn<
 
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
+
       try {
         const refreshResult = await baseQuery(
           { url: '/auth/refresh', method: 'POST' },
