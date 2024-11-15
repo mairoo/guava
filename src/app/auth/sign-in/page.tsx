@@ -16,7 +16,7 @@ const SignInPage = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    rememberMe: false,
+    rememberMe: true,
     captcha: '',
   });
 

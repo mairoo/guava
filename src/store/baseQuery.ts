@@ -61,7 +61,6 @@ export const baseQueryWithRetry: BaseQueryFn<
         if (refreshResult.data) {
           const refreshResponse = refreshResult.data as Auth.LoginResponse;
           api.dispatch(setCredentials(refreshResponse));
-          storage.setLastRefreshTime(Date.now());
           result = await baseQuery(args, api, extraOptions);
         } else {
           api.dispatch(logout());

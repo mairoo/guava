@@ -21,7 +21,9 @@ export const authSlice = createSlice({
       state.accessToken = null;
       state.tokenType = null;
       state.expiresIn = null;
+
       storage.clearRememberMe();
+      storage.clearLastRefreshTime();
     },
   },
 });
