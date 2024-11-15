@@ -10,13 +10,15 @@ import { Mutex } from 'async-mutex';
 import { RootState } from '.';
 import { logout, setCredentials } from './slices/authSlice';
 
-const REFRESH_TOKEN_EXPIRY_BUFFER = 60 * 1000;
+const REFRESH_TOKEN_EXPIRY_BUFFER = 60 * 1000; // 60초 이내 재시도 방지
+const MAX_REFRESH_ATTEMPTS = 3; // 최대 리프레시 시도 횟수
+const mutex = new Mutex(); // 뮤텍스 잠금으로 동시 리프레시 방지
 
-const mutex = new Mutex();
+let refreshAttempts = 0;
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:8080',
-  credentials: 'include', // 리프레시 토큰 전송 대비
+  credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;
     const tokenType = (getState() as RootState).auth.tokenType;
@@ -37,11 +39,10 @@ export const baseQueryWithRetry: BaseQueryFn<
   await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
 
-  // 액세스 토큰 만료되어 자동 리프레시 시도
   if (result.error && result.error.status === 401) {
     const lastRefreshTime = storage.getLastRefreshTime();
 
-    // REFRESH_TOKEN_EXPIRY_BUFFER 이내에 리프레시했거나 remember me가 없으면 리프레시하지 않고 로그아웃
+    // 리프레시 토큰 만료되었거나 remember me 없으면 로그아웃
     if (
       !storage.getRememberMe() ||
       (lastRefreshTime &&
@@ -51,10 +52,18 @@ export const baseQueryWithRetry: BaseQueryFn<
       return result;
     }
 
+    // 이미 3회 이상 시도했으면 로그아웃
+    if (refreshAttempts >= MAX_REFRESH_ATTEMPTS) {
+      api.dispatch(logout());
+      return result;
+    }
+
+    // 동시 리프레시 방지
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
-
       try {
+        refreshAttempts++;
+
         const refreshResult = await baseQuery(
           { url: '/auth/refresh', method: 'POST' },
           api,
@@ -64,10 +73,13 @@ export const baseQueryWithRetry: BaseQueryFn<
         if (refreshResult.data) {
           const refreshResponse = refreshResult.data as Auth.LoginResponse;
           api.dispatch(setCredentials(refreshResponse));
+          refreshAttempts = 0; // 성공하면 카운터 리셋
           result = await baseQuery(args, api, extraOptions);
         } else {
           api.dispatch(logout());
         }
+      } catch (error) {
+        api.dispatch(logout());
       } finally {
         release();
       }
