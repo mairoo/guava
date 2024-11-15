@@ -1,19 +1,15 @@
 'use client';
 
 import { useLogoutMutation } from '@/store/apis/authApi';
-import { useAppDispatch } from '@/store/hooks';
-import { authSlice } from '@/store/slices/authSlice';
 import { useRouter } from 'next/navigation';
 
 export default function LogoutPage() {
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const [logout, { isLoading }] = useLogoutMutation();
 
   const handleLogout = async () => {
     try {
       await logout().unwrap();
-      dispatch(authSlice.actions.logout());
       console.log('로그아웃되었습니다');
       router.push('/');
     } catch (error) {

@@ -1,15 +1,12 @@
 'use client';
 
 import { useLoginMutation } from '@/store/apis/authApi';
-import { useAppDispatch } from '@/store/hooks';
-import { setCredentials } from '@/store/slices/authSlice';
 import storage from '@/utils/storage';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const SignInPage = () => {
-  const dispatch = useAppDispatch();
   const [login, { isLoading }] = useLoginMutation();
   const router = useRouter();
 
@@ -31,8 +28,6 @@ const SignInPage = () => {
       }
 
       if (response.status === 200) {
-        dispatch(setCredentials(response));
-
         router.push('/dashboard');
       } else {
         console.error('Login failed:', response.message);
