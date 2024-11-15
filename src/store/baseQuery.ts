@@ -16,7 +16,7 @@ const mutex = new Mutex();
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:8080',
-  credentials: 'include', // 항상 쿠키 전송 (리프레시 토큰 전송)
+  credentials: 'include', // 리프레시 토큰 전송 대비
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;
     const tokenType = (getState() as RootState).auth.tokenType;

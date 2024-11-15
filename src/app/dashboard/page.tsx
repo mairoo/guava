@@ -1,10 +1,12 @@
 'use client';
 
 import { useRefreshMutation } from '@/store/apis/authApi';
-import { router } from 'next/client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const DashboardPage = () => {
+  const router = useRouter();
   const [refresh, { isLoading }] = useRefreshMutation();
 
   const handleRefresh = async () => {
