@@ -1,17 +1,13 @@
-import '@/styles/globals.css'
+import '@/styles/globals.css';
 import React from 'react';
-import {Providers} from './providers'
+import { Providers } from './providers';
 
-const RootLayout = ({
-                        children,
-                    }: {
-    children: React.ReactNode
-}) => (
-    <html lang="en">
+const RootLayout = ({ children }: { children: React.ReactNode }) => (
+  <html lang="en">
     <body>
-    <Providers>{children}</Providers>
+      <Providers>{children}</Providers>
     </body>
-    </html>
+  </html>
 );
 
-export default RootLayout
+export default RootLayout;
