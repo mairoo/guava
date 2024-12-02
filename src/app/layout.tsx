@@ -1,6 +1,6 @@
 import '@/styles/globals.css';
-import AuthProvider from '@/components/AuthProvider';
 import { MainLayout } from '@/components/layout';
+import AuthProvider from '@/providers/auth/AuthProvider';
 import React from 'react';
 import { StoreProvider } from './storeProvider';
 

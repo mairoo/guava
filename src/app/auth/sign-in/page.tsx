@@ -1,6 +1,6 @@
 'use client';
 
-import { useLoginMutation } from '@/store/apis/authApi';
+import { useLoginMutation } from '@/store/auth/api';
 import storage from '@/utils/storage';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

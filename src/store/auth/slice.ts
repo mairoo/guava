@@ -8,7 +8,7 @@ const initialState: Auth.State.AuthState = {
   expiresIn: null,
 };
 
-export const authSlice = createSlice({
+export const slice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
@@ -28,6 +28,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout } = slice.actions;
 
-export default authSlice.reducer;
+export default slice.reducer;

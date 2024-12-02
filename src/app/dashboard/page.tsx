@@ -1,6 +1,6 @@
 'use client';
 
-import { useRefreshMutation } from '@/store/apis/authApi';
+import { useRefreshMutation } from '@/store/auth/api';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

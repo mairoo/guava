@@ -1,6 +1,6 @@
 'use client';
 
-import { useLogoutMutation } from '@/store/apis/authApi';
+import { useLogoutMutation } from '@/store/auth/api';
 import { useRouter } from 'next/navigation';
 
 export default function LogoutPage() {

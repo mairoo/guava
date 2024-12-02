@@ -1,11 +1,11 @@
 import { baseQueryWithRetry } from '@/store/baseQuery';
-import { logout, setCredentials } from '@/store/slices/authSlice';
+import { logout, setCredentials } from '@/store/auth/slice';
 import { Auth } from '@/types/auth';
 import storage from '@/utils/storage';
 
 import { createApi } from '@reduxjs/toolkit/query/react';
 
-const authApi = createApi({
+const api = createApi({
   reducerPath: 'authApi',
   baseQuery: baseQueryWithRetry,
   endpoints: (builder) => ({
@@ -74,6 +74,6 @@ const authApi = createApi({
 });
 
 export const { useLoginMutation, useRefreshMutation, useLogoutMutation } =
-  authApi;
+  api;
 
-export { authApi };
+export { api };

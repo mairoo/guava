@@ -8,7 +8,7 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { Mutex } from 'async-mutex';
 import { RootState } from '.';
-import { logout, setCredentials } from './slices/authSlice';
+import { logout, setCredentials } from './auth/slice';
 
 const REFRESH_TOKEN_EXPIRY_BUFFER = 60 * 1000; // 60초 이내 재시도 방지
 const MAX_REFRESH_ATTEMPTS = 3; // 최대 리프레시 시도 횟수
