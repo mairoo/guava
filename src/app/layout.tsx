@@ -2,8 +2,14 @@ import '@/styles/globals.css';
 import { MainLayout } from '@/components/layout';
 import AuthProvider from '@/providers/auth/AuthProvider';
 import { Metadata, Viewport } from 'next';
+import { Nanum_Gothic } from 'next/font/google';
 import React from 'react';
 import { StoreProvider } from './storeProvider';
+
+const nanum = Nanum_Gothic({
+  weight: ['400', '700', '800'],
+  subsets: ['latin'],
+});
 
 export const metadata: Metadata = {
   title: '핀코인',
@@ -19,7 +25,7 @@ export const viewport: Viewport = {
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
-  <html lang="ko">
+  <html lang="ko" className={nanum.className}>
     <body>
       <MainLayout>
         <AuthProvider>
