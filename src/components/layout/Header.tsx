@@ -1,5 +1,12 @@
-export const Header = () => (
-  <header className="bg-gray-800 text-white p-4">
-    <h1 className="text-xl font-bold">Header</h1>
+import { ReactNode } from 'react';
+
+interface HeaderProps {
+  children?: ReactNode;
+  className?: string;
+}
+
+export const Header = ({ children, className }: HeaderProps) => (
+  <header className={`w-full shadow-sm ${className}`}>
+    {children}
   </header>
 );
