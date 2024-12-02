@@ -4,7 +4,7 @@ export const FooterContent = () => {
   return (
     <>
       <div className="bg-green-50 text-gray-600">
-        <div className="container max-w-7xl mx-auto px-4">
+        <div className="container max-w-7xl mx-auto px-2">
           {/* Top Section: Navigation Links */}
           <div className="pt-4">
             <div className="flex flex-wrap gap-x-6 gap-y-1">
@@ -58,7 +58,7 @@ export const FooterContent = () => {
 
       {/* Copyright */}
       <div className="bg-teal-900 text-gray-200">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-2">
           <div className="py-2 text-center">
             <span>Copyright © 2012-2024 www.pincoin.co.kr</span>
             <br className="sm:hidden" />

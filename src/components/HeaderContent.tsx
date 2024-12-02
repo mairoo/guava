@@ -6,7 +6,7 @@ export const HeaderContent = () => {
   return (
     <>
       <div className="bg-white text-gray-800">
-        <div className="container max-w-7xl mx-auto px-4">
+        <div className="container max-w-7xl mx-auto px-2">
           {/* Top Row */}
           <div className="py-1 flex justify-between items-center">
             {/* Logo */}
@@ -56,7 +56,7 @@ export const HeaderContent = () => {
 
       {/* Second Row with green background */}
       <div className="bg-green-50 text-gray-800">
-        <div className="container max-w-7xl mx-auto px-4">
+        <div className="container max-w-7xl mx-auto px-2">
           {/* Bottom Row */}
           <div className="py-1 flex justify-between items-center">
             {/* Category Dropdown */}
