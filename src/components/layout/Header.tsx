@@ -1,13 +1,16 @@
 'use client';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { ReactNode } from 'react';
+import classNames from 'classnames';
+import { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-interface HeaderProps {
+interface HeaderProps extends ComponentPropsWithoutRef<'header'> {
   children?: ReactNode;
   className?: string;
+
+  [key: string]: any;
 }
 
-export const Header = ({ children, className }: HeaderProps) => {
+export const Header = ({ children, ...rest }: HeaderProps) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   if (isMobile) {
@@ -15,6 +18,8 @@ export const Header = ({ children, className }: HeaderProps) => {
   }
 
   return (
-    <header className={`w-full shadow-sm ${className}`}>{children}</header>
+    <header className={classNames(rest.className)} {...rest}>
+      {children}
+    </header>
   );
 };

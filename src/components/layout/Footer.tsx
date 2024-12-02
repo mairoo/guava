@@ -1,13 +1,15 @@
 import classNames from 'classnames';
-import { ReactNode } from 'react';
+import { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-interface FooterProps {
+interface FooterProps extends ComponentPropsWithoutRef<'footer'> {
   children?: ReactNode;
   className?: string;
+
+  [key: string]: any;
 }
 
-export const Footer = ({ children, className }: FooterProps) => (
-  <footer className={classNames('w-full text-sm', className)}>
+export const Footer = ({ children, ...rest }: FooterProps) => (
+  <footer className={classNames(rest.className)} {...rest}>
     {children}
   </footer>
 );
