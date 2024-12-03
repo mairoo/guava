@@ -1,5 +1,6 @@
 import { DottedList, FlexColumn } from '@/components/layout';
 import { ProductGrid, ProductItemBuy } from '@/components/product';
+import Link from 'next/link';
 import React from 'react';
 
 const bestsellers = [
@@ -43,7 +44,7 @@ const bestsellers = [
 
 const CategoryDetailPage = () => {
   return (
-    <FlexColumn spacing={2} paddingY={2}>
+    <FlexColumn spacing={2} marginY={2}>
       <DottedList
         indent={2}
         border="border border-yellow-200"
@@ -69,13 +70,18 @@ const CategoryDetailPage = () => {
       </DottedList>
       <ProductGrid gap={2} py={0}>
         {bestsellers.map((product) => (
-          <ProductItemBuy
+          <Link
             key={product.id}
-            name={product.name}
-            discountRate={product.discountRate}
-            price={3550}
-            imageUrl={product.imageUrl} // 실제 이미지 URL로 교체 필요
-          />
+            href={`/shop/product/1/${product.name}`}
+            className="block"
+          >
+            <ProductItemBuy
+              name={product.name}
+              discountRate={product.discountRate}
+              price={3550}
+              imageUrl={product.imageUrl}
+            />
+          </Link>
         ))}
       </ProductGrid>
     </FlexColumn>

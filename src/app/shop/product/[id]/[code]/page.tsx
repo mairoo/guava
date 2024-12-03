@@ -50,8 +50,8 @@ const breadcrumbItems = [
 
 const ProductDetailPage = () => {
   return (
-    <FlexColumn spacing={2}>
-      <Breadcrumbs items={breadcrumbItems} marginTop={2} marginLeft={1} />
+    <FlexColumn spacing={2} marginY={2}>
+      <Breadcrumbs items={breadcrumbItems} marginLeft={1} />
       <ProductGrid gap={2} py={0}>
         {bestsellers.map((product) => (
           <ProductItemBuy
@@ -59,7 +59,7 @@ const ProductDetailPage = () => {
             name={product.name}
             discountRate={product.discountRate}
             price={3550}
-            imageUrl={product.imageUrl} // 실제 이미지 URL로 교체 필요
+            imageUrl={product.imageUrl}
           />
         ))}
       </ProductGrid>

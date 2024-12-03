@@ -22,7 +22,7 @@ export const ProductItemBuy = ({
   const formattedPrice = price.toLocaleString();
 
   return (
-    <Card className="w-full overflow-hidden shadow-none border-gray-200">
+    <Card className="w-full overflow-hidden shadow-none hover:shadow-md transition-shadow border-gray-200">
       <CardContent className="p-0">
         <div className="relative aspect-[157/100] w-full overflow-hidden">
           <img

@@ -296,7 +296,7 @@ const Page = () => (
             name={product.name}
             discountRate={product.discountRate}
             price={3550}
-            imageUrl={product.imageUrl} // 실제 이미지 URL로 교체 필요
+            imageUrl={product.imageUrl}
           />
         ))}
       </ProductGrid>
