@@ -6,16 +6,16 @@ export const HeaderContent = () => {
   return (
     <>
       <div className="bg-white text-gray-800">
-        <div className="container max-w-7xl mx-auto px-2">
+        <div className="container max-w-7xl mx-auto p-2">
           {/* Top Row */}
           <div className="py-1 flex justify-between items-center">
             {/* Logo */}
             <div>
               <Link href="/">
                 <img
-                  src="https://placehold.co/120x40?text=Logo"
-                  alt="Logo"
-                  className="h-10"
+                  src="https://pincoin-s3.s3.amazonaws.com/static/images/shop/default/pincoin_www_260x50.png"
+                  alt="핀코인 대표몰"
+                  title="핀코인 대표몰"
                 />
               </Link>
             </div>

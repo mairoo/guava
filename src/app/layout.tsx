@@ -14,6 +14,9 @@ const nanum = Nanum_Gothic({
 export const metadata: Metadata = {
   title: '핀코인',
   description: '대한민국 1등 온라인 상품권 쇼핑몰 핀코인',
+  icons: {
+    icon: 'https://pincoin-s3.s3.amazonaws.com/static/images/shop/default/favicon.png',
+  },
 };
 
 export const viewport: Viewport = {
