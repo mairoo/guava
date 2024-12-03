@@ -6,3 +6,4 @@ export * from './FlexColumn';
 export * from './FlexRow';
 export * from './TitledSection';
 export * from './DottedList';
+export * from './MessageTitleDateList';
