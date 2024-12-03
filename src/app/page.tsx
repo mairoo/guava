@@ -1,7 +1,6 @@
 import { FlexColumn } from '@/components/layout';
 import TitledSection from '@/components/layout/TitledSection';
-import ProductGrid from '@/components/product/ProductGrid';
-import ProductItem from '@/components/product/ProductItem';
+import { ProductGrid, ProductItem } from '@/components/product';
 
 import React from 'react';
 
@@ -118,10 +117,7 @@ const products = [
 
 const Home = () => (
   <FlexColumn spacing={4}>
-    <TitledSection
-      title="오늘의 최저가 상품권"
-      showBorder={false}
-    >
+    <TitledSection title="오늘의 최저가 상품권" showBorder={false}>
       <ProductGrid gap={2} py={0}>
         {products.map((product) => (
           <ProductItem

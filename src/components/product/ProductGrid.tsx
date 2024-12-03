@@ -9,7 +9,7 @@ interface ProductGridProps {
   py?: number;
 }
 
-const ProductGrid = ({
+export const ProductGrid = ({
   children,
   className = '',
   my = 0,
@@ -36,5 +36,3 @@ const ProductGrid = ({
     </div>
   );
 };
-
-export default ProductGrid;

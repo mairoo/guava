@@ -9,7 +9,7 @@ interface ProductItemProps {
   showBorder?: boolean;
 }
 
-const ProductItem = ({
+export const ProductItem = ({
   imageUrl = 'https://placehold.co/170x100?text=Product',
   name = '상품명',
   discountRate = 1.0,
@@ -47,5 +47,3 @@ const ProductItem = ({
     </Card>
   );
 };
-
-export default ProductItem;
