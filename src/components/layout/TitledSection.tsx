@@ -1,10 +1,12 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import classNames from 'classnames';
 import React from 'react';
 
 interface TitledSectionProps {
   title: string;
   children: React.ReactNode;
+
   fontSize?:
     | 'text-sm'
     | 'text-base'
@@ -14,26 +16,40 @@ interface TitledSectionProps {
     | 'text-3xl';
   titleColor?: string;
   isBold?: boolean;
-  spacing?: string;
+  spacing?: 'space-y-0' | 'space-y-2' | 'space-y-4' | 'space-y-6' | 'space-y-8';
   verticalMargin?: string;
   padding?: string;
   className?: string;
+  showBorder?: boolean;
+  showSeparator?: boolean;
 }
 
 const TitledSection = ({
   title,
   children,
+
   fontSize = 'text-xl',
   titleColor = 'text-foreground',
   isBold = true,
-  spacing = 'space-y-4',
+  spacing = 'space-y-2',
   verticalMargin = 'my-4',
-  padding = 'p-6',
+  padding = 'p-0',
   className,
+  showBorder = true,
+  showSeparator = false,
 }: TitledSectionProps) => {
   return (
-    <Card className={classNames('mx-0', verticalMargin, padding, className)}>
-      <CardHeader className="px-0 pt-0">
+    <Card
+      className={classNames(
+        'mx-0 rounded-lg',
+        spacing,
+        verticalMargin,
+        padding,
+        className,
+        { 'border-0 shadow-none': !showBorder },
+      )}
+    >
+      <CardHeader className="px-0 pt-0 pb-0">
         <h2
           className={classNames('text-left', fontSize, titleColor, {
             'font-bold': isBold,
@@ -42,9 +58,12 @@ const TitledSection = ({
           {title}
         </h2>
       </CardHeader>
-      <CardContent className={classNames('px-0 pb-0', spacing)}>
-        {children}
-      </CardContent>
+      {showSeparator && (
+        <div className="-mx-6">
+          <Separator className="bg-gray-200" />
+        </div>
+      )}
+      <CardContent className="px-0 py-0">{children}</CardContent>
     </Card>
   );
 };
