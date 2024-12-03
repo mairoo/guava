@@ -46,14 +46,14 @@ export const ProductItemBuy = ({
         </div>
       </CardContent>
 
-      <CardFooter className="p-2 bg-gray-50 justify-center">
+      <CardFooter className="p-2 bg-gray-100 justify-center">
         <Button
           variant="outline"
           size="sm"
           className="border-gray-900 text-gray-900 hover:bg-white"
           onClick={onAddToCart}
         >
-          <ShoppingCart className="w-4 h-4 mr-1" />
+          <ShoppingCart className="w-4 h-4" />
           담기
         </Button>
       </CardFooter>
