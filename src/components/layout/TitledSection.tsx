@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import classNames from 'classnames';
-import React from 'react';
+import React, { ComponentPropsWithoutRef } from 'react';
 
-interface TitledSectionProps {
+interface TitledSectionProps extends ComponentPropsWithoutRef<'div'> {
   title: string;
   children: React.ReactNode;
 
@@ -24,7 +24,7 @@ interface TitledSectionProps {
   showSeparator?: boolean;
 }
 
-const TitledSection = ({
+export const TitledSection = ({
   title,
   children,
 
@@ -35,7 +35,7 @@ const TitledSection = ({
   verticalMargin = 'my-4',
   padding = 'p-0',
   className,
-  showBorder = true,
+  showBorder = false,
   showSeparator = false,
 }: TitledSectionProps) => {
   return (
@@ -67,5 +67,3 @@ const TitledSection = ({
     </Card>
   );
 };
-
-export default TitledSection;

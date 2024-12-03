@@ -1,8 +1,8 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowDown } from 'lucide-react';
-import React from 'react';
+import React, { ComponentPropsWithoutRef } from 'react';
 
-interface ProductItemProps {
+interface ProductItemProps extends ComponentPropsWithoutRef<'div'> {
   imageUrl: string;
   name: string;
   discountRate: number;

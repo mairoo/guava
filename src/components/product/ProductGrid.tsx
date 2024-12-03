@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { ComponentPropsWithoutRef } from 'react';
 
-interface ProductGridProps {
+interface ProductGridProps extends ComponentPropsWithoutRef<'div'> {
   children: React.ReactNode;
   className?: string;
   my?: number;
