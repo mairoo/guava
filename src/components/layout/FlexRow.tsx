@@ -1,5 +1,5 @@
 import { Separator } from '@/components/ui/separator';
-import classNames from 'classnames';
+import { cn } from '@/lib/utils';
 import { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 interface FlexRowProps extends ComponentPropsWithoutRef<'div'> {
@@ -22,7 +22,7 @@ export const FlexRow = ({
 }: FlexRowProps) => {
   return (
     <div
-      className={classNames('flex flex-row my-0', `mx-${marginX}`, className)}
+      className={cn('flex flex-row my-0', `mx-${marginX}`, className)}
       {...rest}
     >
       {Array.isArray(children) ? (

@@ -1,15 +1,12 @@
-import className from "classnames";
-import { ComponentPropsWithoutRef, ReactNode } from "react";
+import { cn } from '@/lib/utils';
+import { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-interface DrawerHeadingProps extends ComponentPropsWithoutRef<"div"> {
+interface DrawerHeadingProps extends ComponentPropsWithoutRef<'div'> {
   children?: ReactNode;
 }
 
 const DrawerHeading = ({ children, ...rest }: DrawerHeadingProps) => {
-  const classes = className(
-    rest.className,
-    "font-bold border-l-4 border-b px-2 py-1",
-  );
+  const classes = cn(rest.className, 'font-bold border-l-4 border-b px-2 py-1');
 
   return (
     <div>

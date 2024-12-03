@@ -1,5 +1,5 @@
 import { Separator } from '@/components/ui/separator';
-import classNames from 'classnames';
+import { cn } from '@/lib/utils';
 import { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 interface FlexColumnProps extends ComponentPropsWithoutRef<'div'> {
@@ -80,18 +80,14 @@ export const FlexColumn = ({
 
   return (
     <div
-      className={classNames(
-        'flex flex-col mx-0',
-        marginYClasses[marginY],
-        className,
-      )}
+      className={cn('flex flex-col mx-0', marginYClasses[marginY], className)}
       {...rest}
     >
       {Array.isArray(children) ? (
         children.map((child, index) => (
           <div key={index}>
             <div
-              className={classNames(
+              className={cn(
                 paddingXClasses[paddingX],
                 paddingYClasses[paddingY],
               )}
@@ -108,10 +104,7 @@ export const FlexColumn = ({
         ))
       ) : (
         <div
-          className={classNames(
-            paddingXClasses[paddingX],
-            paddingYClasses[paddingY],
-          )}
+          className={cn(paddingXClasses[paddingX], paddingYClasses[paddingY])}
         >
           {children}
         </div>

@@ -43,7 +43,7 @@ const bestsellers = [
 
 const CategoryDetailPage = () => {
   return (
-    <FlexColumn spacing={1} paddingY={2}>
+    <FlexColumn spacing={2} paddingY={2}>
       <DottedList
         indent={2}
         border="border border-yellow-200"

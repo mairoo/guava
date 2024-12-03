@@ -1,5 +1,5 @@
 import { Separator } from '@/components/ui/separator';
-import classNames from 'classnames';
+import { cn } from '@/lib/utils';
 import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 interface GridRowTwoThirdsProps extends ComponentPropsWithoutRef<'div'> {
@@ -24,7 +24,7 @@ export const GridRowTwoThirds = ({
 
   return (
     <div
-      className={classNames(
+      className={cn(
         'grid grid-cols-1 md:grid-cols-3',
         `gap-${gap}`,
         `mx-${marginX}`,
@@ -32,7 +32,7 @@ export const GridRowTwoThirds = ({
       )}
       {...rest}
     >
-      <div className={classNames(`p-${padding}`, 'md:col-span-2')}>
+      <div className={cn(`p-${padding}`, 'md:col-span-2')}>
         {childrenArray[0]}
         {showDivider && <Separator className="mt-4 bg-gray-200 md:hidden" />}
       </div>

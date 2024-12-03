@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '@/lib/utils';
 import React, { ComponentPropsWithoutRef } from 'react';
 
 interface DotListProps extends ComponentPropsWithoutRef<'div'> {
@@ -20,18 +20,24 @@ export const DottedList = ({
 }: DotListProps) => {
   const items = React.Children.toArray(children);
 
-  const containerClasses = classNames('space-y-2', backgroundColor, border, {
-    'rounded-lg': rounded,
-    'p-4': border,
-  });
-
   return (
-    <ul className={containerClasses}>
+    <ul
+      className={cn(
+        'space-y-2',
+        backgroundColor,
+        border,
+        rounded && 'rounded-lg',
+        border && 'p-4',
+      )}
+    >
       {items.map((item, index) => (
         <li key={index} className="flex items-start list-none">
           <div style={{ width: `${indent}rem` }} className="shrink-0 relative">
             <span
-              className={`${dotColor} w-2 h-2 rounded-full absolute top-2 right-3`}
+              className={cn(
+                'w-2 h-2 rounded-full absolute top-2 right-3',
+                dotColor,
+              )}
               aria-hidden="true"
             />
           </div>

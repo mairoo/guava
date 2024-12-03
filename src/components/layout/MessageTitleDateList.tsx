@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card';
-import classNames from 'classnames';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import React from 'react';
 
@@ -23,13 +23,13 @@ export const MessageTitleDateList: React.FC<MessageTitleDateListProps> = ({
 }) => {
   return (
     <Card
-      className={classNames('w-full max-w-2xl shadow-none', {
+      className={cn('w-full max-w-2xl shadow-none', {
         'border-0': !cardBorder,
       })}
     >
       <CardContent className="p-0">
         <div
-          className={classNames('flex flex-col', {
+          className={cn('flex flex-col', {
             'gap-1': spacing === 1,
             'gap-2': spacing === 2,
             'gap-3': spacing === 3,

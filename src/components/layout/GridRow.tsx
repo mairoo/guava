@@ -1,5 +1,5 @@
 import { Separator } from '@/components/ui/separator';
-import classNames from 'classnames';
+import { cn } from '@/lib/utils';
 import { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 interface GridRowProps extends ComponentPropsWithoutRef<'div'> {
@@ -39,7 +39,7 @@ export const GridRow = ({
 
   return (
     <div
-      className={classNames(
+      className={cn(
         'grid',
         getGridCols(cols),
         `gap-${gap}`,

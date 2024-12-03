@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '@/lib/utils';
 import { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 interface MainProps extends ComponentPropsWithoutRef<'main'> {
@@ -9,7 +9,7 @@ interface MainProps extends ComponentPropsWithoutRef<'main'> {
 }
 
 export const Main = ({ children, ...rest }: MainProps) => (
-  <main className={classNames(rest.className)} {...rest}>
+  <main className={cn(rest.className)} {...rest}>
     {children}
   </main>
 );

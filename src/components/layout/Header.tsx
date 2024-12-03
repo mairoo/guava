@@ -1,6 +1,6 @@
 'use client';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import classNames from 'classnames';
+import { cn } from '@/lib/utils';
 import { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 interface HeaderProps extends ComponentPropsWithoutRef<'header'> {
@@ -18,7 +18,7 @@ export const Header = ({ children, ...rest }: HeaderProps) => {
   }
 
   return (
-    <header className={classNames(rest.className)} {...rest}>
+    <header className={cn(rest.className)} {...rest}>
       {children}
     </header>
   );

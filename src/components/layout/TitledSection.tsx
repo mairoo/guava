@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import classNames from 'classnames';
+import { cn } from '@/lib/utils';
 import React, { ComponentPropsWithoutRef } from 'react';
 
 interface TitledSectionProps extends ComponentPropsWithoutRef<'div'> {
@@ -40,7 +40,7 @@ export const TitledSection = ({
 }: TitledSectionProps) => {
   return (
     <Card
-      className={classNames(
+      className={cn(
         'mx-0 rounded-lg',
         spacing,
         verticalMargin,
@@ -51,7 +51,7 @@ export const TitledSection = ({
     >
       <CardHeader className="px-0 pt-0 pb-0">
         <h2
-          className={classNames('text-left', fontSize, titleColor, {
+          className={cn('text-left', fontSize, titleColor, {
             'font-bold': isBold,
           })}
         >

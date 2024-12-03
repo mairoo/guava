@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { cn } from '@/lib/utils';
 import { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 interface FooterProps extends ComponentPropsWithoutRef<'footer'> {
@@ -9,7 +9,7 @@ interface FooterProps extends ComponentPropsWithoutRef<'footer'> {
 }
 
 export const Footer = ({ children, ...rest }: FooterProps) => (
-  <footer className={classNames(rest.className)} {...rest}>
+  <footer className={cn(rest.className)} {...rest}>
     {children}
   </footer>
 );
