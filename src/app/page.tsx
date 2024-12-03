@@ -1,8 +1,11 @@
-import Link from 'next/link';
+import { FlexColumn } from '@/components/layout';
+import React from 'react';
 
 const Home = () => (
-  <div>
-    <Link href="/auth/sign-in">로그인</Link>
-  </div>
+  <FlexColumn spacing={4}>
+    <div>First item</div>
+    <div>Second item</div>
+    <div>Third item</div>
+  </FlexColumn>
 );
 export default Home;
