@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React from 'react';
 
 interface MessageTitleDate {
-  category: string;
+  category?: string;
   title: string;
   date: string;
   url: string;
@@ -44,7 +44,9 @@ export const MessageTitleDateList: React.FC<MessageTitleDateListProps> = ({
               className="flex justify-between items-center hover:bg-gray-50 px-2 py-1 rounded-sm cursor-pointer"
             >
               <div className="flex items-center space-x-2">
-                <span className="font-bold">[{notice.category}]</span>
+                {notice.category && (
+                  <span className="font-bold">[{notice.category}]</span>
+                )}
                 <span>{notice.title}</span>
               </div>
               <span className="text-gray-600 text-sm">{notice.date}</span>

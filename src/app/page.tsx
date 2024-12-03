@@ -1,7 +1,8 @@
 import {
   DottedList,
   FlexColumn,
-  FlexRow,
+  GridRow,
+  GridRowTwoThirds,
   MessageTitleDateList,
   TitledSection,
 } from '@/components/layout';
@@ -153,6 +154,34 @@ const noticeData = [
   },
 ];
 
+const testimonialData = [
+  {
+    title: '5년째 잘 이용하고 있습니다',
+    date: '2024.10.23',
+    url: '/testimonials/1',
+  },
+  {
+    title: '관리가 확실하며 답변이 빠르고 처리도 빠릅니다.',
+    date: '2024.09.05',
+    url: '/testimonials/2',
+  },
+  {
+    title: '발송이 매우 빨라서 좋아요',
+    date: '2024.08.08',
+    url: '/testimonials/3',
+  },
+  {
+    title: '문의가 바로 답변이오네요...',
+    date: '2024.07.30',
+    url: '/testimonials/4',
+  },
+  {
+    title: '잘 사용하고 있습니다',
+    date: '2024.07.30',
+    url: '/testimonials/5',
+  },
+];
+
 const Home = () => (
   <FlexColumn spacing={4}>
     <TitledSection title="오늘의 최저가 상품권">
@@ -168,7 +197,7 @@ const Home = () => (
       </ProductGrid>
     </TitledSection>
 
-    <FlexRow>
+    <GridRowTwoThirds gap={4}>
       <TitledSection title="상품권 금융사기 예방수칙">
         <DottedList
           indent={2}
@@ -192,12 +221,15 @@ const Home = () => (
           </div>
         </DottedList>
       </TitledSection>
-    </FlexRow>
-    <FlexRow>
+    </GridRowTwoThirds>
+    <GridRow cols={2} gap={4}>
       <TitledSection title="공지사항">
         <MessageTitleDateList messages={noticeData} />
       </TitledSection>
-    </FlexRow>
+      <TitledSection title="이용후기">
+        <MessageTitleDateList messages={testimonialData} />
+      </TitledSection>
+    </GridRow>
   </FlexColumn>
 );
 export default Home;
