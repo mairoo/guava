@@ -3,7 +3,9 @@
 import { Breadcrumbs, FlexColumn } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import React, { ChangeEvent, useState } from 'react';
 
@@ -15,7 +17,7 @@ const breadcrumbItems = [
 
 const ProductInfo = () => (
   <div className="space-y-2">
-    <h2 className="text-lg font-medium">상품 이름</h2>
+    <h2 className="text-lg font-bold">상품 이름</h2>
     <p className="text-sm text-gray-600">정가 50,000원</p>
     <p className="text-sm text-gray-600">판매가 45,000원</p>
     <p className="text-sm text-gray-600">할인율 9.00%</p>
@@ -55,24 +57,39 @@ const QuantitySelector = ({
   onDecrement,
   onChange,
 }: QuantitySelectorProps) => (
-  <div className="space-y-1">
+  <div className="space-y-2 w-full">
     <div className="text-sm">수량</div>
-    <div className="flex items-center space-x-2">
-      <Button variant="outline" className="px-3 py-1" onClick={onDecrement}>
+    <div className="w-full flex [&>*:not(:first-child)]:border-l-0">
+      <Button
+        variant="outline"
+        className="rounded-r-none px-4"
+        onClick={onDecrement}
+      >
         -
       </Button>
-      <input
+      <Input
         type="number"
         value={quantity}
         onChange={onChange}
-        className="w-16 text-center px-3 py-2 border rounded-md"
+        className="text-center rounded-none w-full"
         min="1"
       />
-      <Button variant="outline" className="px-3 py-1" onClick={onIncrement}>
+      <Button
+        variant="outline"
+        className="rounded-l-none px-4"
+        onClick={onIncrement}
+      >
         +
       </Button>
     </div>
-    <Button className="w-full">담기</Button>
+    <Button
+      variant="outline"
+      size="sm"
+      className="w-full border-gray-900 text-gray-900 hover:bg-white"
+    >
+      <ShoppingCart className="w-4 h-4" />
+      담기
+    </Button>
   </div>
 );
 
