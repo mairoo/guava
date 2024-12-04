@@ -12,22 +12,22 @@ interface BreadcrumbItem {
 
 interface BreadcrumbsProps {
   items: BreadcrumbItem[];
-  marginTop?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16;
+  marginY?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16;
   marginLeft?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16;
 }
 
-const marginTopClasses = {
-  0: 'mt-0',
-  1: 'mt-1',
-  2: 'mt-2',
-  3: 'mt-3',
-  4: 'mt-4',
-  5: 'mt-5',
-  6: 'mt-6',
-  8: 'mt-8',
-  10: 'mt-10',
-  12: 'mt-12',
-  16: 'mt-16',
+const marginYClasses = {
+  0: 'my-0',
+  1: 'my-1',
+  2: 'my-2',
+  3: 'my-3',
+  4: 'my-4',
+  5: 'my-5',
+  6: 'my-6',
+  8: 'my-8',
+  10: 'my-10',
+  12: 'my-12',
+  16: 'my-16',
 } as const;
 
 const marginLeftClasses = {
@@ -46,12 +46,12 @@ const marginLeftClasses = {
 
 export const Breadcrumbs = ({
   items,
-  marginTop = 0,
+  marginY = 0,
   marginLeft = 0,
 }: BreadcrumbsProps) => {
   return (
     <Breadcrumb
-      className={cn(marginTopClasses[marginTop], marginLeftClasses[marginLeft])}
+      className={cn(marginYClasses[marginY], marginLeftClasses[marginLeft])}
     >
       <BreadcrumbList>
         {items.map((item, index) => (
