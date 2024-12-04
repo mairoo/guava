@@ -21,11 +21,13 @@ const formatKRW = new Intl.NumberFormat('ko-KR', {
   currencyDisplay: 'symbol',
 });
 
+/*
 const formatUSD = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   currencyDisplay: 'symbol',
 });
+*/
 
 const ProductInfo = () => (
   <div className="space-y-2">
@@ -114,7 +116,7 @@ const QuantitySelector = ({
 const ProductDetailPage = () => {
   const [quantity, setQuantity] = useState(1);
 
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const isDesktop = useMediaQuery('(min-width: 1280px)');
 
   const handleIncrement = () => setQuantity((prev) => prev + 1);
   const handleDecrement = () => setQuantity((prev) => Math.max(1, prev - 1));

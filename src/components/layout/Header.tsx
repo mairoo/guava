@@ -16,7 +16,7 @@ interface HeaderProps extends ComponentPropsWithoutRef<'header'> {
 }
 
 export const Header = ({ children, ...rest }: HeaderProps) => {
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const isDesktop = useMediaQuery('(min-width: 1280px)');
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
