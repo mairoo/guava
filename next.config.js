@@ -8,6 +8,18 @@ const nextConfig = {
   compiler: {
     removeConsole: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+      },
+      {
+        protocol: "https",
+        hostname: "pincoin-s3.s3.amazonaws.com",
+      },
+    ],
+  },
 };
 
 module.exports = withBundleAnalyzer(nextConfig);
