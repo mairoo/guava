@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import Image from 'next/image';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
 const breadcrumbItems = [
   { text: '홈', url: '/' },
@@ -30,6 +30,7 @@ const ProductImage = () => (
       fill
       sizes="100vw"
       className="object-contain"
+      priority
     />
   </div>
 );
@@ -76,14 +77,15 @@ const QuantitySelector = ({
 );
 
 const ProductDetailPage = () => {
+  const [quantity, setQuantity] = useState(1);
+
   const isDesktop = useMediaQuery('(min-width: 1024px)');
-  const [quantity, setQuantity] = React.useState(1);
 
   const handleIncrement = () => setQuantity((prev) => prev + 1);
   const handleDecrement = () => setQuantity((prev) => Math.max(1, prev - 1));
   const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 1;
-    setQuantity(value);
+    setQuantity(Math.max(1, value));
   };
 
   const productImage = <ProductImage />;

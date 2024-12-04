@@ -1,7 +1,12 @@
 'use client';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { cn } from '@/lib/utils';
-import { ComponentPropsWithoutRef, ReactNode } from 'react';
+import {
+  ComponentPropsWithoutRef,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react';
 
 interface HeaderProps extends ComponentPropsWithoutRef<'header'> {
   children?: ReactNode;
@@ -11,9 +16,19 @@ interface HeaderProps extends ComponentPropsWithoutRef<'header'> {
 }
 
 export const Header = ({ children, ...rest }: HeaderProps) => {
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const [isClient, setIsClient] = useState(false);
 
-  if (isMobile) {
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // 초기 렌더링 시에는 아무것도 보여주지 않음
+  if (!isClient) {
+    return null;
+  }
+
+  if (!isDesktop) {
     return <div>mobile</div>;
   }
 
