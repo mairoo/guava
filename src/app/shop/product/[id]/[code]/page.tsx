@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { ShoppingCart } from 'lucide-react';
+import { ArrowDown, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import React, { ChangeEvent, useState } from 'react';
 
@@ -15,12 +15,30 @@ const breadcrumbItems = [
   { text: '구글기프트카드' },
 ];
 
+const formatKRW = new Intl.NumberFormat('ko-KR', {
+  style: 'currency',
+  currency: 'KRW',
+  currencyDisplay: 'symbol',
+});
+
+const formatUSD = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  currencyDisplay: 'symbol',
+});
+
 const ProductInfo = () => (
   <div className="space-y-2">
     <h2 className="text-lg font-bold">상품 이름</h2>
-    <p className="text-sm text-gray-600">정가 50,000원</p>
-    <p className="text-sm text-gray-600">판매가 45,000원</p>
-    <p className="text-sm text-gray-600">할인율 9.00%</p>
+    <p className="text-sm text-gray-600">
+      정가: <span className="line-through">{formatKRW.format(47500)}</span>
+    </p>
+    <p className="text-sm text-gray-600">판매가 {formatKRW.format(45000)}</p>
+    <div className="text-sm text-gray-600 flex items-center gap-1">
+      할인율 <span className="text-red-500">9.00</span>
+      <span className="text-red-500">%</span>
+      <ArrowDown className="w-4 h-4 text-red-500" />
+    </div>
   </div>
 );
 
@@ -123,14 +141,14 @@ const ProductDetailPage = () => {
       {isDesktop ? (
         <div className="grid grid-cols-[2fr,1fr] gap-8 w-full">
           {productDescription}
-          <div className="space-y-2 w-full">
+          <div className="space-y-8 w-full">
             {productImage}
             {productInfo}
             {quantitySelector}
           </div>
         </div>
       ) : (
-        <div className="space-y-1">
+        <div className="space-y-4">
           {productImage}
           {productInfo}
           {quantitySelector}
