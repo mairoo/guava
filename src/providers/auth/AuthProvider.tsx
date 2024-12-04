@@ -26,7 +26,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   if (!isInitialized) {
-    return <div>initializing</div>;
+    return <div>초기화 중</div>;
   }
 
   return <>{children}</>;
