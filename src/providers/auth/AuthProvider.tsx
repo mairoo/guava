@@ -2,12 +2,24 @@
 
 import React, { useEffect, useState } from 'react';
 
+// 마운트 상태를 체크하는 간단한 훅
+const useMounted = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return mounted;
+};
+
 interface AuthProviderProps {
   children: React.ReactNode;
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useMounted();
 
   useEffect(() => {
     const initAuth = async () => {
@@ -18,15 +30,23 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       } catch (error) {
         console.error('Auth initialization failed:', error);
       } finally {
-        setIsInitialized(true);
+        setIsLoading(false);
       }
     };
 
-    initAuth();
-  }, []);
+    if (isMounted) {
+      initAuth();
+    }
+  }, [isMounted]);
 
-  if (!isInitialized) {
-    return <div>초기화 중</div>;
+  // 마운트되기 전에는 children을 바로 렌더링
+  if (!isMounted) {
+    return <>{children}</>;
+  }
+
+  // 마운트된 후 로딩 중일 때만 로딩 표시
+  if (isLoading) {
+    return <div>로딩 중...</div>;
   }
 
   return <>{children}</>;

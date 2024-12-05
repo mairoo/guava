@@ -29,7 +29,7 @@ export const HeaderContent = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="/cart" className="hover:text-gray-600">
+                  <a href="/shop/cart" className="hover:text-gray-600">
                     장바구니
                   </a>
                 </li>
@@ -39,12 +39,22 @@ export const HeaderContent = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="/mypage" className="hover:text-gray-600">
+                  <a href="/auth/sign-up" className="hover:text-gray-600">
+                    회원가입
+                  </a>
+                </li>
+                <li>
+                  <a href="/auth/sign-in" className="hover:text-gray-600">
+                    로그인
+                  </a>
+                </li>
+                <li>
+                  <a href="/me" className="hover:text-gray-600">
                     마이페이지
                   </a>
                 </li>
                 <li>
-                  <a href="/logout" className="hover:text-gray-600">
+                  <a href="/auth/sign-out" className="hover:text-gray-600">
                     로그아웃
                   </a>
                 </li>
