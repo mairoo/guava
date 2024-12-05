@@ -4,22 +4,21 @@ import { ComponentPropsWithoutRef, ReactNode } from 'react';
 interface HeaderProps extends ComponentPropsWithoutRef<'header'> {
   children?: ReactNode;
   className?: string;
+  desktopContent?: ReactNode;
 
   [key: string]: any;
 }
 
-export const Header = ({ children, ...rest }: HeaderProps) => {
+export const Header = ({
+  children,
+  className,
+  desktopContent,
+  ...rest
+}: HeaderProps) => {
   return (
-    <>
-      {/* 모바일 헤더 */}
-      <header className={cn('md:hidden', rest.className)}>
-        <div>mobile</div>
-      </header>
-
-      {/* 데스크톱 헤더 */}
-      <header className={cn('hidden md:block', rest.className)} {...rest}>
-        {children}
-      </header>
-    </>
+    <header className={cn('w-full', className)} {...rest}>
+      <div className="block">{children}</div>
+      <div className="hidden md:block">{desktopContent}</div>
+    </header>
   );
 };
