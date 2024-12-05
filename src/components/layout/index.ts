@@ -11,3 +11,4 @@ export * from './TitledSection';
 export * from './DottedList';
 export * from './MessageTitleDateList';
 export * from './Breadcrumbs';
+export * from './NavList';

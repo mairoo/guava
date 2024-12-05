@@ -1,3 +1,4 @@
+import { Container, NavList } from '@/components/layout';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
@@ -8,7 +9,7 @@ export const HeaderContent = () => {
       <div className="bg-white text-gray-800">
         <div className="container max-w-7xl mx-auto p-2">
           {/* Top Row */}
-          <div className="py-1 flex justify-between items-center">
+          <Container className="py-1 flex justify-between items-center">
             {/* Logo */}
             <div>
               <Link href="/">
@@ -22,97 +23,52 @@ export const HeaderContent = () => {
 
             {/* Top Navigation */}
             <nav>
-              <ul className="flex gap-6">
-                <li>
-                  <a href="/orders" className="hover:text-gray-600">
-                    주문/발송
-                  </a>
-                </li>
-                <li>
-                  <a href="/shop/cart" className="hover:text-gray-600">
-                    장바구니
-                  </a>
-                </li>
-                <li>
-                  <a href="/support" className="hover:text-gray-600">
-                    고객센터
-                  </a>
-                </li>
-                <li>
-                  <a href="/auth/sign-up" className="hover:text-gray-600">
-                    회원가입
-                  </a>
-                </li>
-                <li>
-                  <a href="/auth/sign-in" className="hover:text-gray-600">
-                    로그인
-                  </a>
-                </li>
-                <li>
-                  <a href="/me" className="hover:text-gray-600">
-                    마이페이지
-                  </a>
-                </li>
-                <li>
-                  <a href="/auth/sign-out" className="hover:text-gray-600">
-                    로그아웃
-                  </a>
-                </li>
-              </ul>
+              <NavList>
+                {[
+                  { href: '/orders', text: '주문/발송' },
+                  { href: '/shop/cart', text: '장바구니' },
+                  { href: '/support', text: '고객센터' },
+                  { href: '/auth/sign-up', text: '회원가입' },
+                  { href: '/auth/sign-in', text: '로그인' },
+                  { href: '/me', text: '마이페이지' },
+                  { href: '/auth/sign-out', text: '로그아웃' },
+                ].map(({ href, text }) => (
+                  <li key={href}>
+                    <a href={href} className="hover:text-gray-600">
+                      {text}
+                    </a>
+                  </li>
+                ))}
+              </NavList>
             </nav>
-          </div>
+          </Container>
         </div>
       </div>
 
       {/* Second Row with green background */}
       <div className="bg-green-50 text-gray-800">
-        <div className="container max-w-7xl mx-auto px-2">
+        <Container>
           {/* Bottom Row */}
           <div className="py-1 flex justify-between items-center">
             {/* Category Dropdown */}
             <nav>
-              <ul className="flex gap-6">
-                <li className="relative group">
-                  <button className="hover:text-gray-600">
-                    구글/넥슨/퍼니카드
-                  </button>
-                  <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-lg rounded-lg p-2 w-48">
-                    {/* Dropdown items here */}
-                  </div>
-                </li>
-                <li className="relative group">
-                  <button className="hover:text-gray-600">
-                    스마트/도서문화/컬쳐랜드
-                  </button>
-                  <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-lg rounded-lg p-2 w-48">
-                    {/* Dropdown items here */}
-                  </div>
-                </li>
-                <li className="relative group">
-                  <button className="hover:text-gray-600">에그/해피머니</button>
-                  <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-lg rounded-lg p-2 w-48">
-                    {/* Dropdown items here */}
-                  </div>
-                </li>
-                <li className="relative group">
-                  <button className="hover:text-gray-600">온/틴캐시</button>
-                  <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-lg rounded-lg p-2 w-48">
-                    {/* Dropdown items here */}
-                  </div>
-                </li>
-                <li className="relative group">
-                  <button className="hover:text-gray-600">선불쿠폰</button>
-                  <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-lg rounded-lg p-2 w-48">
-                    {/* Dropdown items here */}
-                  </div>
-                </li>
-                <li className="relative group">
-                  <button className="hover:text-gray-600">게임소식</button>
-                  <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-lg rounded-lg p-2 w-48">
-                    {/* Dropdown items here */}
-                  </div>
-                </li>
-              </ul>
+              <NavList>
+                {[
+                  '구글/넥슨/퍼니카드',
+                  '스마트/도서문화/컬쳐랜드',
+                  '에그/해피머니',
+                  '온/틴캐시',
+                  '선불쿠폰',
+                  '게임소식',
+                ].map((text) => (
+                  <li key={text} className="relative group">
+                    <button className="hover:text-gray-600">{text}</button>
+                    <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-lg rounded-lg p-2 w-48">
+                      {/* Dropdown items here */}
+                    </div>
+                  </li>
+                ))}
+              </NavList>
             </nav>
 
             {/* Search Field */}
@@ -127,7 +83,7 @@ export const HeaderContent = () => {
               </button>
             </div>
           </div>
-        </div>
+        </Container>
       </div>
     </div>
   );
