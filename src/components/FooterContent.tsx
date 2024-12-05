@@ -1,48 +1,45 @@
 import React from 'react';
 
 export const FooterContent = () => {
+  const links = [
+    { href: '/guide', text: '이용안내' },
+    { href: '/faq', text: '자주 묻는 질문' },
+    { href: '/contact', text: '문의하기' },
+    { href: '/terms', text: '이용약관' },
+    { href: '/privacy', text: '개인정보 처리방침' },
+    { href: '/blog', text: '블로그' },
+    { href: '/docs', text: '기술문서' },
+  ];
+
+  const companyInfo = [
+    '대표: 서종화',
+    '주소: 서초구 서초대로29길 22 보미빌딩 303호',
+    '사업자등록번호: 163-81-01158',
+    '통신판매업신고: 2019-서울서초-0835',
+  ];
+
   return (
     <>
       <div className="bg-green-50 text-gray-600">
         <div className="container max-w-7xl mx-auto px-2">
-          {/* Top Section: Navigation Links */}
           <div className="pt-4">
             <div className="flex flex-wrap gap-x-6 gap-y-1">
-              <a href="/guide" className="hover:text-gray-900">
-                이용안내
-              </a>
-              <a href="/faq" className="hover:text-gray-900">
-                자주 묻는 질문
-              </a>
-              <a href="/contact" className="hover:text-gray-900">
-                문의하기
-              </a>
-              <a href="/terms" className="hover:text-gray-900">
-                이용약관
-              </a>
-              <a href="/privacy" className="hover:text-gray-900">
-                개인정보 처리방침
-              </a>
-              <a href="/blog" className="hover:text-gray-900">
-                블로그
-              </a>
-              <a href="/docs" className="hover:text-gray-900">
-                기술문서
-              </a>
+              {links.map(({ href, text }) => (
+                <a key={href} href={href} className="hover:text-gray-900">
+                  {text}
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Space between sections */}
           <div className="h-4" />
 
-          {/* Company Info */}
           <div className="pb-4">
             <p className="text-xl font-bold mb-4">주식회사 핀코인</p>
             <div className="flex flex-wrap gap-x-6 gap-y-1">
-              <p>대표: 서종화</p>
-              <p>주소: 서초구 서초대로29길 22 보미빌딩 303호</p>
-              <p>사업자등록번호: 163-81-01158</p>
-              <p>통신판매업신고: 2019-서울서초-0835</p>
+              {companyInfo.map((info) => (
+                <p key={info}>{info}</p>
+              ))}
               <p>
                 <a
                   href="mailto:help@pincoin.co.kr"
@@ -56,9 +53,8 @@ export const FooterContent = () => {
         </div>
       </div>
 
-      {/* Copyright */}
       <div className="bg-teal-900 text-gray-200">
-        <div className="container mx-auto px-2">
+        <div className="container max-w-7xl mx-auto px-2">
           <div className="py-2 text-center">
             <span>Copyright © 2012-2024 www.pincoin.co.kr</span>
             <br className="sm:hidden" />
