@@ -156,7 +156,7 @@ const QuantitySelector = ({
 const ProductDetailPage = () => {
   const [quantity, setQuantity] = useState(1);
 
-  const isDesktop = useMediaQuery('(min-width: 1280px)');
+  const { matches: isDesktop } = useMediaQuery('(min-width: 1280px)');
 
   const handleIncrement = () => setQuantity((prev) => prev + 1);
   const handleDecrement = () => setQuantity((prev) => Math.max(1, prev - 1));

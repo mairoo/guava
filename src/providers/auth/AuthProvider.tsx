@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 
-// 마운트 상태를 체크하는 간단한 훅
 const useMounted = () => {
   const [mounted, setMounted] = useState(false);
 
@@ -25,8 +24,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const initAuth = async () => {
       try {
         // 인증 상태 초기화 로직
-        // 예: 토큰 검증, 사용자 정보 가져오기 등
-        // await checkAuthStatus()
       } catch (error) {
         console.error('Auth initialization failed:', error);
       } finally {
@@ -34,19 +31,19 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     };
 
+    // 마운트 된 상태에서만 인증 체크
     if (isMounted) {
       initAuth();
     }
   }, [isMounted]);
 
-  // 마운트되기 전에는 children을 바로 렌더링
-  if (!isMounted) {
-    return <>{children}</>;
-  }
-
-  // 마운트된 후 로딩 중일 때만 로딩 표시
-  if (isLoading) {
-    return <div>로딩 중...</div>;
+  // 마운트 되기 전이면서 로딩 중일 때는 placeholder 반환
+  if (!isMounted && isLoading) {
+    return (
+        <div className="min-h-screen" aria-hidden="true">
+          {children}
+        </div>
+    );
   }
 
   return <>{children}</>;

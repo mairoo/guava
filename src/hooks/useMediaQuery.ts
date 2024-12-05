@@ -15,6 +15,5 @@ export function useMediaQuery(query: string) {
     return () => media.removeEventListener('change', listener);
   }, [query]);
 
-  // SSR 대응을 위해 mounted 상태 확인
-  return mounted ? matches : false;
+  return { matches, mounted };
 }

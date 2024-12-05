@@ -4,7 +4,7 @@ import React from 'react';
 
 export const HeaderContent = () => {
   return (
-    <>
+    <div className="hidden md:block">
       <div className="bg-white text-gray-800">
         <div className="container max-w-7xl mx-auto p-2">
           {/* Top Row */}
@@ -129,6 +129,6 @@ export const HeaderContent = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
