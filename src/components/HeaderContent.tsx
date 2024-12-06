@@ -22,21 +22,43 @@ export const HeaderContent = () => {
           {/* Top Navigation */}
           <nav>
             <NavList>
-              {[
-                { href: '/orders', text: '주문/발송' },
-                { href: '/shop/cart', text: '장바구니' },
-                { href: '/support', text: '고객센터' },
-                { href: '/auth/sign-up', text: '회원가입' },
-                { href: '/auth/sign-in', text: '로그인' },
-                { href: '/me', text: '마이페이지' },
-                { href: '/auth/sign-out', text: '로그아웃' },
-              ].map(({ href, text }) => (
-                <li key={href}>
-                  <a href={href} className="hover:text-gray-600">
-                    {text}
-                  </a>
-                </li>
-              ))}
+              {/* 동적으로 처리하면 리액트가 마운트되면서 발생하는 hydration 과정에서 나타나는 작은 깜빡임 발생 */}
+              {/* 헤더 깜빡임은 푸터 깜박임과 달리 사용자 경험에 별로 안 좋음 */}
+              <li>
+                <Link href="/orders" className="hover:text-gray-600">
+                  주문/발송
+                </Link>
+              </li>
+              <li>
+                <Link href="/shop/cart" className="hover:text-gray-600">
+                  장바구니
+                </Link>
+              </li>
+              <li>
+                <Link href="/support" className="hover:text-gray-600">
+                  고객센터
+                </Link>
+              </li>
+              <li>
+                <Link href="/auth/sign-up" className="hover:text-gray-600">
+                  회원가입
+                </Link>
+              </li>
+              <li>
+                <Link href="/auth/sign-in" className="hover:text-gray-600">
+                  로그인
+                </Link>
+              </li>
+              <li>
+                <Link href="/me" className="hover:text-gray-600">
+                  마이페이지
+                </Link>
+              </li>
+              <li>
+                <Link href="/auth/sign-out" className="hover:text-gray-600">
+                  로그아웃
+                </Link>
+              </li>
             </NavList>
           </nav>
         </Container>
