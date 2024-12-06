@@ -3,7 +3,7 @@ import { Search } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
-export const HeaderContent = () => {
+export const DesktopHeaderContent = () => {
   return (
     <div className="hidden md:block">
       <div className="bg-white text-gray-800">

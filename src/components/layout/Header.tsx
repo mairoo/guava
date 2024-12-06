@@ -1,5 +1,8 @@
+import { DesktopHeaderContent } from '@/components/DesktopHeaderContent';
+import { MobileHeaderContent } from '@/components/MobileHeaderContent';
+
 import { cn } from '@/lib/utils';
-import { ComponentPropsWithoutRef, ReactNode } from 'react';
+import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 interface HeaderProps extends ComponentPropsWithoutRef<'header'> {
   children?: ReactNode;
@@ -17,8 +20,8 @@ export const Header = ({
 }: HeaderProps) => {
   return (
     <header className={cn('w-full', className)} {...rest}>
-      <div className="block">{children}</div>
-      <div className="hidden md:block">{desktopContent}</div>
+      <MobileHeaderContent />
+      <DesktopHeaderContent />
     </header>
   );
 };

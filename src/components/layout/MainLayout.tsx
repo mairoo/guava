@@ -1,5 +1,5 @@
 import { FooterContent } from '@/components/FooterContent';
-import { HeaderContent } from '@/components/HeaderContent';
+import { DesktopHeaderContent } from '@/components/DesktopHeaderContent';
 import { Container, Footer, Header, Main } from '@/components/layout';
 
 import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
@@ -12,7 +12,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header className="w-full text-sm shadow-sm">
-        <HeaderContent />
+        <DesktopHeaderContent />
       </Header>
       <Main className="flex-1 bg-white">
         <Container>{children}</Container>
