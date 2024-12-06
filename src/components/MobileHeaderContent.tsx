@@ -1,6 +1,12 @@
 'use client';
 
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { Menu, Search, ShoppingBag, X } from 'lucide-react';
 import Link from 'next/link';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -37,7 +43,6 @@ export const MobileHeaderContent = () => {
     [isSearching],
   );
 
-  // 컴포넌트가 언마운트될 때 body 스타일 복원
   useEffect(() => {
     return () => {
       document.body.style.overflow = '';
@@ -66,7 +71,6 @@ export const MobileHeaderContent = () => {
   const iconButtonClasses = 'p-2';
 
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
-    // 스크롤 이벤트 전파 방지
     e.stopPropagation();
   };
 
@@ -84,11 +88,20 @@ export const MobileHeaderContent = () => {
             </SheetTrigger>
             <SheetContent
               side="left"
-              className="w-[300px] p-0 border-r shadow-lg !pr-0 overflow-hidden"
+              className="w-[300px] p-0 border-r shadow-lg !pr-0 overflow-hidden [&>button]:hidden"
             >
               <div className="flex flex-col h-full bg-white">
-                <div className="p-4 border-b flex justify-between items-center">
+                <div className="p-2 border-b flex justify-between items-center">
                   <h2 className="text-lg font-semibold">메뉴</h2>
+                  <SheetClose asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="scale-150 transform origin-center rounded-full"
+                    >
+                      <X className="w-6 h-6 text-gray-700" />
+                    </Button>
+                  </SheetClose>
                 </div>
 
                 <nav
