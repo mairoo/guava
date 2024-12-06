@@ -26,64 +26,57 @@ export const MobileHeaderContent = () => {
     }
   }, [isSearching]);
 
+  const menuItems = [
+    { href: '/', label: '홈' },
+    { href: '/shop/cateogry/구글기프트카드', label: '카테고리' },
+    { href: '/me', label: '마이페이지' },
+    { href: '/orders', label: '주문내역' },
+  ];
+
+  const commonIconClasses = 'w-6 h-6 text-gray-700';
+  const menuItemClasses =
+    'flex items-center px-4 py-3 hover:bg-gray-100 transition-colors';
+
   return (
     <>
-      <div className="block md:hidden w-full bg-white relative z-30">
+      <div className="block md:hidden bg-white relative z-30">
         <div className="h-14 px-4 grid grid-cols-[auto_1fr_auto] items-center">
           <Sheet open={isOpen} onOpenChange={toggleDrawer} modal={false}>
             <SheetTrigger asChild disabled={isSearching}>
               <button
                 className={`p-2 -ml-2 ${isSearching ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <Menu className="w-6 h-6 text-gray-700" />
+                <Menu className={commonIconClasses} />
               </button>
             </SheetTrigger>
             <SheetContent
               side="left"
-              className="w-[300px] p-0 border-r shadow-lg z-50 custom-sheet"
+              className="w-[300px] p-0 border-r shadow-lg !pr-0"
             >
               <div className="flex flex-col h-full bg-white">
-                {/* 헤더 영역 */}
-                <div className="p-4 border-b">
+                <div className="p-4 border-b flex justify-between items-center">
                   <h2 className="text-lg font-semibold">메뉴</h2>
+                  <button onClick={() => toggleDrawer(false)}>
+                    <X className={commonIconClasses} />
+                  </button>
                 </div>
 
-                {/* 메뉴 항목들 */}
-                <nav className="flex-1 overflow-y-auto bg-white">
+                <nav className="flex-1 overflow-y-auto">
                   <div className="py-2">
-                    <Link
-                      href="/"
-                      className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
-                      onClick={() => toggleDrawer(false)}
-                    >
-                      홈
-                    </Link>
-                    <Link
-                      href="/shop/cateogry/구글기프트카드"
-                      className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
-                      onClick={() => toggleDrawer(false)}
-                    >
-                      카테고리
-                    </Link>
-                    <Link
-                      href="/me"
-                      className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
-                      onClick={() => toggleDrawer(false)}
-                    >
-                      마이페이지
-                    </Link>
-                    <Link
-                      href="/orders"
-                      className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
-                      onClick={() => toggleDrawer(false)}
-                    >
-                      주문내역
-                    </Link>
+                    {menuItems.map(({ href, label }) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        className={menuItemClasses}
+                        onClick={() => toggleDrawer(false)}
+                      >
+                        {label}
+                      </Link>
+                    ))}
                   </div>
                 </nav>
 
-                {/* 푸터 영역 */}
-                <div className="border-t p-4 bg-white">
+                <div className="border-t p-4">
                   <div className="text-sm text-gray-500">
                     고객센터: 1234-5678
                   </div>
@@ -97,7 +90,7 @@ export const MobileHeaderContent = () => {
               <input
                 type="text"
                 placeholder="상품권 검색"
-                className="w-full h-10 px-2 text-base bg-transparent border-none focus:outline-none"
+                className="w-full h-10 px-2 text-base focus:outline-none"
                 ref={searchInputRef}
                 autoFocus
               />
@@ -114,39 +107,37 @@ export const MobileHeaderContent = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="p-2" onClick={toggleSearch}>
+            <button onClick={toggleSearch}>
               {isSearching ? (
-                <X className="w-6 h-6 text-gray-700" />
+                <X className={commonIconClasses} />
               ) : (
-                <Search className="w-6 h-6 text-gray-700" />
+                <Search className={commonIconClasses} />
               )}
             </button>
-            <button className="p-2">
-              <ShoppingBag className="w-6 h-6 text-gray-700" />
+            <button>
+              <ShoppingBag className={commonIconClasses} />
             </button>
           </div>
         </div>
-        <div className="border-b border-gray-300"></div>
+        <div className="border-b border-gray-300" />
       </div>
+
       {/* 검색용 백드롭 */}
       <div
-        className={`fixed inset-0 bg-black/40 transition-opacity duration-200 z-20 overflow-hidden touch-none ${
+        className={`fixed inset-0 bg-black/40 transition-opacity duration-200 z-20 ${
           isSearching ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
+        style={{ touchAction: 'none' }}
         onClick={toggleSearch}
-        style={{
-          touchAction: 'none',
-        }}
       />
+
       {/* 서랍메뉴용 백드롭 */}
       <div
-        className={`fixed inset-0 bg-black/40 transition-opacity duration-200 z-40 overflow-hidden touch-none ${
+        className={`fixed inset-0 bg-black/40 transition-opacity duration-200 z-40 ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
+        style={{ touchAction: 'none' }}
         onClick={() => toggleDrawer(false)}
-        style={{
-          touchAction: 'none',
-        }}
       />
     </>
   );
