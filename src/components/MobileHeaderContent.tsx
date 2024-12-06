@@ -31,8 +31,10 @@ export const MobileHeaderContent = () => {
       <div className="block md:hidden w-full bg-white relative z-30">
         <div className="h-14 px-4 grid grid-cols-[auto_1fr_auto] items-center">
           <Sheet open={isOpen} onOpenChange={toggleDrawer} modal={false}>
-            <SheetTrigger asChild>
-              <button className="p-2 -ml-2">
+            <SheetTrigger asChild disabled={isSearching}>
+              <button
+                className={`p-2 -ml-2 ${isSearching ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
                 <Menu className="w-6 h-6 text-gray-700" />
               </button>
             </SheetTrigger>
@@ -128,17 +130,23 @@ export const MobileHeaderContent = () => {
       </div>
       {/* 검색용 백드롭 */}
       <div
-        className={`fixed inset-0 bg-black/40 transition-opacity duration-200 z-20 ${
+        className={`fixed inset-0 bg-black/40 transition-opacity duration-200 z-20 overflow-hidden touch-none ${
           isSearching ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         onClick={toggleSearch}
+        style={{
+          touchAction: 'none',
+        }}
       />
       {/* 서랍메뉴용 백드롭 */}
       <div
-        className={`fixed inset-0 bg-black/40 transition-opacity duration-200 z-40 ${
+        className={`fixed inset-0 bg-black/40 transition-opacity duration-200 z-40 overflow-hidden touch-none ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         onClick={() => toggleDrawer(false)}
+        style={{
+          touchAction: 'none',
+        }}
       />
     </>
   );
