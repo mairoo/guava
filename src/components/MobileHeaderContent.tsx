@@ -18,7 +18,34 @@ export const MobileHeaderContent = () => {
   const toggleDrawer = (open: boolean) => {
     setIsOpen(open);
     if (isSearching) setIsSearching(false);
+
+    // 서랍 메뉴가 열릴 때 body 스크롤 막기
+    if (open) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      // 현재 스크롤 위치 저장
+      document.body.style.top = `-${window.scrollY}px`;
+    } else {
+      // 스크롤 위치 복원
+      const scrollY = document.body.style.top;
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.top = '';
+      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+    }
   };
+
+  // 컴포넌트가 언마운트될 때 body 스타일 복원
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.top = '';
+    };
+  }, []);
 
   useEffect(() => {
     if (isSearching && searchInputRef.current) {
@@ -38,6 +65,11 @@ export const MobileHeaderContent = () => {
     'flex items-center px-4 py-3 hover:bg-gray-100 transition-colors';
   const iconButtonClasses = 'p-2';
 
+  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    // 스크롤 이벤트 전파 방지
+    e.stopPropagation();
+  };
+
   return (
     <>
       <div className="block md:hidden bg-white relative z-30">
@@ -52,14 +84,21 @@ export const MobileHeaderContent = () => {
             </SheetTrigger>
             <SheetContent
               side="left"
-              className="w-[300px] p-0 border-r shadow-lg !pr-0"
+              className="w-[300px] p-0 border-r shadow-lg !pr-0 overflow-hidden"
             >
               <div className="flex flex-col h-full bg-white">
                 <div className="p-4 border-b flex justify-between items-center">
                   <h2 className="text-lg font-semibold">메뉴</h2>
                 </div>
 
-                <nav className="flex-1 overflow-y-auto">
+                <nav
+                  className="flex-1 overflow-y-auto overscroll-contain"
+                  onScroll={handleScroll}
+                  style={{
+                    WebkitOverflowScrolling: 'touch',
+                    isolation: 'isolate',
+                  }}
+                >
                   <div className="py-2">
                     {menuItems.map(({ href, label }) => (
                       <Link
