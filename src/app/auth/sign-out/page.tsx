@@ -1,5 +1,6 @@
 'use client';
 
+import { TopSpace } from '@/components/layout';
 import { useLogoutMutation } from '@/store/auth/api';
 import { useRouter } from 'next/navigation';
 
@@ -18,7 +19,7 @@ export default function LogoutPage() {
   };
 
   return (
-    <div>
+    <TopSpace>
       <div>
         <h1>로그아웃</h1>
         <p>정말 로그아웃 하시겠습니까?</p>
@@ -31,6 +32,6 @@ export default function LogoutPage() {
           </button>
         </div>
       </div>
-    </div>
+    </TopSpace>
   );
 }

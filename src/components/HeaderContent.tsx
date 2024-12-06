@@ -14,7 +14,7 @@ export const HeaderContent = () => {
             <div>
               <Link href="/">
                 <img
-                  src="https://pincoin-s3.s3.amazonaws.com/static/images/shop/default/pincoin_www_260x50.png"
+                  src="/pincoin_www_260x50.png"
                   alt="핀코인 대표몰"
                   title="핀코인 대표몰"
                 />
