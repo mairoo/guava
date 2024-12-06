@@ -3,7 +3,7 @@
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Search, ShoppingBag, X } from 'lucide-react';
 import Link from 'next/link';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 export const MobileHeaderContent = () => {
   const [isSearching, setIsSearching] = useState(false);
@@ -15,27 +15,27 @@ export const MobileHeaderContent = () => {
     if (isOpen) setIsOpen(false);
   };
 
-  const toggleDrawer = (open: boolean) => {
-    setIsOpen(open);
-    if (isSearching) setIsSearching(false);
+  const toggleDrawer = useCallback(
+    (open: boolean) => {
+      setIsOpen(open);
+      if (isSearching) setIsSearching(false);
 
-    // 서랍 메뉴가 열릴 때 body 스크롤 막기
-    if (open) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      // 현재 스크롤 위치 저장
-      document.body.style.top = `-${window.scrollY}px`;
-    } else {
-      // 스크롤 위치 복원
-      const scrollY = document.body.style.top;
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
-    }
-  };
+      if (open) {
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+        document.body.style.top = `-${window.scrollY}px`;
+      } else {
+        const scrollY = document.body.style.top;
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.top = '';
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+    },
+    [isSearching],
+  );
 
   // 컴포넌트가 언마운트될 때 body 스타일 복원
   useEffect(() => {
