@@ -36,15 +36,22 @@ export const MobileHeaderContent = () => {
   const commonIconClasses = 'w-6 h-6 text-gray-700';
   const menuItemClasses =
     'flex items-center px-4 py-3 hover:bg-gray-100 transition-colors';
+  const iconButtonClasses = 'p-2';
 
   return (
     <>
+      <style jsx global>{`
+        .sheet-close-button svg {
+          width: 24px !important;
+          height: 24px !important;
+        }
+      `}</style>
       <div className="block md:hidden bg-white relative z-30">
         <div className="h-14 px-4 grid grid-cols-[auto_1fr_auto] items-center">
           <Sheet open={isOpen} onOpenChange={toggleDrawer} modal={false}>
             <SheetTrigger asChild disabled={isSearching}>
               <button
-                className={`p-2 -ml-2 ${isSearching ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`${iconButtonClasses} -ml-2 ${isSearching ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <Menu className={commonIconClasses} />
               </button>
@@ -56,9 +63,6 @@ export const MobileHeaderContent = () => {
               <div className="flex flex-col h-full bg-white">
                 <div className="p-4 border-b flex justify-between items-center">
                   <h2 className="text-lg font-semibold">메뉴</h2>
-                  <button onClick={() => toggleDrawer(false)}>
-                    <X className={commonIconClasses} />
-                  </button>
                 </div>
 
                 <nav className="flex-1 overflow-y-auto">
@@ -107,14 +111,14 @@ export const MobileHeaderContent = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <button onClick={toggleSearch}>
+            <button className={iconButtonClasses} onClick={toggleSearch}>
               {isSearching ? (
                 <X className={commonIconClasses} />
               ) : (
                 <Search className={commonIconClasses} />
               )}
             </button>
-            <button>
+            <button className={iconButtonClasses}>
               <ShoppingBag className={commonIconClasses} />
             </button>
           </div>
