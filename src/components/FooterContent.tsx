@@ -1,4 +1,5 @@
 import React from 'react';
+import { Container } from './layout/Container';
 
 export const FooterContent = () => {
   const links = [
@@ -21,7 +22,7 @@ export const FooterContent = () => {
   return (
     <>
       <div className="bg-green-50 text-gray-600">
-        <div className="container max-w-7xl mx-auto px-2">
+        <Container>
           <div className="pt-4">
             <div className="flex flex-wrap gap-x-6 gap-y-1">
               {links.map(({ href, text }) => (
@@ -50,17 +51,17 @@ export const FooterContent = () => {
               </p>
             </div>
           </div>
-        </div>
+        </Container>
       </div>
 
       <div className="bg-teal-900 text-gray-200">
-        <div className="container max-w-7xl mx-auto px-2">
+        <Container>
           <div className="py-2 text-center">
             <span>Copyright © 2012-2024 www.pincoin.co.kr</span>
             <br className="sm:hidden" />
             <span className="sm:inline"> All Rights Reserved.</span>
           </div>
-        </div>
+        </Container>
       </div>
     </>
   );
