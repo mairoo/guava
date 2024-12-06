@@ -40,12 +40,6 @@ export const MobileHeaderContent = () => {
 
   return (
     <>
-      <style jsx global>{`
-        .sheet-close-button svg {
-          width: 24px !important;
-          height: 24px !important;
-        }
-      `}</style>
       <div className="block md:hidden bg-white relative z-30">
         <div className="h-14 px-4 grid grid-cols-[auto_1fr_auto] items-center">
           <Sheet open={isOpen} onOpenChange={toggleDrawer} modal={false}>
