@@ -1,11 +1,11 @@
-// pages/CartPage.tsx
 'use client';
 
 import { CartItemDesktop } from '@/components/cart/CartItemDesktop';
 import { CartItemMobile } from '@/components/cart/CartItemMobile';
-import { PaymentMethods } from '@/components/cart/PaymentMethods';
 import { FlexColumn, TitledSection } from '@/components/layout';
 import { Card, CardContent } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { CART_ITEMS, PAYMENT_METHODS } from '@/data/cart';
 import { formatKRW } from '@/utils';
 import { useState } from 'react';
@@ -59,6 +59,58 @@ const CartPage = () => {
     </div>
   );
 
+  const PaymentMethodsDesktopView = (
+    <div className="hidden lg:block">
+      <Card className="border-0 shadow-none">
+        <CardContent className="pt-6 p-3">
+          <RadioGroup
+            value={paymentMethod}
+            onValueChange={handlePaymentMethodChange}
+            className="grid grid-cols-3 gap-4"
+          >
+            {PAYMENT_METHODS.map((method) => (
+              <div key={method.id} className="flex items-center space-x-3">
+                <RadioGroupItem value={method.id} id={`desktop-${method.id}`} />
+                <Label
+                  htmlFor={`desktop-${method.id}`}
+                  className="cursor-pointer"
+                >
+                  <span className="font-medium">{method.name}</span>
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const PaymentMethodsMobileView = (
+    <div className="lg:hidden">
+      <Card>
+        <CardContent className="pt-6 p-3">
+          <RadioGroup
+            value={paymentMethod}
+            onValueChange={handlePaymentMethodChange}
+            className="space-y-3"
+          >
+            {PAYMENT_METHODS.map((method) => (
+              <div key={method.id} className="flex items-center space-x-3">
+                <RadioGroupItem value={method.id} id={`mobile-${method.id}`} />
+                <Label
+                  htmlFor={`mobile-${method.id}`}
+                  className="cursor-pointer"
+                >
+                  <span className="font-medium">{method.name}</span>
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
   return (
     <FlexColumn>
       <TitledSection title="장바구니 / 주문결제">
@@ -66,11 +118,8 @@ const CartPage = () => {
         {MobileView}
       </TitledSection>
       <TitledSection title="입금 / 결제수단">
-        <PaymentMethods
-          methods={PAYMENT_METHODS}
-          selectedMethod={paymentMethod}
-          onMethodChangeAction={handlePaymentMethodChange}
-        />
+        {PaymentMethodsDesktopView}
+        {PaymentMethodsMobileView}
       </TitledSection>
       <TitledSection title="주의사항">
         <div>주문 전 확인사항 영역</div>
