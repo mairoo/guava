@@ -100,7 +100,7 @@ export const MobileHeaderContent = () => {
                   title="핀코인"
                   className="h-6 object-contain"
                 />
-                <span className="text-lg font-semibold">핀코인</span>
+                <span className="text-xl font-semibold text-orange-500">핀코인</span>
               </Link>
             )}
           </div>

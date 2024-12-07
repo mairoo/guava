@@ -87,7 +87,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       >
         <div className="flex flex-col h-full bg-white">
           <div className="relative border-b">
-            <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b]">
+            <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-green-50 text-lime-600">
               장바구니
             </h2>
             <SheetClose asChild>
@@ -137,7 +137,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
           {cartItems.length > 0 && (
             <div className="border-t">
-              <h2 className="h-14 flex items-center justify-between px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b]">
+              <h2 className="h-14 flex items-center justify-between px-4 text-lg font-semibold bg-green-50 text-lime-600">
                 <span>총 상품금액</span>
                 <span>
                   {cartItems

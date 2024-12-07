@@ -64,7 +64,7 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
           <div className="flex flex-col h-full bg-white">
             {/* 상단 고정 영역 */}
             <div className="relative border-b">
-              <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b]">
+              <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-green-50 text-lime-600">
                 핀코인 대표몰
               </h2>
               <SheetClose asChild>
@@ -94,7 +94,7 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
 
             {/* 상품권 목록 (스크롤 가능) */}
             <div className="flex-1 flex flex-col min-h-0">
-              <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b] border-y sticky top-0 z-10">
+              <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-green-50 text-lime-600 border-y sticky top-0 z-10">
                 상품권
               </h2>
               <div

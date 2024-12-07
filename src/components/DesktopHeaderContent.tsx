@@ -31,54 +31,11 @@ export const DesktopHeaderContent: React.FC<DesktopHeaderContentProps> = ({
                 title="핀코인"
                 className="h-8 object-contain"
               />
-              <span className="text-xl font-semibold">핀코인</span>
+              <span className="text-xl font-semibold text-orange-500">핀코인</span>
             </Link>
           </div>
 
-          {/* Top Navigation */}
-          <nav>
-            <NavList>
-              {currentMenuItems.map(({ href, label, icon: Icon }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className="hover:text-gray-600 flex items-center gap-1"
-                  >
-                    <Icon className="w-4 h-4" />
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </NavList>
-          </nav>
-        </Container>
-      </div>
-
-      {/* Second Row with green background */}
-      <div className="bg-green-50 text-gray-800">
-        <Container>
-          <div className="py-1 flex justify-between items-center">
-            {/* Category Dropdown */}
-            <nav>
-              <NavList>
-                {[
-                  '구글/넥슨/퍼니카드',
-                  '스마트/도서문화/컬쳐랜드',
-                  '에그/해피머니',
-                  '온/틴캐시',
-                  '선불쿠폰',
-                  '게임소식',
-                ].map((text) => (
-                  <li key={text} className="relative group">
-                    <button className="hover:text-gray-600">{text}</button>
-                    <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-lg rounded-lg p-2 w-48">
-                      {/* Dropdown items here */}
-                    </div>
-                  </li>
-                ))}
-              </NavList>
-            </nav>
-
+          <div className="flex items-center gap-6">
             {/* Search Field */}
             <div className="relative w-64">
               <input
@@ -90,6 +47,23 @@ export const DesktopHeaderContent: React.FC<DesktopHeaderContentProps> = ({
                 <Search className="h-5 w-5 text-gray-400" />
               </button>
             </div>
+
+            {/* Top Navigation */}
+            <nav>
+              <NavList>
+                {currentMenuItems.map(({ href, label, icon: Icon }) => (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      className="hover:text-gray-600 flex items-center gap-1"
+                    >
+                      <Icon className="w-4 h-4" />
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </NavList>
+            </nav>
           </div>
         </Container>
       </div>
