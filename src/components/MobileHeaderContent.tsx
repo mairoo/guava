@@ -173,7 +173,7 @@ export const MobileHeaderContent = () => {
 
       {/* 검색용 백드롭 */}
       <div
-        className={`fixed inset-0 bg-black/40 transition-opacity duration-200 z-20 ${
+        className={`fixed inset-0 bg-black/40 transition-opacity duration-100 z-20 ${
           isSearching ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         style={{ touchAction: 'none' }}
@@ -182,7 +182,7 @@ export const MobileHeaderContent = () => {
 
       {/* 서랍메뉴용 백드롭 */}
       <div
-        className={`fixed inset-0 bg-black/40 transition-opacity duration-200 z-40 ${
+        className={`fixed inset-0 bg-black/40 transition-opacity duration-100 z-40 ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         style={{ touchAction: 'none' }}
