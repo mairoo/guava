@@ -64,7 +64,7 @@ const OrderListPage = () => {
         <OrderList orders={orders} />
       </TitledSection>
 
-      <GridRow cols={2} gap={4}>
+      <GridRow cols={2} gapX={8} gapY={0}>
         <TitledSection title="최근 로그인 이력">
           <LoginHistory logins={logins} />
         </TitledSection>

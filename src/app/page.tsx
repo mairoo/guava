@@ -152,7 +152,7 @@ const Page = () => (
         </DottedList>
       </TitledSection>
     </GridRowTwoThirds>
-    <GridRow cols={2} gap={4}>
+    <GridRow cols={2} gapX={8} gapY={0}>
       <TitledSection title="공지사항">
         <MessageTitleDateList messages={noticeData} />
       </TitledSection>
