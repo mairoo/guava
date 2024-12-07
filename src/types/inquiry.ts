@@ -3,7 +3,6 @@ export interface Inquiry {
   status: string;
   category: string;
   orderId: string | null;
-  date: string;
-  time: string;
+  datetime: string; // ISO 8601 format: YYYY-MM-DD HH:mm:ss
   title: string;
 }

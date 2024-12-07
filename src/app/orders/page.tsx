@@ -47,8 +47,7 @@ const OrderListPage = () => {
       status: '답변완료',
       category: '입금/결제',
       orderId: 'e3d12d89',
-      date: '2024년 12월 5일',
-      time: '오후 5:40',
+      datetime: '2024-12-05 17:40:00',
       title: '결제 확인 부탁드립니다',
     },
     {
@@ -56,8 +55,7 @@ const OrderListPage = () => {
       status: '답변대기',
       category: '회원가입',
       orderId: null,
-      date: '2024년 10월 6일',
-      time: '오후 3:51',
+      datetime: '2024-10-06 15:51:00',
       title: '본인인증 오류 관련 문의드립니다',
     },
   ];
