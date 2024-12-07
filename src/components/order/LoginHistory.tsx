@@ -16,8 +16,8 @@ const formatDatetime = (datetime: string) => {
     .replace(',', '');
 };
 
-const truncateUserAgent = (userAgent: string) => {
-  const maxLength = 19; // "2024-12-05 17:40:00" 길이
+const truncateUserAgent = (userAgent: string, isMobile = false) => {
+  const maxLength = isMobile ? 40 : 19; // 모바일에서는 더 긴 길이 허용
   return userAgent.length > maxLength
     ? `${userAgent.substring(0, maxLength - 1)}…`
     : userAgent;
@@ -33,7 +33,9 @@ export const LoginHistory = ({ logins }: { logins: Login[] }) => {
             key={login.id}
             className="grid grid-cols-3 gap-4 p-4 items-center hover:bg-slate-50 transition-colors"
           >
-            <div className="text-sm font-mono">{formatDatetime(login.datetime)}</div>
+            <div className="text-sm font-mono">
+              {formatDatetime(login.datetime)}
+            </div>
             <div className="text-sm font-mono">
               {truncateUserAgent(login.userAgent)}
             </div>
@@ -52,14 +54,12 @@ export const LoginHistory = ({ logins }: { logins: Login[] }) => {
           className="p-4 border rounded-lg hover:bg-slate-50 transition-colors"
         >
           <div className="space-y-2">
-            <div className="text-sm">{formatDatetime(login.datetime)}</div>
             <div className="flex justify-between items-center">
-              <span className="text-sm font-mono text-slate-600">
-                {truncateUserAgent(login.userAgent)}
-              </span>
-              <span className="text-sm font-mono text-slate-600">
-                {login.ip}
-              </span>
+              <span className="text-sm">{formatDatetime(login.datetime)}</span>
+              <span className="text-sm font-mono">{login.ip}</span>
+            </div>
+            <div className="text-sm font-mono text-slate-600">
+              {truncateUserAgent(login.userAgent, true)}
             </div>
           </div>
         </div>
