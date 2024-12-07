@@ -1,8 +1,10 @@
 'use client';
 
-import { CartAgreements } from '@/components/cart';
-import { CartItemDesktop } from '@/components/cart/CartItemDesktop';
-import { CartItemMobile } from '@/components/cart/CartItemMobile';
+import {
+  CartAgreements,
+  CartItemDesktop,
+  CartItemMobile,
+} from '@/components/cart';
 import { FlexColumn, TitledSection } from '@/components/layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -123,18 +125,18 @@ const CartPage = () => {
 
   return (
     <FlexColumn>
-      <TitledSection title="장바구니 / 주문결제">
+      <TitledSection title="장바구니 / 주문결제" showBorder>
         {DesktopView}
         {MobileView}
       </TitledSection>
-      <TitledSection title="입금 / 결제수단">
+      <TitledSection title="입금 / 결제수단" showBorder>
         {PaymentMethodsDesktopView}
         {PaymentMethodsMobileView}
       </TitledSection>
-      <div className="">
+      <TitledSection title="주문 동의" showBorder>
         <CartAgreements onSubmit={handleOrderSubmit} />
-      </div>
-      <TitledSection title="주의사항">
+      </TitledSection>
+      <TitledSection title="주의사항" showBorder>
         <div>주문 전 확인사항 영역</div>
       </TitledSection>
     </FlexColumn>
