@@ -18,7 +18,6 @@ interface TitledSectionProps extends ComponentPropsWithoutRef<'div'> {
   isBold?: boolean;
   spacing?: 'space-y-0' | 'space-y-2' | 'space-y-4' | 'space-y-6' | 'space-y-8';
   verticalMargin?: string;
-  padding?: string;
   className?: string;
   showBorder?: boolean;
   showSeparator?: boolean;
@@ -27,13 +26,11 @@ interface TitledSectionProps extends ComponentPropsWithoutRef<'div'> {
 export const TitledSection = ({
   title,
   children,
-
   fontSize = 'text-xl',
   titleColor = 'text-amber-600',
   isBold = true,
   spacing = 'space-y-2',
   verticalMargin = 'my-3',
-  padding = 'p-0',
   className,
   showBorder = false,
   showSeparator = false,
@@ -41,12 +38,14 @@ export const TitledSection = ({
   return (
     <Card
       className={cn(
-        'mx-0 rounded-lg',
+        'mx-0 rounded-lg p-0 lg:p-6',
         spacing,
         verticalMargin,
-        padding,
         className,
-        { 'border-0 shadow-none': !showBorder },
+        {
+          'border-0 shadow-none': !showBorder,
+          'lg:border lg:shadow border-0 shadow-none': showBorder,
+        },
       )}
     >
       <CardHeader className="px-0 pt-0 pb-0">

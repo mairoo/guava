@@ -60,20 +60,19 @@ const OrderListPage = () => {
 
   return (
     <FlexColumn>
-      <TitledSection title="주문 및 발송 내역">
+      <TitledSection title="주문 및 발송 내역" showBorder>
         <OrderList orders={orders} />
+        <Pagination />
       </TitledSection>
 
       <GridRow cols={2} gapX={8} gapY={0}>
-        <TitledSection title="최근 로그인 이력">
+        <TitledSection title="최근 로그인 이력" showBorder>
           <LoginHistory logins={logins} />
         </TitledSection>
-        <TitledSection title="최근 문의 내역">
+        <TitledSection title="최근 문의 내역" showBorder>
           <InquiryList inquiries={inquiries} />
         </TitledSection>
       </GridRow>
-
-      <Pagination />
     </FlexColumn>
   );
 };
