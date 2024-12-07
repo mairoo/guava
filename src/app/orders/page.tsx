@@ -146,9 +146,9 @@ const OrderListPage = () => {
             ))}
           </div>
 
-          <div className="flex items-center gap-2 mt-1 p-3 bg-slate-50 rounded-md border border-slate-200">
-            <Info className="h-4 w-4 text-slate-500 flex-shrink-0" />
-            <span className="text-sm text-slate-600">
+          <div className="flex items-center gap-2 mt-1 p-3 bg-amber-50 rounded-md border border-amber-200 ">
+            <Info className="h-4 w-4 text-orange-900 flex-shrink-0" />
+            <span className="text-sm text-orange-900">
               신용카드/휴대폰 결제 구매내역은 카드몰 주문/발송 페이지에서 확인
               가능합니다.
             </span>
@@ -157,9 +157,9 @@ const OrderListPage = () => {
         <GridRow cols={2} gap={4}>
           <TitledSection title="최근 로그인 이력">
             <div className="space-y-4">
-              <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-md border border-slate-200">
-                <Info className="h-4 w-4 text-slate-500 flex-shrink-0" />
-                <span className="text-sm text-slate-600">
+              <div className="flex items-center gap-2 p-3 bg-amber-50 rounded-md border border-amber-200 ">
+                <Info className="h-4 w-4 text-orange-900 flex-shrink-0" />
+                <span className="text-sm text-orange-900">
                   수상한 접속이 있는 경우 즉시 비밀번호를 변경하시고 고객센터에
                   알려주세요.
                 </span>
@@ -217,53 +217,62 @@ const OrderListPage = () => {
           </TitledSection>
           <TitledSection title="최근 문의 내역">
             <div className="space-y-4">
-              <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-md border border-slate-200">
-                <Info className="h-4 w-4 text-slate-500 flex-shrink-0" />
-                <span className="text-sm text-slate-600">
+              <div className="flex items-center gap-2 p-3 bg-amber-50 rounded-md border border-amber-200">
+                <Info className="h-4 w-4 text-orange-900 flex-shrink-0" />
+                <span className="text-sm text-orange-900">
                   고객센터 운영 시간: 매일 오전 10시~밤 11시
                 </span>
               </div>
 
               {/* 데스크톱 뷰 */}
               <div className="hidden lg:block">
-                <div className="grid grid-cols-5 gap-4 p-4 bg-slate-50 border-y font-medium">
+                {/* Header */}
+                <div className="grid grid-cols-4 gap-4 p-4 bg-slate-50 border-y font-medium">
                   <div className="text-sm text-slate-600">답변상태</div>
                   <div className="text-sm text-slate-600">문의유형</div>
                   <div className="text-sm text-slate-600">관련주문</div>
                   <div className="text-sm text-slate-600">문의일시</div>
-                  <div className="text-sm text-slate-600">제목</div>
                 </div>
-
                 <div className="divide-y">
                   {inquiries.map((inquiry) => (
                     <div
                       key={inquiry.id}
-                      className="grid grid-cols-5 gap-4 p-4 items-center hover:bg-slate-50 transition-colors"
+                      className="hover:bg-slate-50 transition-colors"
                     >
-                      <div className="text-sm">
-                        <span
-                          className={
-                            inquiry.status === '답변완료'
-                              ? 'text-green-600'
-                              : 'text-orange-600'
-                          }
-                        >
-                          {inquiry.status}
-                        </span>
+                      {/* First row */}
+                      <div className="grid grid-cols-4 gap-4 p-4 pb-2 items-center">
+                        <div className="text-sm">
+                          <span
+                            className={
+                              inquiry.status === '답변완료'
+                                ? 'text-green-600'
+                                : 'text-orange-600'
+                            }
+                          >
+                            {inquiry.status}
+                          </span>
+                        </div>
+                        <div className="text-sm">{inquiry.category}</div>
+                        <div className="text-sm">
+                          {inquiry.orderId ? (
+                            <div className="flex items-center gap-1">
+                              <span className="font-mono">
+                                {inquiry.orderId}
+                              </span>
+                              <LinkIcon className="h-3 w-3 text-slate-400" />
+                            </div>
+                          ) : (
+                            '-'
+                          )}
+                        </div>
+                        <div className="text-sm">{`${inquiry.date} ${inquiry.time}`}</div>
                       </div>
-                      <div className="text-sm">{inquiry.category}</div>
-                      <div className="text-sm">
-                        {inquiry.orderId ? (
-                          <div className="flex items-center gap-1">
-                            <span className="font-mono">{inquiry.orderId}</span>
-                            <LinkIcon className="h-3 w-3 text-slate-400" />
-                          </div>
-                        ) : (
-                          '-'
-                        )}
+                      {/* Second row */}
+                      <div className="px-4 pb-4">
+                        <div className="text-sm font-medium">
+                          {inquiry.title}
+                        </div>
                       </div>
-                      <div className="text-sm">{`${inquiry.date} ${inquiry.time}`}</div>
-                      <div className="text-sm font-medium">{inquiry.title}</div>
                     </div>
                   ))}
                 </div>
