@@ -1,5 +1,6 @@
 'use client';
 
+import { CartAgreements } from '@/components/cart';
 import { CartItemDesktop } from '@/components/cart/CartItemDesktop';
 import { CartItemMobile } from '@/components/cart/CartItemMobile';
 import { FlexColumn, TitledSection } from '@/components/layout';
@@ -25,6 +26,15 @@ const CartPage = () => {
     } catch (error) {
       console.error('Failed to update payment method:', error);
       // 에러 처리 로직 추가 (예: 토스트 메시지)
+    }
+  };
+
+  const handleOrderSubmit = async () => {
+    try {
+      // 주문 제출 로직 구현
+      console.log('Order submitted');
+    } catch (error) {
+      console.error('Failed to submit order:', error);
     }
   };
 
@@ -121,6 +131,9 @@ const CartPage = () => {
         {PaymentMethodsDesktopView}
         {PaymentMethodsMobileView}
       </TitledSection>
+      <div className="">
+        <CartAgreements onSubmit={handleOrderSubmit} />
+      </div>
       <TitledSection title="주의사항">
         <div>주문 전 확인사항 영역</div>
       </TitledSection>
