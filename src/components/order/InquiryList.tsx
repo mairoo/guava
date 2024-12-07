@@ -35,7 +35,7 @@ export const InquiryList = ({ inquiries }: { inquiries: Inquiry[] }) => {
   );
 
   const MobileView = (
-    <div className="lg:hidden space-y-4">
+    <div className="lg:hidden space-y-2">
       {inquiries.map((inquiry) => (
         <div
           key={inquiry.id}
@@ -69,7 +69,7 @@ export const InquiryList = ({ inquiries }: { inquiries: Inquiry[] }) => {
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <InfoAlert>고객센터 운영 시간: 매일 오전 10시~밤 11시</InfoAlert>
       {DesktopView}
       {MobileView}

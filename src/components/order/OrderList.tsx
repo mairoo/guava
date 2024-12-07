@@ -1,8 +1,9 @@
-import { TableHeader } from '@/components/common';
+import { InfoAlert, TableHeader } from '@/components/common';
 import { Card, CardContent } from '@/components/ui/card';
 import { Order } from '@/types/order';
 import { formatAmount, truncateUUID } from '@/utils';
 import Link from 'next/link';
+import React from 'react';
 
 export const OrderList = ({ orders }: { orders: Order[] }) => {
   const DesktopView = (
@@ -18,26 +19,30 @@ export const OrderList = ({ orders }: { orders: Order[] }) => {
       />
       <div className="divide-y">
         {orders.map((order) => (
-          <Link key={order.id} href={order.url}>
-            <div className="grid grid-cols-5 gap-4 p-4 items-center hover:bg-slate-50 transition-colors cursor-pointer">
-              <div className="font-mono text-sm">{truncateUUID(order.id)}</div>
-              <div className="text-sm">{order.status}</div>
-              <div className="text-sm">{order.paymentMethod}</div>
-              <div className="text-sm">{order.orderDate}</div>
-              <div className="text-sm font-semibold text-right">
-                {formatAmount(order.totalAmount)}
+          <div key={order.id}>
+            <Link href={order.url}>
+              <div className="grid grid-cols-5 gap-4 p-4 items-center hover:bg-slate-50 transition-colors cursor-pointer">
+                <div className="font-mono text-sm">
+                  {truncateUUID(order.id)}
+                </div>
+                <div className="text-sm">{order.status}</div>
+                <div className="text-sm">{order.paymentMethod}</div>
+                <div className="text-sm">{order.orderDate}</div>
+                <div className="text-sm font-semibold text-right">
+                  {formatAmount(order.totalAmount)}
+                </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+          </div>
         ))}
       </div>
     </div>
   );
 
   const MobileView = (
-    <div className="lg:hidden space-y-4">
+    <div className="lg:hidden space-y-2">
       {orders.map((order) => (
-        <Link key={order.id} href={order.url}>
+        <Link key={order.id} href={order.url} className="block">
           <Card className="hover:bg-slate-50 transition-colors cursor-pointer">
             <CardContent className="pt-6">
               <div className="space-y-3">
@@ -63,9 +68,13 @@ export const OrderList = ({ orders }: { orders: Order[] }) => {
   );
 
   return (
-    <>
+    <div className="space-y-2">
       {DesktopView}
       {MobileView}
-    </>
+      <InfoAlert>
+        신용카드/휴대폰 결제 구매내역은 카드몰 주문/발송 페이지에서 확인
+        가능합니다.
+      </InfoAlert>
+    </div>
   );
 };

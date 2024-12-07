@@ -1,4 +1,4 @@
-import { InfoAlert, Pagination } from '@/components/common';
+import { Pagination } from '@/components/common';
 import { FlexColumn, GridRow, TitledSection } from '@/components/layout';
 import { InquiryList, LoginHistory, OrderList } from '@/components/order';
 
@@ -62,10 +62,6 @@ const OrderListPage = () => {
     <FlexColumn spacing={2}>
       <TitledSection title="주문 및 발송 내역">
         <OrderList orders={orders} />
-        <InfoAlert>
-          신용카드/휴대폰 결제 구매내역은 카드몰 주문/발송 페이지에서 확인
-          가능합니다.
-        </InfoAlert>
       </TitledSection>
 
       <GridRow cols={2} gap={4}>

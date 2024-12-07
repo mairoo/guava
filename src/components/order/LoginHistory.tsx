@@ -26,7 +26,7 @@ export const LoginHistory = ({ logins }: { logins: Login[] }) => {
   );
 
   const MobileView = (
-    <div className="lg:hidden space-y-4">
+    <div className="lg:hidden space-y-2">
       {logins.map((login) => (
         <div
           key={login.id}
@@ -47,7 +47,7 @@ export const LoginHistory = ({ logins }: { logins: Login[] }) => {
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <InfoAlert>
         수상한 접속이 있는 경우 즉시 비밀번호를 변경하시고 고객센터에
         알려주세요.
