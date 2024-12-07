@@ -1,4 +1,3 @@
-import { TableHeader } from '@/components/common';
 import { FlexColumn, TitledSection } from '@/components/layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatKRW } from '@/utils';
@@ -8,6 +7,9 @@ const CartPage = () => {
   const cartItems = [
     { id: 1, name: '넥슨카드 5만원', price: 47500, quantity: 2 },
     { id: 2, name: '구글 5만원', price: 47500, quantity: 2 },
+    { id: 3, name: '구글 5만원', price: 47500, quantity: 2 },
+    { id: 4, name: '구글 5만원', price: 47500, quantity: 2 },
+    { id: 5, name: '구글 5만원', price: 47500, quantity: 2 },
   ];
 
   const totalAmount = cartItems.reduce(
@@ -17,7 +19,6 @@ const CartPage = () => {
 
   const DesktopView = (
     <div className="hidden lg:block">
-      <TableHeader columns={['상품명', '단가', '수량', '부분합계']} />
       <div className="divide-y">
         {cartItems.map((item) => (
           <div
@@ -62,7 +63,7 @@ const CartPage = () => {
         <Card key={item.id} className="hover:bg-slate-50 transition-colors">
           <CardContent className="pt-6">
             <div className="space-y-3">
-              <div className="text-sm font-medium">{item.name}</div>
+              <div className="text-sm font-semibold">{item.name}</div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">단가</span>
                 <span className="text-sm">{formatKRW.format(item.price)}</span>
