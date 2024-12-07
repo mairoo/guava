@@ -8,8 +8,6 @@ export const FooterContent = () => {
     { href: '/contact', text: '문의하기' },
     { href: '/terms', text: '이용약관' },
     { href: '/privacy', text: '개인정보 처리방침' },
-    { href: '/blog', text: '블로그' },
-    { href: '/docs', text: '기술문서' },
   ];
 
   const companyInfo = [
@@ -36,7 +34,7 @@ export const FooterContent = () => {
           <div className="h-4" />
 
           <div className="pb-4">
-            <p className="text-xl font-bold mb-4">주식회사 핀코인</p>
+            <p className="text-xl font-bold mb-4 text-orange-500">주식회사 핀코인</p>
             <div className="flex flex-wrap gap-x-6 gap-y-1">
               {companyInfo.map((info) => (
                 <p key={info}>{info}</p>

@@ -29,7 +29,7 @@ export const TitledSection = ({
   children,
 
   fontSize = 'text-xl',
-  titleColor = 'text-foreground',
+  titleColor = 'text-amber-600',
   isBold = true,
   spacing = 'space-y-2',
   verticalMargin = 'my-4',

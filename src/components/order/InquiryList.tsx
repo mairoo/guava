@@ -48,7 +48,7 @@ export const InquiryList = ({ inquiries }: { inquiries: Inquiry[] }) => {
                   className={`text-sm ${
                     inquiry.status === '답변완료'
                       ? 'text-green-600'
-                      : 'text-orange-600'
+                      : 'text-rose-600'
                   }`}
                 >
                   {inquiry.status}
