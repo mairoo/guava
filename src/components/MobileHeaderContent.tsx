@@ -62,6 +62,17 @@ export const MobileHeaderContent = () => {
     { href: '/shop/cateogry/구글기프트카드', label: '카테고리' },
     { href: '/me', label: '마이페이지' },
     { href: '/orders', label: '주문내역' },
+    // 더미 메뉴 항목 추가
+    { href: '/menu/1', label: '기프트카드 구매방법' },
+    { href: '/menu/2', label: '자주 묻는 질문' },
+    { href: '/menu/3', label: '이벤트' },
+    { href: '/menu/4', label: '공지사항' },
+    { href: '/menu/5', label: '고객센터' },
+    { href: '/menu/6', label: '이용약관' },
+    { href: '/menu/7', label: '개인정보처리방침' },
+    { href: '/menu/8', label: '제휴문의' },
+    { href: '/menu/9', label: '회사소개' },
+    { href: '/menu/10', label: '채용정보' },
   ];
 
   const commonIconClasses = 'w-6 h-6 text-gray-700';
