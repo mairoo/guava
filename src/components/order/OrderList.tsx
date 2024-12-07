@@ -49,13 +49,13 @@ export const OrderList = ({ orders }: { orders: Order[] }) => {
                 <div className="font-mono text-sm">
                   {truncateUUID(order.id)}
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">{order.paymentMethod}</span>
-                  <span className="text-sm">{order.status}</span>
+                <div className="flex justify-between items-center text-sm">
+                  <span>{order.paymentMethod}</span>
+                  <span>{order.status}</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">{order.orderDate}</span>
-                  <span className="text-sm font-semibold">
+                <div className="flex justify-between items-center text-sm">
+                  <span>{order.orderDate}</span>
+                  <span className="font-semibold">
                     {formatKRW.format(order.totalAmount)}
                   </span>
                 </div>

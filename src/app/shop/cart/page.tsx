@@ -1,3 +1,4 @@
+import { TableHeader } from '@/components/common';
 import { FlexColumn, TitledSection } from '@/components/layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatKRW } from '@/utils';
@@ -16,19 +17,14 @@ const CartPage = () => {
 
   const DesktopView = (
     <div className="hidden lg:block">
-      <div className="grid grid-cols-4 gap-4 p-4 bg-slate-100 rounded-t-lg">
-        <div className="text-sm font-medium">상품권</div>
-        <div className="text-sm font-medium text-right">단가</div>
-        <div className="text-sm font-medium text-center">수량</div>
-        <div className="text-sm font-medium text-right">부분합계</div>
-      </div>
+      <TableHeader columns={['상품명', '단가', '수량', '부분합계']} />
       <div className="divide-y">
         {cartItems.map((item) => (
           <div
             key={item.id}
             className="grid grid-cols-4 gap-4 p-4 items-center hover:bg-slate-50 transition-colors"
           >
-            <div className="text-sm font-bold">{item.name}</div>
+            <div className="text-sm font-semibold">{item.name}</div>
             <div className="text-sm text-right">
               {formatKRW.format(item.price)}
             </div>
@@ -52,8 +48,8 @@ const CartPage = () => {
           </div>
         ))}
       </div>
-      <div className="flex justify-end p-4 bg-slate-50 rounded-b-lg">
-        <div className="text-lg font-semibold">
+      <div className="flex justify-end p-4 bg-lime-50 rounded-b-lg">
+        <div className="text-sm font-semibold">
           합계금액: {formatKRW.format(totalAmount)}
         </div>
       </div>
@@ -66,7 +62,7 @@ const CartPage = () => {
         <Card key={item.id} className="hover:bg-slate-50 transition-colors">
           <CardContent className="pt-6">
             <div className="space-y-3">
-              <div className="text-sm font-bold">{item.name}</div>
+              <div className="text-sm font-medium">{item.name}</div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">단가</span>
                 <span className="text-sm">{formatKRW.format(item.price)}</span>
@@ -96,13 +92,11 @@ const CartPage = () => {
           </CardContent>
         </Card>
       ))}
-      <Card className="bg-slate-50">
+      <Card className="bg-lime-50">
         <CardContent className="pt-6">
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-medium">합계금액</span>
-            <span className="text-lg font-semibold">
-              {formatKRW.format(totalAmount)}
-            </span>
+          <div className="flex justify-between items-center text-sm font-bold">
+            <span>합계금액</span>
+            <span>{formatKRW.format(totalAmount)}</span>
           </div>
         </CardContent>
       </Card>
