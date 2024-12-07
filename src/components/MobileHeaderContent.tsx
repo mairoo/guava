@@ -14,7 +14,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 export const MobileHeaderContent = () => {
   const [isSearching, setIsSearching] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { lockScroll, unlockScroll } = useScrollLock();
 
@@ -28,13 +29,15 @@ export const MobileHeaderContent = () => {
       unlockScroll();
     }
 
-    if (isOpen) setIsOpen(false);
-  }, [isSearching, isOpen, lockScroll, unlockScroll]);
+    if (isMenuOpen) setIsMenuOpen(false);
+    if (isCartOpen) setIsCartOpen(false);
+  }, [isSearching, isMenuOpen, isCartOpen, lockScroll, unlockScroll]);
 
-  const toggleDrawer = useCallback(
+  const toggleMenu = useCallback(
     (open: boolean) => {
-      setIsOpen(open);
+      setIsMenuOpen(open);
       if (isSearching) setIsSearching(false);
+      if (isCartOpen) setIsCartOpen(false);
 
       if (open) {
         lockScroll();
@@ -42,7 +45,22 @@ export const MobileHeaderContent = () => {
         unlockScroll();
       }
     },
-    [isSearching, lockScroll, unlockScroll],
+    [isSearching, isCartOpen, lockScroll, unlockScroll],
+  );
+
+  const toggleCart = useCallback(
+    (open: boolean) => {
+      setIsCartOpen(open);
+      if (isSearching) setIsSearching(false);
+      if (isMenuOpen) setIsMenuOpen(false);
+
+      if (open) {
+        lockScroll();
+      } else {
+        unlockScroll();
+      }
+    },
+    [isSearching, isMenuOpen, lockScroll, unlockScroll],
   );
 
   useEffect(() => {
@@ -62,7 +80,6 @@ export const MobileHeaderContent = () => {
     { href: '/shop/cateogry/구글기프트카드', label: '카테고리' },
     { href: '/me', label: '마이페이지' },
     { href: '/orders', label: '주문내역' },
-    // 더미 메뉴 항목 추가
     { href: '/menu/1', label: '기프트카드 구매방법' },
     { href: '/menu/2', label: '자주 묻는 질문' },
     { href: '/menu/3', label: '이벤트' },
@@ -84,11 +101,63 @@ export const MobileHeaderContent = () => {
     e.stopPropagation();
   };
 
+  const cartItems = [
+    {
+      id: 1,
+      name: '구글플레이 기프트카드 1만원',
+      price: 10000,
+      quantity: 2,
+    },
+    {
+      id: 2,
+      name: '구글플레이 기프트카드 3만원',
+      price: 30000,
+      quantity: 1,
+    },
+    {
+      id: 3,
+      name: '구글플레이 기프트카드 5만원',
+      price: 50000,
+      quantity: 1,
+    },
+    {
+      id: 4,
+      name: '넷플릭스 기프트카드 3개월',
+      price: 45000,
+      quantity: 2,
+    },
+    {
+      id: 5,
+      name: '플레이스테이션 기프트카드 5만원',
+      price: 50000,
+      quantity: 1,
+    },
+    {
+      id: 6,
+      name: '닌텐도 기프트카드 3만원',
+      price: 30000,
+      quantity: 3,
+    },
+    {
+      id: 7,
+      name: '아이튠즈 기프트카드 3만원',
+      price: 30000,
+      quantity: 2,
+    },
+    {
+      id: 8,
+      name: '로블록스 기프트카드 1만원',
+      price: 10000,
+      quantity: 4,
+    },
+  ];
+
   return (
     <>
       <div className="block md:hidden bg-white relative z-30">
         <div className="h-14 px-4 grid grid-cols-[auto_1fr_auto] items-center">
-          <Sheet open={isOpen} onOpenChange={toggleDrawer} modal={false}>
+          {/* 왼쪽 메뉴 서랍 */}
+          <Sheet open={isMenuOpen} onOpenChange={toggleMenu} modal={false}>
             <SheetTrigger asChild disabled={isSearching}>
               <button
                 className={`${iconButtonClasses} -ml-2 ${isSearching ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -128,7 +197,7 @@ export const MobileHeaderContent = () => {
                         key={href}
                         href={href}
                         className={menuItemClasses}
-                        onClick={() => toggleDrawer(false)}
+                        onClick={() => toggleMenu(false)}
                       >
                         {label}
                       </Link>
@@ -174,9 +243,86 @@ export const MobileHeaderContent = () => {
                 <Search className={commonIconClasses} />
               )}
             </button>
-            <button className={iconButtonClasses}>
-              <ShoppingBag className={commonIconClasses} />
-            </button>
+            {/* 장바구니 서랍 */}
+            <Sheet open={isCartOpen} onOpenChange={toggleCart} modal={false}>
+              <SheetTrigger asChild>
+                <button className={iconButtonClasses}>
+                  <ShoppingBag className={commonIconClasses} />
+                </button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="w-[300px] p-0 border-l shadow-lg !pl-0 overflow-hidden [&>button]:hidden"
+              >
+                <div className="flex flex-col h-full bg-white">
+                  <div className="p-2 border-b flex justify-between items-center sticky top-0 bg-white z-10">
+                    <h2 className="text-lg font-semibold">장바구니</h2>
+                    <SheetClose asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="scale-150 transform origin-center rounded-full"
+                      >
+                        <X className="w-6 h-6 text-gray-700" />
+                      </Button>
+                    </SheetClose>
+                  </div>
+
+                  <div
+                    className="flex-1 overflow-y-auto overscroll-contain"
+                    onScroll={handleScroll}
+                    style={{
+                      WebkitOverflowScrolling: 'touch',
+                      isolation: 'isolate',
+                    }}
+                  >
+                    {cartItems.length > 0 ? (
+                      <div className="py-2">
+                        {cartItems.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center justify-between px-4 py-3 border-b last:border-b-0"
+                          >
+                            <div className="flex-1">
+                              <div className="font-medium">{item.name}</div>
+                              <div className="text-sm text-gray-500 mt-1">
+                                {item.price.toLocaleString()}원 x{' '}
+                                {item.quantity}개
+                              </div>
+                            </div>
+                            <div className="font-medium ml-4 text-right">
+                              {(item.price * item.quantity).toLocaleString()}원
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-gray-500">
+                        장바구니가 비어있습니다
+                      </div>
+                    )}
+                  </div>
+
+                  {cartItems.length > 0 && (
+                    <div className="border-t p-4 sticky bottom-0 bg-white">
+                      <div className="flex justify-between mb-4">
+                        <span className="font-medium">총 상품금액</span>
+                        <span className="font-medium">
+                          {cartItems
+                            .reduce(
+                              (sum, item) => sum + item.price * item.quantity,
+                              0,
+                            )
+                            .toLocaleString()}
+                          원
+                        </span>
+                      </div>
+                      <Button className="w-full">주문하기</Button>
+                    </div>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
         <div className="border-b border-gray-300" />
@@ -194,10 +340,15 @@ export const MobileHeaderContent = () => {
       {/* 서랍메뉴용 백드롭 */}
       <div
         className={`fixed inset-0 bg-black/40 transition-opacity duration-100 z-40 ${
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          isMenuOpen || isCartOpen
+            ? 'opacity-100'
+            : 'opacity-0 pointer-events-none'
         }`}
         style={{ touchAction: 'none' }}
-        onClick={() => toggleDrawer(false)}
+        onClick={() => {
+          if (isMenuOpen) toggleMenu(false);
+          if (isCartOpen) toggleCart(false);
+        }}
       />
     </>
   );
