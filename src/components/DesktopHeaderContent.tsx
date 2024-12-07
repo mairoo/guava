@@ -1,42 +1,10 @@
 'use client';
 
 import { Container, NavList } from '@/components/layout';
-import {
-  HelpCircle,
-  LogIn,
-  LogOut,
-  PackageCheck,
-  Search,
-  ShoppingCart,
-  User,
-  UserPlus,
-} from 'lucide-react';
+import { commonMenuItems, guestMenuItems, memberMenuItems } from '@/data/menus';
+import { Search } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
-
-// 메뉴 타입 정의에 icon 추가
-interface MenuItem {
-  href: string;
-  label: string;
-  icon: React.ElementType;
-}
-
-// 재사용 가능한 메뉴 아이템 정의
-const memberMenuItems: MenuItem[] = [
-  { href: '/me', label: '마이페이지', icon: User },
-  { href: '/auth/sign-out', label: '로그아웃', icon: LogOut },
-];
-
-const guestMenuItems: MenuItem[] = [
-  { href: '/auth/sign-in', label: '로그인', icon: LogIn },
-  { href: '/auth/sign-up', label: '회원가입', icon: UserPlus },
-];
-
-const commonMenuItems: MenuItem[] = [
-  { href: '/orders', label: '주문/발송', icon: PackageCheck },
-  { href: '/shop/cart', label: '장바구니', icon: ShoppingCart },
-  { href: '/support', label: '고객센터', icon: HelpCircle },
-];
 
 interface DesktopHeaderContentProps {
   isLoggedIn?: boolean;
