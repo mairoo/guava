@@ -44,7 +44,7 @@ export const OrderList = ({ orders }: { orders: Order[] }) => {
       {orders.map((order) => (
         <Link key={order.id} href={order.url} className="block">
           <Card className="hover:bg-slate-50 transition-colors cursor-pointer">
-            <CardContent className="pt-6">
+            <CardContent className="pt-6 p-3">
               <div className="space-y-3">
                 <div className="font-mono text-sm">
                   {truncateUUID(order.id)}

@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const Pagination = () => (
-  <div className="flex justify-center items-center gap-2 my-4">
+  <div className="flex justify-center items-center gap-2 mb-2">
     {['prev', '1', '2', '3', '4', 'next'].map((item, _) => (
       <button
         key={item}

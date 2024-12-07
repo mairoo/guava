@@ -38,7 +38,7 @@ export const InquiryList = ({ inquiries }: { inquiries: Inquiry[] }) => {
       {inquiries.map((inquiry) => (
         <div
           key={inquiry.id}
-          className="p-4 border rounded-lg hover:bg-slate-50 transition-colors"
+          className="p-3 border rounded-lg hover:bg-slate-50 transition-colors"
         >
           <div className="space-y-2">
             <div className="flex justify-between items-center">
