@@ -1,4 +1,3 @@
-// components/header/MenuDrawer.tsx
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -62,24 +61,35 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
       >
         <div className="flex flex-col h-full bg-white">
           {/* 상단 고정 영역 */}
-          <div>
-            <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b] border-b">
+          <div className="relative border-b">
+            <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b]">
               핀코인 대표몰
             </h2>
-            <nav className="py-2">
-              {mainMenuItems.map(({ href, label, icon: Icon }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
-                  onClick={() => onOpenChangeAction(false)}
-                >
-                  <Icon className="w-5 h-5 mr-3 text-gray-600" />
-                  {label}
-                </Link>
-              ))}
-            </nav>
+            {/* 닫기 버튼을 상단 헤더 내부로 이동하고 위치 조정 */}
+            <SheetClose asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full"
+              >
+                <X className="w-6 h-6 text-gray-700" />
+              </Button>
+            </SheetClose>
           </div>
+
+          <nav className="py-2">
+            {mainMenuItems.map(({ href, label, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
+                onClick={() => onOpenChangeAction(false)}
+              >
+                <Icon className="w-5 h-5 mr-3 text-gray-600" />
+                {label}
+              </Link>
+            ))}
+          </nav>
 
           {/* 상품권 목록 (스크롤 가능) */}
           <div className="flex-1 flex flex-col min-h-0">
@@ -115,17 +125,6 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
               카드몰로 이동
             </h2>
           </div>
-
-          {/* 닫기 버튼 */}
-          <SheetClose asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 right-2 scale-150 transform origin-center rounded-full"
-            >
-              <X className="w-6 h-6 text-gray-700" />
-            </Button>
-          </SheetClose>
         </div>
       </SheetContent>
     </Sheet>
