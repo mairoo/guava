@@ -27,17 +27,15 @@ const OrderListPage = () => {
   const logins = [
     {
       id: '1',
-      date: '2024년 12월 5일',
-      time: '오후 5:40',
-      device: '데스크톱',
-      location: '서울',
+      datetime: '2024-12-05 17:40:00',
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      ip: '123.45.67.89',
     },
     {
       id: '2',
-      date: '2024년 10월 6일',
-      time: '오후 3:51',
-      device: '모바일',
-      location: '부산',
+      datetime: '2024-10-06 15:51:00',
+      userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X)',
+      ip: '98.76.54.32',
     },
   ];
 

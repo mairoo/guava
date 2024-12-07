@@ -1,7 +1,6 @@
 export interface Login {
   id: string;
-  date: string;
-  time: string;
-  device: string;
-  location: string;
+  datetime: string;
+  userAgent: string;
+  ip: string;
 }

@@ -1,20 +1,43 @@
 import { InfoAlert, TableHeader } from '@/components/common';
 import { Login } from '@/types/login';
 
+const formatDatetime = (datetime: string) => {
+  return new Date(datetime)
+    .toLocaleString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    })
+    .replace(/\./g, '-')
+    .replace(',', '');
+};
+
+const truncateUserAgent = (userAgent: string) => {
+  const maxLength = 19; // "2024-12-05 17:40:00" 길이
+  return userAgent.length > maxLength
+    ? `${userAgent.substring(0, maxLength - 1)}…`
+    : userAgent;
+};
+
 export const LoginHistory = ({ logins }: { logins: Login[] }) => {
   const DesktopView = (
     <div className="hidden lg:block">
-      <TableHeader columns={['접속일자', '접속시간', '접속기기', '접속위치']} />
+      <TableHeader columns={['접속일시', 'User-Agent', 'IP 주소']} />
       <div className="divide-y">
         {logins.map((login) => (
           <div
             key={login.id}
-            className="grid grid-cols-4 gap-4 p-4 items-center hover:bg-slate-50 transition-colors"
+            className="grid grid-cols-3 gap-4 p-4 items-center hover:bg-slate-50 transition-colors"
           >
-            <div className="text-sm">{login.date}</div>
-            <div className="text-sm">{login.time}</div>
-            <div className="text-sm">{login.device}</div>
-            <div className="text-sm">{login.location}</div>
+            <div className="text-sm font-mono">{formatDatetime(login.datetime)}</div>
+            <div className="text-sm font-mono">
+              {truncateUserAgent(login.userAgent)}
+            </div>
+            <div className="text-sm font-mono">{login.ip}</div>
           </div>
         ))}
       </div>
@@ -29,13 +52,14 @@ export const LoginHistory = ({ logins }: { logins: Login[] }) => {
           className="p-4 border rounded-lg hover:bg-slate-50 transition-colors"
         >
           <div className="space-y-2">
+            <div className="text-sm">{formatDatetime(login.datetime)}</div>
             <div className="flex justify-between items-center">
-              <span className="text-sm">{login.date}</span>
-              <span className="text-sm">{login.time}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-slate-600">{login.device}</span>
-              <span className="text-sm text-slate-600">{login.location}</span>
+              <span className="text-sm font-mono text-slate-600">
+                {truncateUserAgent(login.userAgent)}
+              </span>
+              <span className="text-sm font-mono text-slate-600">
+                {login.ip}
+              </span>
             </div>
           </div>
         </div>
