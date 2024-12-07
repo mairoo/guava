@@ -32,7 +32,7 @@ export const TitledSection = ({
   titleColor = 'text-amber-600',
   isBold = true,
   spacing = 'space-y-2',
-  verticalMargin = 'my-4',
+  verticalMargin = 'my-3',
   padding = 'p-0',
   className,
   showBorder = false,
