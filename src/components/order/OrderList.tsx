@@ -1,7 +1,7 @@
 import { InfoAlert, TableHeader } from '@/components/common';
 import { Card, CardContent } from '@/components/ui/card';
 import { Order } from '@/types/order';
-import { formatAmount, truncateUUID } from '@/utils';
+import { formatKRW, truncateUUID } from '@/utils';
 import Link from 'next/link';
 import React from 'react';
 
@@ -29,7 +29,7 @@ export const OrderList = ({ orders }: { orders: Order[] }) => {
                 <div className="text-sm">{order.paymentMethod}</div>
                 <div className="text-sm">{order.orderDate}</div>
                 <div className="text-sm font-semibold text-right">
-                  {formatAmount(order.totalAmount)}
+                  {formatKRW.format(order.totalAmount)}
                 </div>
               </div>
             </Link>
@@ -56,7 +56,7 @@ export const OrderList = ({ orders }: { orders: Order[] }) => {
                 <div className="flex justify-between items-center">
                   <span className="text-sm">{order.orderDate}</span>
                   <span className="text-sm font-semibold">
-                    {formatAmount(order.totalAmount)}
+                    {formatKRW.format(order.totalAmount)}
                   </span>
                 </div>
               </div>

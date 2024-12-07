@@ -1,6 +1,6 @@
 import { InfoAlert, TableHeader } from '@/components/common';
 import { Login } from '@/types/login';
-import { formatDatetime, truncateUserAgent } from '@/utils';
+import { truncateUserAgent } from '@/utils';
 
 export const LoginHistory = ({ logins }: { logins: Login[] }) => {
   const DesktopView = (
@@ -12,9 +12,7 @@ export const LoginHistory = ({ logins }: { logins: Login[] }) => {
             key={login.id}
             className="grid grid-cols-3 gap-4 p-4 items-center hover:bg-slate-50 transition-colors"
           >
-            <div className="text-sm font-mono">
-              {formatDatetime(login.datetime)}
-            </div>
+            <div className="text-sm font-mono">{login.datetime}</div>
             <div className="text-sm font-mono">
               {truncateUserAgent(login.userAgent)}
             </div>
@@ -34,7 +32,7 @@ export const LoginHistory = ({ logins }: { logins: Login[] }) => {
         >
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm">{formatDatetime(login.datetime)}</span>
+              <span className="text-sm">{login.datetime}</span>
               <span className="text-sm font-mono">{login.ip}</span>
             </div>
             <div className="text-sm font-mono text-slate-600">

@@ -1,7 +1,6 @@
 import { InfoAlert, TableHeader } from '@/components/common';
 
 import { Inquiry } from '@/types/inquiry';
-import { formatDatetime } from '@/utils';
 
 export const InquiryList = ({ inquiries }: { inquiries: Inquiry[] }) => {
   const DesktopView = (
@@ -16,14 +15,14 @@ export const InquiryList = ({ inquiries }: { inquiries: Inquiry[] }) => {
                   className={
                     inquiry.status === '답변완료'
                       ? 'text-green-600'
-                      : 'text-orange-600'
+                      : 'text-rose-600'
                   }
                 >
                   {inquiry.status}
                 </span>
               </div>
               <div className="text-sm">{inquiry.category}</div>
-              <div className="text-sm">{formatDatetime(inquiry.datetime)}</div>
+              <div className="text-sm">{inquiry.datetime}</div>
             </div>
             <div className="px-4 pb-4">
               <div className="text-sm font-medium">{inquiry.title}</div>
@@ -57,9 +56,7 @@ export const InquiryList = ({ inquiries }: { inquiries: Inquiry[] }) => {
                   {inquiry.category}
                 </span>
               </div>
-              <span className="text-sm text-slate-600">
-                {formatDatetime(inquiry.datetime)}
-              </span>
+              <span className="text-sm text-slate-600">{inquiry.datetime}</span>
             </div>
             <div className="text-sm font-medium">{inquiry.title}</div>
           </div>

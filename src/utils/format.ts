@@ -1,21 +1,12 @@
-export const formatDatetime = (datetime: string) => {
-  return new Date(datetime)
-    .toLocaleString('ko-KR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-    })
-    .replace(/\./g, '-')
-    .replace(',', '');
-};
-
 export const formatKRW = new Intl.NumberFormat('ko-KR', {
   style: 'currency',
   currency: 'KRW',
+  currencyDisplay: 'symbol',
+});
+
+export const formatUSD = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
   currencyDisplay: 'symbol',
 });
 
