@@ -1,4 +1,4 @@
-const storage = {
+export const storage = {
   keys: {
     rememberMe: 'rememberMe' as const,
     // 다른 키들도 여기에 추가 가능
@@ -74,5 +74,3 @@ const storage = {
     }
   },
 };
-
-export default storage;

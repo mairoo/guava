@@ -1,21 +1,7 @@
 import { InfoAlert, TableHeader } from '@/components/common';
 
 import { Inquiry } from '@/types/inquiry';
-
-const formatDatetime = (datetime: string) => {
-  return new Date(datetime)
-    .toLocaleString('ko-KR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-    })
-    .replace(/\./g, '-')
-    .replace(',', '');
-};
+import { formatDatetime } from '@/utils';
 
 export const InquiryList = ({ inquiries }: { inquiries: Inquiry[] }) => {
   const DesktopView = (

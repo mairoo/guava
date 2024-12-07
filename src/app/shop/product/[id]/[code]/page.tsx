@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { formatKRW } from '@/utils';
 import { ArrowDown, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import React, { ChangeEvent, useState } from 'react';
@@ -61,12 +62,6 @@ const productDescription = `
 13. 고객 지원 및 잔액 확인을 위해서는 [support.google.com/googleplay/go/cardhelp](https://support.google.com/googleplay/go/cardhelp) 페이지에 방문하세요.
 14. 이용약관: [g.co/playtermskr](https://g.co/playtermskr)
 `;
-
-const formatKRW = new Intl.NumberFormat('ko-KR', {
-  style: 'currency',
-  currency: 'KRW',
-  currencyDisplay: 'symbol',
-});
 
 const ProductInfo = () => (
   <div className="space-y-2">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useLoginMutation } from '@/store/auth/api';
-import storage from '@/utils/storage';
+import { storage } from '@/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
