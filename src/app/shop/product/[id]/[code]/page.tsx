@@ -173,7 +173,7 @@ const ProductDetailPage = () => {
   const productDescription = <ProductDescription />;
 
   return (
-    <FlexColumn marginY={2} className="w-full">
+    <FlexColumn spacing={2} marginY={2} className="w-full">
       <Breadcrumbs items={breadcrumbItems} marginY={1} />
       {isDesktop ? (
         <div className="grid grid-cols-[2fr,1fr] gap-8 w-full">
