@@ -86,13 +86,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         className="w-[300px] p-0 border-l shadow-lg !pl-0 overflow-hidden [&>button]:hidden"
       >
         <div className="flex flex-col h-full bg-white">
-          <div className="p-2 border-b flex justify-between items-center sticky top-0 bg-white z-10">
-            <h2 className="text-lg font-semibold">장바구니</h2>
+          <div className="relative border-b">
+            <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b]">
+              장바구니
+            </h2>
             <SheetClose asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="scale-150 transform origin-center rounded-full"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full"
               >
                 <X className="w-6 h-6 text-gray-700" />
               </Button>
@@ -134,17 +136,24 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           </div>
 
           {cartItems.length > 0 && (
-            <div className="border-t p-4 sticky bottom-0 bg-white">
-              <div className="flex justify-between mb-4">
-                <span className="font-medium">총 상품금액</span>
-                <span className="font-medium">
+            <div className="border-t">
+              <h2 className="h-14 flex items-center justify-between px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b]">
+                <span>총 상품금액</span>
+                <span>
                   {cartItems
                     .reduce((sum, item) => sum + item.price * item.quantity, 0)
                     .toLocaleString()}
                   원
                 </span>
+              </h2>
+              <div className="p-4">
+                <Button
+                  variant="outline"
+                  className="w-full bg-white hover:bg-gray-50"
+                >
+                  주문하기
+                </Button>
               </div>
-              <Button className="w-full">주문하기</Button>
             </div>
           )}
         </div>
