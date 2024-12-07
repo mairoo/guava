@@ -5,6 +5,8 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
+  SheetOverlay,
+  SheetPortal,
   SheetTrigger,
 } from '@/components/ui/sheet';
 import {
@@ -33,19 +35,16 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
   isLoggedIn,
   onOpenChangeAction,
 }) => {
-  // 로그인한 사용자용 메뉴
   const memberMenuItems = [
     { href: '/me', label: '마이페이지', icon: User },
     { href: '/logout', label: '로그아웃', icon: LogOut },
   ];
 
-  // 비로그인 사용자용 메뉴
   const guestMenuItems = [
     { href: '/login', label: '로그인', icon: LogIn },
     { href: '/register', label: '회원가입', icon: UserPlus },
   ];
 
-  // 공통 메뉴 아이템
   const commonMenuItems = [
     { href: '/orders', label: '주문/발송', icon: ShoppingBag },
     { href: '/customer-service', label: '고객센터', icon: HelpCircle },
@@ -68,7 +67,6 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
     e.stopPropagation();
   };
 
-  // 현재 로그인 상태에 따라 적절한 메뉴 아이템을 결합
   const currentMenuItems = [
     ...(isLoggedIn ? memberMenuItems : guestMenuItems),
     ...commonMenuItems,
@@ -83,77 +81,86 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
           <Menu className="w-6 h-6 text-gray-700" />
         </button>
       </SheetTrigger>
-      <SheetContent
-        side="left"
-        className="w-[300px] p-0 border-r shadow-lg !pr-0 overflow-hidden [&>button]:hidden"
-      >
-        <div className="flex flex-col h-full bg-white">
-          {/* 상단 고정 영역 */}
-          <div className="relative border-b">
-            <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b]">
-              핀코인 대표몰
-            </h2>
-            <SheetClose asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full"
-              >
-                <X className="w-6 h-6 text-gray-700" />
-              </Button>
-            </SheetClose>
-          </div>
 
-          <nav className="py-2">
-            {currentMenuItems.map(({ href, label, icon: Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
-                onClick={() => onOpenChangeAction(false)}
-              >
-                <Icon className="w-5 h-5 mr-3 text-gray-600" />
-                {label}
-              </Link>
-            ))}
-          </nav>
+      <SheetPortal>
+        {/* 그림자 오버레이 */}
+        <SheetOverlay className="backdrop-blur-sm bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
 
-          {/* 상품권 목록 (스크롤 가능) */}
-          <div className="flex-1 flex flex-col min-h-0">
-            <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b] border-y sticky top-0 z-10">
-              상품권
-            </h2>
-            <div
-              className="flex-1 overflow-y-auto overscroll-contain"
-              onScroll={handleScroll}
-              style={{
-                WebkitOverflowScrolling: 'touch',
-                isolation: 'isolate',
-              }}
-            >
-              <nav className="py-2">
-                {giftCardItems.map(({ href, label }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
-                    onClick={() => onOpenChangeAction(false)}
-                  >
-                    {label}
-                  </Link>
-                ))}
-              </nav>
+        <SheetContent
+          side="left"
+          className="fixed top-0 w-[300px] p-0 border-r !pr-0 overflow-hidden [&>button]:hidden 
+            shadow-[5px_0_25px_0_rgba(0,0,0,0.1)] data-[state=open]:animate-in data-[state=closed]:animate-out
+            data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left duration-150
+            after:absolute after:top-0 after:right-[-25px] after:w-[25px] after:h-full after:shadow-[0_0_15px_rgba(0,0,0,0.1)]"
+        >
+          <div className="flex flex-col h-full bg-white">
+            {/* 상단 고정 영역 */}
+            <div className="relative border-b">
+              <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b]">
+                핀코인 대표몰
+              </h2>
+              <SheetClose asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full"
+                >
+                  <X className="w-6 h-6 text-gray-700" />
+                </Button>
+              </SheetClose>
+            </div>
+
+            <nav className="py-2">
+              {currentMenuItems.map(({ href, label, icon: Icon }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
+                  onClick={() => onOpenChangeAction(false)}
+                >
+                  <Icon className="w-5 h-5 mr-3 text-gray-600" />
+                  {label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* 상품권 목록 (스크롤 가능) */}
+            <div className="flex-1 flex flex-col min-h-0">
+              <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b] border-y sticky top-0 z-10">
+                상품권
+              </h2>
+              <div
+                className="flex-1 overflow-y-auto overscroll-contain"
+                onScroll={handleScroll}
+                style={{
+                  WebkitOverflowScrolling: 'touch',
+                  isolation: 'isolate',
+                }}
+              >
+                <nav className="py-2">
+                  {giftCardItems.map(({ href, label }) => (
+                    <Link
+                      key={href}
+                      href={href}
+                      className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
+                      onClick={() => onOpenChangeAction(false)}
+                    >
+                      {label}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+            </div>
+
+            {/* 하단 고정 영역 */}
+            <div className="border-t">
+              <h2 className="h-14 flex items-center px-4 text-[#29ABE2] font-medium">
+                카드몰로 이동
+              </h2>
             </div>
           </div>
-
-          {/* 하단 고정 영역 */}
-          <div className="border-t">
-            <h2 className="h-14 flex items-center px-4 text-[#29ABE2] font-medium">
-              카드몰로 이동
-            </h2>
-          </div>
-        </div>
-      </SheetContent>
+        </SheetContent>
+      </SheetPortal>
     </Sheet>
   );
 };
