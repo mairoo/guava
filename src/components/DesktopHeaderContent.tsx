@@ -20,16 +20,18 @@ export const DesktopHeaderContent: React.FC<DesktopHeaderContentProps> = ({
 
   return (
     <div className="hidden md:block">
-      <div className="bg-white text-gray-800">
+      <div className="bg-green-50 text-gray-800">
         <Container className="py-1 flex justify-between items-center">
           {/* Logo */}
           <div>
-            <Link href="/">
+            <Link href="/" className="flex items-center gap-2">
               <img
-                src="/pincoin_www_260x50.png"
-                alt="핀코인 대표몰"
-                title="핀코인 대표몰"
+                src="/pincoin_logo.svg"
+                alt="핀코인"
+                title="핀코인"
+                className="h-8 object-contain"
               />
+              <span className="text-xl font-semibold">핀코인</span>
             </Link>
           </div>
 
