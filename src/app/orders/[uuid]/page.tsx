@@ -1,2 +1,5 @@
-// OrderDetailView
-// hide, again, delete actions
+const OrderDetailPage = () => {
+  return <div>order detail</div>;
+};
+
+export default OrderDetailPage;

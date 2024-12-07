@@ -4,4 +4,5 @@ export interface Order {
   paymentMethod: string;
   orderDate: string;
   totalAmount: number;
+  url: string;
 }

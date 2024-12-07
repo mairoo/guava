@@ -1,6 +1,7 @@
 import { TableHeader } from '@/components/common';
 import { Card, CardContent } from '@/components/ui/card';
 import { Order } from '@/types/order';
+import Link from 'next/link';
 
 const truncateUUID = (uuid: string) => uuid.substring(0, 7) + '...';
 
@@ -25,18 +26,17 @@ export const OrderList = ({ orders }: { orders: Order[] }) => {
       />
       <div className="divide-y">
         {orders.map((order) => (
-          <div
-            key={order.id}
-            className="grid grid-cols-5 gap-4 p-4 items-center hover:bg-slate-50 transition-colors"
-          >
-            <div className="font-mono text-sm">{truncateUUID(order.id)}</div>
-            <div className="text-sm">{order.status}</div>
-            <div className="text-sm">{order.paymentMethod}</div>
-            <div className="text-sm">{order.orderDate}</div>
-            <div className="text-sm font-semibold text-right">
-              {formatAmount(order.totalAmount)}
+          <Link key={order.id} href={order.url}>
+            <div className="grid grid-cols-5 gap-4 p-4 items-center hover:bg-slate-50 transition-colors cursor-pointer">
+              <div className="font-mono text-sm">{truncateUUID(order.id)}</div>
+              <div className="text-sm">{order.status}</div>
+              <div className="text-sm">{order.paymentMethod}</div>
+              <div className="text-sm">{order.orderDate}</div>
+              <div className="text-sm font-semibold text-right">
+                {formatAmount(order.totalAmount)}
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
@@ -45,23 +45,27 @@ export const OrderList = ({ orders }: { orders: Order[] }) => {
   const MobileView = (
     <div className="lg:hidden space-y-4">
       {orders.map((order) => (
-        <Card key={order.id} className="hover:bg-slate-50 transition-colors">
-          <CardContent className="pt-6">
-            <div className="space-y-3">
-              <div className="font-mono text-sm">{truncateUUID(order.id)}</div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm">{order.paymentMethod}</span>
-                <span className="text-sm">{order.status}</span>
+        <Link key={order.id} href={order.url}>
+          <Card className="hover:bg-slate-50 transition-colors cursor-pointer">
+            <CardContent className="pt-6">
+              <div className="space-y-3">
+                <div className="font-mono text-sm">
+                  {truncateUUID(order.id)}
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm">{order.paymentMethod}</span>
+                  <span className="text-sm">{order.status}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm">{order.orderDate}</span>
+                  <span className="text-sm font-semibold">
+                    {formatAmount(order.totalAmount)}
+                  </span>
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm">{order.orderDate}</span>
-                <span className="text-sm font-semibold">
-                  {formatAmount(order.totalAmount)}
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Link>
       ))}
     </div>
   );

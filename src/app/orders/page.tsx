@@ -12,6 +12,7 @@ const OrderListPage = () => {
       paymentMethod: '계좌이체/무통장입금',
       orderDate: '2024-12-07 20:52',
       totalAmount: 91000,
+      url: '/orders/e3d12d89-1234-5678-90ab',
     },
     {
       id: 'f4e23e90-2345-6789-01bc-defa12345678',
@@ -19,6 +20,7 @@ const OrderListPage = () => {
       paymentMethod: '카드결제',
       orderDate: '2024-12-07 19:30',
       totalAmount: 128000,
+      url: '/orders/f4e23e90-2345-6789-01bc-defa12345678',
     },
   ];
 
