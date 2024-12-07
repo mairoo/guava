@@ -37,16 +37,10 @@ export const TitledSection = ({
 }: TitledSectionProps) => {
   return (
     <Card
-      className={cn(
-        'mx-0 rounded-lg p-0 lg:p-6',
-        spacing,
-        verticalMargin,
-        className,
-        {
-          'border-0 shadow-none': !showBorder,
-          'lg:border lg:shadow border-0 shadow-none': showBorder,
-        },
-      )}
+      className={cn('mx-0 rounded-lg p-0', spacing, verticalMargin, className, {
+        'border-0 shadow-none': !showBorder,
+        'lg:border lg:shadow lg:p-6 border-0 shadow-none': showBorder,
+      })}
     >
       <CardHeader className="px-0 pt-0 pb-0">
         <h2
