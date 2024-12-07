@@ -9,12 +9,9 @@ import {
   SheetPortal,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import {
-  commonMenuItems,
-  giftCardItems,
-  guestMenuItems,
-  memberMenuItems,
-} from '@/data/menus';
+import { commonMenuItems, guestMenuItems, memberMenuItems } from '@/data/menus';
+import { products } from '@/data/products';
+import { getGiftCardItems } from '@/types/product';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
@@ -40,6 +37,8 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
     ...(isLoggedIn ? memberMenuItems : guestMenuItems),
     ...commonMenuItems,
   ];
+
+  const giftCardItems = getGiftCardItems(products);
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChangeAction} modal={false}>
