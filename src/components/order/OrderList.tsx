@@ -1,16 +1,8 @@
 import { TableHeader } from '@/components/common';
 import { Card, CardContent } from '@/components/ui/card';
 import { Order } from '@/types/order';
+import { formatAmount, truncateUUID } from '@/utils';
 import Link from 'next/link';
-
-const truncateUUID = (uuid: string) => uuid.substring(0, 7) + '...';
-
-const formatAmount = (amount: number) =>
-  new Intl.NumberFormat('ko-KR', {
-    style: 'currency',
-    currency: 'KRW',
-    currencyDisplay: 'symbol',
-  }).format(amount);
 
 export const OrderList = ({ orders }: { orders: Order[] }) => {
   const DesktopView = (
