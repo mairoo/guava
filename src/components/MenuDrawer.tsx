@@ -78,12 +78,12 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
               </SheetClose>
             </div>
 
-            <nav className="py-2">
+            <nav className="py-1">
               {currentMenuItems.map(({ href, label, icon: Icon }) => (
                 <Link
                   key={href}
                   href={href}
-                  className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
+                  className="flex items-center px-4 py-2 hover:bg-gray-100 transition-colors"
                   onClick={() => onOpenChangeAction(false)}
                 >
                   <Icon className="w-5 h-5 mr-3 text-gray-600" />
@@ -105,12 +105,12 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
                   isolation: 'isolate',
                 }}
               >
-                <nav className="py-2">
+                <nav className="py-1">
                   {giftCardItems.map(({ href, label }) => (
                     <Link
                       key={href}
                       href={href}
-                      className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
+                      className="flex items-center px-4 py-2 hover:bg-gray-100 transition-colors"
                       onClick={() => onOpenChangeAction(false)}
                     >
                       {label}
