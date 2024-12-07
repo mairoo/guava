@@ -79,6 +79,7 @@ export const MobileHeaderContent = () => {
           <MenuDrawer
             isOpen={isMenuOpen}
             isSearching={isSearching}
+            isLoggedIn={false}
             onOpenChangeAction={toggleMenu}
           />
 

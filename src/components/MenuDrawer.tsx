@@ -7,25 +7,47 @@ import {
   SheetContent,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { HelpCircle, LogOut, Menu, ShoppingBag, User, X } from 'lucide-react';
+import {
+  HelpCircle,
+  LogIn,
+  LogOut,
+  Menu,
+  ShoppingBag,
+  User,
+  UserPlus,
+  X,
+} from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
 interface MenuDrawerProps {
   isOpen: boolean;
   isSearching: boolean;
+  isLoggedIn: boolean;
   onOpenChangeAction: (open: boolean) => void;
 }
 
 export const MenuDrawer: React.FC<MenuDrawerProps> = ({
   isOpen,
   isSearching,
+  isLoggedIn,
   onOpenChangeAction,
 }) => {
-  const mainMenuItems = [
+  // 로그인한 사용자용 메뉴
+  const memberMenuItems = [
     { href: '/me', label: '마이페이지', icon: User },
     { href: '/logout', label: '로그아웃', icon: LogOut },
-    { href: '/cart', label: '장바구니', icon: ShoppingBag },
+  ];
+
+  // 비로그인 사용자용 메뉴
+  const guestMenuItems = [
+    { href: '/login', label: '로그인', icon: LogIn },
+    { href: '/register', label: '회원가입', icon: UserPlus },
+  ];
+
+  // 공통 메뉴 아이템
+  const commonMenuItems = [
+    { href: '/orders', label: '주문/발송', icon: ShoppingBag },
     { href: '/customer-service', label: '고객센터', icon: HelpCircle },
   ];
 
@@ -46,6 +68,12 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
     e.stopPropagation();
   };
 
+  // 현재 로그인 상태에 따라 적절한 메뉴 아이템을 결합
+  const currentMenuItems = [
+    ...(isLoggedIn ? memberMenuItems : guestMenuItems),
+    ...commonMenuItems,
+  ];
+
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChangeAction} modal={false}>
       <SheetTrigger asChild disabled={isSearching}>
@@ -65,7 +93,6 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
             <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-[#f8faf3] text-[#7daf3b]">
               핀코인 대표몰
             </h2>
-            {/* 닫기 버튼을 상단 헤더 내부로 이동하고 위치 조정 */}
             <SheetClose asChild>
               <Button
                 variant="ghost"
@@ -78,7 +105,7 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
           </div>
 
           <nav className="py-2">
-            {mainMenuItems.map(({ href, label, icon: Icon }) => (
+            {currentMenuItems.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}
