@@ -1,9 +1,55 @@
+'use client';
+
 import { Container, NavList } from '@/components/layout';
-import { Search } from 'lucide-react';
+import {
+  HelpCircle,
+  LogIn,
+  LogOut,
+  PackageCheck,
+  Search,
+  ShoppingCart,
+  User,
+  UserPlus,
+} from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
-export const DesktopHeaderContent = () => {
+// 메뉴 타입 정의에 icon 추가
+interface MenuItem {
+  href: string;
+  label: string;
+  icon: React.ElementType;
+}
+
+// 재사용 가능한 메뉴 아이템 정의
+const memberMenuItems: MenuItem[] = [
+  { href: '/me', label: '마이페이지', icon: User },
+  { href: '/auth/sign-out', label: '로그아웃', icon: LogOut },
+];
+
+const guestMenuItems: MenuItem[] = [
+  { href: '/auth/sign-in', label: '로그인', icon: LogIn },
+  { href: '/auth/sign-up', label: '회원가입', icon: UserPlus },
+];
+
+const commonMenuItems: MenuItem[] = [
+  { href: '/orders', label: '주문/발송', icon: PackageCheck },
+  { href: '/shop/cart', label: '장바구니', icon: ShoppingCart },
+  { href: '/support', label: '고객센터', icon: HelpCircle },
+];
+
+interface DesktopHeaderContentProps {
+  isLoggedIn?: boolean;
+}
+
+export const DesktopHeaderContent: React.FC<DesktopHeaderContentProps> = ({
+  isLoggedIn = false,
+}) => {
+  const currentMenuItems = [
+    ...commonMenuItems,
+    ...(isLoggedIn ? memberMenuItems : guestMenuItems),
+  ];
+
   return (
     <div className="hidden md:block">
       <div className="bg-white text-gray-800">
@@ -22,43 +68,17 @@ export const DesktopHeaderContent = () => {
           {/* Top Navigation */}
           <nav>
             <NavList>
-              {/* 동적으로 처리하면 리액트가 마운트되면서 발생하는 hydration 과정에서 나타나는 작은 깜빡임 발생 */}
-              {/* 헤더 깜빡임은 푸터 깜박임과 달리 사용자 경험에 별로 안 좋음 */}
-              <li>
-                <Link href="/orders" className="hover:text-gray-600">
-                  주문/발송
-                </Link>
-              </li>
-              <li>
-                <Link href="/shop/cart" className="hover:text-gray-600">
-                  장바구니
-                </Link>
-              </li>
-              <li>
-                <Link href="/support" className="hover:text-gray-600">
-                  고객센터
-                </Link>
-              </li>
-              <li>
-                <Link href="/auth/sign-up" className="hover:text-gray-600">
-                  회원가입
-                </Link>
-              </li>
-              <li>
-                <Link href="/auth/sign-in" className="hover:text-gray-600">
-                  로그인
-                </Link>
-              </li>
-              <li>
-                <Link href="/me" className="hover:text-gray-600">
-                  마이페이지
-                </Link>
-              </li>
-              <li>
-                <Link href="/auth/sign-out" className="hover:text-gray-600">
-                  로그아웃
-                </Link>
-              </li>
+              {currentMenuItems.map(({ href, label, icon: Icon }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="hover:text-gray-600 flex items-center gap-1"
+                  >
+                    <Icon className="w-4 h-4" />
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </NavList>
           </nav>
         </Container>

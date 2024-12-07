@@ -14,6 +14,7 @@ import {
   LogIn,
   LogOut,
   Menu,
+  PackageCheck,
   ShoppingBag,
   User,
   UserPlus,
@@ -46,8 +47,9 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
   ];
 
   const commonMenuItems = [
-    { href: '/orders', label: '주문/발송', icon: ShoppingBag },
-    { href: '/customer-service', label: '고객센터', icon: HelpCircle },
+    { href: '/orders', label: '주문/발송', icon: PackageCheck },
+    { href: '/shop/cart', label: '장바구니', icon: ShoppingBag },
+    { href: '/support', label: '고객센터', icon: HelpCircle },
   ];
 
   const giftCardItems = [
