@@ -3,7 +3,7 @@ import React from 'react';
 
 const SignUpPage = () => {
   return (
-    <FlexColumn spacing={2} marginY={2}>
+    <FlexColumn marginY={2}>
       <FlexRow>123</FlexRow>
     </FlexColumn>
   );

@@ -59,7 +59,7 @@ const OrderListPage = () => {
   ];
 
   return (
-    <FlexColumn spacing={0}>
+    <FlexColumn>
       <TitledSection title="주문 및 발송 내역">
         <OrderList orders={orders} />
       </TitledSection>

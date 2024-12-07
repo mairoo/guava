@@ -112,7 +112,7 @@ const bestsellers = [
 ];
 
 const Page = () => (
-  <FlexColumn spacing={2}>
+  <FlexColumn>
     <TitledSection title="오늘의 최저가 상품권">
       <ProductGrid gap={2} py={0}>
         {products.map((product) => (

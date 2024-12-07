@@ -53,7 +53,7 @@ const CartPage = () => {
         {cartItems.map((item) => (
           <div
             key={item.id}
-            className="grid grid-cols-4 gap-4 p-4 items-center hover:bg-slate-50 transition-colors"
+            className="grid grid-cols-4 gap-4 p-3 items-center hover:bg-slate-50 transition-colors"
           >
             <div className="text-sm font-semibold">{item.name}</div>
             <div className="text-sm text-right">
@@ -79,7 +79,7 @@ const CartPage = () => {
           </div>
         ))}
       </div>
-      <div className="flex justify-end p-4 bg-lime-50 rounded-b-lg">
+      <div className="flex justify-end p-3 bg-lime-50 rounded-b-lg">
         <div className="text-sm font-semibold">
           합계금액: {formatKRW.format(totalAmount)}
         </div>
@@ -135,7 +135,7 @@ const CartPage = () => {
   );
 
   return (
-    <FlexColumn spacing={0}>
+    <FlexColumn>
       <TitledSection title="장바구니 / 주문결제">
         {DesktopView}
         {MobileView}

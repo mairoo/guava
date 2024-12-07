@@ -55,7 +55,7 @@ const warningContent = `
 
 const CategoryDetailPage = () => {
   return (
-    <FlexColumn spacing={2} marginY={2}>
+    <FlexColumn marginY={2}>
       <Card className="w-full border border-yellow-200 bg-yellow-50 shadow-none p-1">
         <div className="prose prose-sm max-w-none">
           <ReactMarkdown>{warningContent}</ReactMarkdown>
