@@ -13,7 +13,7 @@ import type { Auth } from '@/types/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Key, Mail, User } from 'lucide-react';
 import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 const signUpSchema = yup.object().shape({
@@ -83,7 +83,6 @@ const SignUpPage = () => {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors, isSubmitting },
   } = useForm<FormInputs>({
     resolver: yupResolver(signUpSchema),
@@ -125,16 +124,10 @@ const SignUpPage = () => {
               </div>
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center space-x-2">
-                  <Controller
-                    name="termsAccepted"
-                    control={control}
-                    render={({ field }) => (
-                      <Checkbox
-                        id="termsAccept"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    )}
+                  <Checkbox
+                    id="termsAccept"
+                    className={cn(errors.termsAccepted && 'border-red-500')}
+                    {...register('termsAccepted')}
                   />
                   <Label
                     htmlFor="termsAccept"
@@ -143,11 +136,6 @@ const SignUpPage = () => {
                     이용약관에 동의합니다
                   </Label>
                 </div>
-                {errors.termsAccepted && (
-                  <p className={styles.errorMessage}>
-                    {errors.termsAccepted.message}
-                  </p>
-                )}
               </div>
             </div>
 
@@ -163,16 +151,10 @@ const SignUpPage = () => {
               </div>
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center space-x-2">
-                  <Controller
-                    name="privacyAccepted"
-                    control={control}
-                    render={({ field }) => (
-                      <Checkbox
-                        id="privacyAccept"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    )}
+                  <Checkbox
+                    id="privacyAccept"
+                    className={cn(errors.privacyAccepted && 'border-red-500')}
+                    {...register('privacyAccepted')}
                   />
                   <Label
                     htmlFor="privacyAccept"
@@ -181,11 +163,6 @@ const SignUpPage = () => {
                     개인정보 처리방침에 동의합니다
                   </Label>
                 </div>
-                {errors.privacyAccepted && (
-                  <p className={styles.errorMessage}>
-                    {errors.privacyAccepted.message}
-                  </p>
-                )}
               </div>
             </div>
           </GridRow>
