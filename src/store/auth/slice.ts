@@ -1,5 +1,5 @@
 import { Auth } from '@/types/auth';
-import storage from '@/utils/storage';
+import { storage } from '@/utils';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: Auth.State.AuthState = {

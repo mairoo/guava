@@ -1,7 +1,7 @@
-import { baseQueryWithRetry } from '@/store/baseQuery';
 import { logout, setCredentials } from '@/store/auth/slice';
+import { baseQueryWithRetry } from '@/store/baseQuery';
 import { Auth } from '@/types/auth';
-import storage from '@/utils/storage';
+import { storage } from '@/utils';
 
 import { createApi } from '@reduxjs/toolkit/query/react';
 
@@ -73,7 +73,6 @@ const api = createApi({
   }),
 });
 
-export const { useLoginMutation, useRefreshMutation, useLogoutMutation } =
-  api;
+export const { useLoginMutation, useRefreshMutation, useLogoutMutation } = api;
 
 export { api };
