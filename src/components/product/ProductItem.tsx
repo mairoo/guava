@@ -5,17 +5,17 @@ import React, { ComponentPropsWithoutRef } from 'react';
 
 interface ProductItemProps extends ComponentPropsWithoutRef<'div'> {
   imageUrl: string;
-  name: string;
+  title: string;
   discountRate: number;
-  url: string; // url prop 추가
+  url: string;
   showBorder?: boolean;
 }
 
 export const ProductItem = ({
   imageUrl = 'https://placehold.co/170x100?text=Product',
-  name = '상품명',
+  title = '상품명',
   discountRate = 1.0,
-  url = '#', // 기본값 설정
+  url = '#',
   showBorder = false,
 }: ProductItemProps) => {
   const formattedRate = discountRate.toFixed(2);
@@ -32,14 +32,14 @@ export const ProductItem = ({
           <div className="relative aspect-[157/100] w-full mb-2 border border-gray-800 rounded-md overflow-hidden">
             <img
               src={imageUrl}
-              alt={name}
+              alt={title}
               className="object-cover w-full h-full"
             />
           </div>
 
           <div className="space-y-1 text-center">
             <h3 className="font-medium text-sm text-gray-900 line-clamp-2">
-              {name}
+              {title}
             </h3>
 
             <div className="flex items-center justify-center gap-1 text-red-500">

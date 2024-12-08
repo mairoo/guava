@@ -118,7 +118,7 @@ const Page = () => (
         {products.map((product) => (
           <ProductItem
             key={product.id}
-            name={product.name}
+            title={product.title}
             discountRate={product.discountRate}
             imageUrl={product.imageUrl}
             url={product.url}
