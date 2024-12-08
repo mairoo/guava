@@ -1,8 +1,7 @@
 'use client';
 
-import { TopSpace } from '@/components/layout';
+import { TitledSection, TopSpace } from '@/components/layout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
@@ -61,56 +60,54 @@ const FindPasswordPage = () => {
 
   return (
     <TopSpace>
-      <Card className="w-full max-w-xl mx-auto sm:border sm:shadow-sm border-0 shadow-none">
-        <CardHeader className="p-2 sm:p-3">
-          <CardTitle className="text-xl font-bold text-center">
-            비밀번호 찾기
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-2 sm:p-3">
-          <div className="mb-6 text-center text-gray-600">
-            <p>
-              가입하신 이메일 주소로 비밀번호 초기화를 위한 이메일을 발송합니다.
-            </p>
+      <TitledSection
+        title="비밀번호 찾기"
+        showBorder
+        spacing="space-y-4"
+        className="w-full max-w-xl mx-auto"
+      >
+        <div className="mb-6 text-center text-gray-600">
+          <p>
+            가입하신 이메일 주소로 비밀번호 초기화를 위한 이메일을 발송합니다.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">이메일</Label>
+            <Input
+              id="email"
+              type="email"
+              {...register('email')}
+              placeholder="이메일을 입력하세요"
+              className={cn(
+                styles.input.base,
+                errors.email && styles.input.error,
+              )}
+            />
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email.message}</p>
+            )}
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">이메일</Label>
-              <Input
-                id="email"
-                type="email"
-                {...register('email')}
-                placeholder="이메일을 입력하세요"
-                className={cn(
-                  styles.input.base,
-                  errors.email && styles.input.error,
-                )}
-              />
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
-              )}
-            </div>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className={cn(
+              styles.button.base,
+              isLoading && styles.button.loading,
+            )}
+          >
+            {isLoading ? '처리 중...' : '비밀번호 재설정 이메일 받기'}
+          </Button>
 
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className={cn(
-                styles.button.base,
-                isLoading && styles.button.loading,
-              )}
-            >
-              {isLoading ? '처리 중...' : '비밀번호 재설정 이메일 받기'}
-            </Button>
-
-            <div className="flex justify-center pt-4 text-sm">
-              <Link href="/auth/sign-in" className={styles.link}>
-                로그인으로 돌아가기
-              </Link>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+          <div className="flex justify-center pt-4 text-sm">
+            <Link href="/auth/sign-in" className={styles.link}>
+              로그인으로 돌아가기
+            </Link>
+          </div>
+        </form>
+      </TitledSection>
     </TopSpace>
   );
 };

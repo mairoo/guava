@@ -1,8 +1,7 @@
 'use client';
 
-import { TopSpace } from '@/components/layout';
+import { TitledSection, TopSpace } from '@/components/layout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { useLogoutMutation } from '@/store/auth/api';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -41,45 +40,43 @@ const LogoutPage = () => {
 
   return (
     <TopSpace>
-      <Card className="w-full max-w-xl mx-auto sm:border sm:shadow-sm border-0 shadow-none">
-        <CardHeader className="p-2 sm:p-3">
-          <CardTitle className="text-xl font-bold text-center">
-            로그아웃
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-2 sm:p-3">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <p className="text-center text-gray-600">
-              정말 로그아웃 하시겠습니까?
-            </p>
-            <div className="grid grid-cols-2 gap-4">
-              <Button
-                type="button"
-                onClick={() => router.back()}
-                disabled={isLoading}
-                className={cn(
-                  styles.button.base,
-                  styles.button.secondary,
-                  isLoading && styles.button.loading,
-                )}
-              >
-                취소
-              </Button>
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className={cn(
-                  styles.button.base,
-                  styles.button.primary,
-                  isLoading && styles.button.loading,
-                )}
-              >
-                {isLoading ? '로그아웃 중...' : '로그아웃'}
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <TitledSection
+        title="로그아웃"
+        showBorder
+        spacing="space-y-4"
+        className="w-full max-w-xl mx-auto"
+      >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <p className="text-center text-gray-600">
+            정말 로그아웃 하시겠습니까?
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              type="button"
+              onClick={() => router.back()}
+              disabled={isLoading}
+              className={cn(
+                styles.button.base,
+                styles.button.secondary,
+                isLoading && styles.button.loading,
+              )}
+            >
+              취소
+            </Button>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className={cn(
+                styles.button.base,
+                styles.button.primary,
+                isLoading && styles.button.loading,
+              )}
+            >
+              {isLoading ? '로그아웃 중...' : '로그아웃'}
+            </Button>
+          </div>
+        </form>
+      </TitledSection>
     </TopSpace>
   );
 };

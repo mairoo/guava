@@ -1,8 +1,7 @@
 'use client';
 
-import { TopSpace } from '@/components/layout';
+import { TitledSection, TopSpace } from '@/components/layout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -66,79 +65,75 @@ const SignInPage = () => {
 
   return (
     <TopSpace>
-      <Card className="w-full max-w-xl mx-auto sm:border sm:shadow-sm border-0 shadow-none">
-        <CardHeader className="p-2 sm:p-3">
-          <CardTitle className="text-xl font-bold text-center">
-            로그인
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-2 sm:p-3">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">이메일</Label>
-              <Input
-                id="email"
-                type="email"
-                {...register('email')}
-                placeholder="이메일을 입력하세요"
-                className={cn(
-                  styles.input.base,
-                  errors.email && styles.input.error,
-                )}
-              />
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">비밀번호</Label>
-              <Input
-                id="password"
-                type="password"
-                {...register('password')}
-                placeholder="비밀번호를 입력하세요"
-                className={cn(
-                  styles.input.base,
-                  errors.password && styles.input.error,
-                )}
-              />
-              {errors.password && (
-                <p className="text-sm text-red-500">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox id="rememberMe" {...register('rememberMe')} />
-              <Label htmlFor="rememberMe" className="cursor-pointer">
-                로그인 상태 유지
-              </Label>
-            </div>
-
-            <Button
-              type="submit"
-              disabled={isLoading}
+      <TitledSection
+        title="로그인"
+        showBorder
+        spacing="space-y-4"
+        className="w-full max-w-xl mx-auto"
+      >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">이메일</Label>
+            <Input
+              id="email"
+              type="email"
+              {...register('email')}
+              placeholder="이메일을 입력하세요"
               className={cn(
-                styles.button.base,
-                isLoading && styles.button.loading,
+                styles.input.base,
+                errors.email && styles.input.error,
               )}
-            >
-              {isLoading ? '로그인 중...' : '로그인'}
-            </Button>
+            />
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email.message}</p>
+            )}
+          </div>
 
-            <div className="flex justify-between pt-4 text-sm">
-              <Link href="/auth/find-password" className={styles.link}>
-                비밀번호 찾기
-              </Link>
-              <Link href="/auth/sign-up" className={styles.link}>
-                회원가입
-              </Link>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+          <div className="space-y-2">
+            <Label htmlFor="password">비밀번호</Label>
+            <Input
+              id="password"
+              type="password"
+              {...register('password')}
+              placeholder="비밀번호를 입력하세요"
+              className={cn(
+                styles.input.base,
+                errors.password && styles.input.error,
+              )}
+            />
+            {errors.password && (
+              <p className="text-sm text-red-500">{errors.password.message}</p>
+            )}
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Checkbox id="rememberMe" {...register('rememberMe')} />
+            <Label htmlFor="rememberMe" className="cursor-pointer">
+              로그인 상태 유지
+            </Label>
+          </div>
+
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className={cn(
+              styles.button.base,
+              isLoading && styles.button.loading,
+            )}
+          >
+            {isLoading ? '로그인 중...' : '로그인'}
+          </Button>
+
+          <div className="flex justify-between pt-4 text-sm">
+            <Link href="/auth/find-password" className={styles.link}>
+              비밀번호 찾기
+            </Link>
+            <Link href="/auth/sign-up" className={styles.link}>
+              회원가입
+            </Link>
+          </div>
+        </form>
+      </TitledSection>
     </TopSpace>
   );
 };
