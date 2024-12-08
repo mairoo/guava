@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { privacyContent } from '@/data/privacy';
 import { termsContent } from '@/data/terms';
 import { cn } from '@/lib/utils';
+import { Key, Mail, User } from 'lucide-react';
 import React from 'react';
 
 const styles = {
@@ -30,10 +31,10 @@ const SignUpPage = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <FlexColumn spacing={4}>
+      <FlexColumn spacing={2}>
         {/* 약관 동의 섹션 */}
         <TitledSection
-          title="회원가입"
+          title="약관 동의"
           showBorder
           spacing="space-y-4"
           className="w-full"
@@ -92,58 +93,88 @@ const SignUpPage = () => {
             <div className="space-y-6">
               <div className={styles.inputWrapper}>
                 <Label htmlFor="email">이메일</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="이메일을 입력하세요"
-                  className={styles.input.base}
-                />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <Mail className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="이메일을 입력하세요"
+                    className={cn(styles.input.base, 'pl-10')}
+                  />
+                </div>
               </div>
               <div className={styles.inputWrapper}>
                 <Label htmlFor="password">비밀번호</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="비밀번호를 입력하세요"
-                  className={styles.input.base}
-                />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <Key className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="비밀번호를 입력하세요"
+                    className={cn(styles.input.base, 'pl-10')}
+                  />
+                </div>
               </div>
               <div className={styles.inputWrapper}>
                 <Label htmlFor="passwordConfirm">비밀번호 확인</Label>
-                <Input
-                  id="passwordConfirm"
-                  type="password"
-                  placeholder="비밀번호를 다시 입력하세요"
-                  className={styles.input.base}
-                />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <Key className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <Input
+                    id="passwordConfirm"
+                    type="password"
+                    placeholder="비밀번호를 다시 입력하세요"
+                    className={cn(styles.input.base, 'pl-10')}
+                  />
+                </div>
+              </div>
+              <div className={styles.inputWrapper}>
+                <Label htmlFor="nickname">닉네임</Label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <User className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <Input
+                    id="nickname"
+                    type="text"
+                    placeholder="닉네임을 입력하세요"
+                    className={cn(styles.input.base, 'pl-10')}
+                  />
+                </div>
               </div>
             </div>
 
             {/* 회원 개인정보 */}
             <div className="space-y-6">
-              <div className={styles.inputWrapper}>
-                <Label htmlFor="name">성명</Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="성명을 입력하세요"
-                  className={styles.input.base}
-                />
-              </div>
-              <div className={styles.inputWrapper}>
-                <Label htmlFor="nickname">닉네임</Label>
-                <Input
-                  id="nickname"
-                  type="text"
-                  placeholder="닉네임을 입력하세요"
-                  className={styles.input.base}
-                />
-              </div>
+              <GridRow gapX={4} gapY={2}>
+                <div className={styles.inputWrapper}>
+                  <Label htmlFor="lastName">성</Label>
+                  <Input
+                    id="lastName"
+                    type="text"
+                    placeholder="성을 입력하세요"
+                    className={cn(styles.input.base, 'w-full')}
+                  />
+                </div>
+                <div className={styles.inputWrapper}>
+                  <Label htmlFor="firstName">이름</Label>
+                  <Input
+                    id="firstName"
+                    type="text"
+                    placeholder="이름을 입력하세요"
+                    className={cn(styles.input.base, 'w-full')}
+                  />
+                </div>
+              </GridRow>
             </div>
           </GridRow>
 
-          {/* 회원가입 버튼 */}
-          <div className="mt-8">
+          <div className="mt-4">
             <Button type="submit" className={cn(styles.button.base)}>
               회원가입
             </Button>

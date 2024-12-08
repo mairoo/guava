@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -66,7 +67,7 @@ const FindPasswordPage = () => {
         spacing="space-y-4"
         className="w-full max-w-xl mx-auto"
       >
-        <div className="mb-6 text-center text-gray-600">
+        <div className="mb-4 text-gray-600">
           <p>
             가입하신 이메일 주소로 비밀번호 초기화를 위한 이메일을 발송합니다.
           </p>
@@ -75,16 +76,22 @@ const FindPasswordPage = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">이메일</Label>
-            <Input
-              id="email"
-              type="email"
-              {...register('email')}
-              placeholder="이메일을 입력하세요"
-              className={cn(
-                styles.input.base,
-                errors.email && styles.input.error,
-              )}
-            />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <Mail className="w-5 h-5 text-gray-400" />
+              </div>
+              <Input
+                id="email"
+                type="email"
+                {...register('email')}
+                placeholder="이메일을 입력하세요"
+                className={cn(
+                  styles.input.base,
+                  'pl-10',
+                  errors.email && styles.input.error,
+                )}
+              />
+            </div>
             {errors.email && (
               <p className="text-sm text-red-500">{errors.email.message}</p>
             )}

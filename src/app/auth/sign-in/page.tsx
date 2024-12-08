@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { useLoginMutation } from '@/store/auth/api';
 import { Auth } from '@/types/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Key, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -74,16 +75,22 @@ const SignInPage = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">이메일</Label>
-            <Input
-              id="email"
-              type="email"
-              {...register('email')}
-              placeholder="이메일을 입력하세요"
-              className={cn(
-                styles.input.base,
-                errors.email && styles.input.error,
-              )}
-            />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <Mail className="w-5 h-5 text-gray-400" />
+              </div>
+              <Input
+                id="email"
+                type="email"
+                {...register('email')}
+                placeholder="이메일을 입력하세요"
+                className={cn(
+                  styles.input.base,
+                  'pl-10',
+                  errors.email && styles.input.error,
+                )}
+              />
+            </div>
             {errors.email && (
               <p className="text-sm text-red-500">{errors.email.message}</p>
             )}
@@ -91,16 +98,22 @@ const SignInPage = () => {
 
           <div className="space-y-2">
             <Label htmlFor="password">비밀번호</Label>
-            <Input
-              id="password"
-              type="password"
-              {...register('password')}
-              placeholder="비밀번호를 입력하세요"
-              className={cn(
-                styles.input.base,
-                errors.password && styles.input.error,
-              )}
-            />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <Key className="w-5 h-5 text-gray-400" />
+              </div>
+              <Input
+                id="password"
+                type="password"
+                {...register('password')}
+                placeholder="비밀번호를 입력하세요"
+                className={cn(
+                  styles.input.base,
+                  'pl-10',
+                  errors.password && styles.input.error,
+                )}
+              />
+            </div>
             {errors.password && (
               <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
