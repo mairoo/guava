@@ -6,9 +6,12 @@ export namespace Auth {
   }
 
   export interface SignUpRequest {
-    username: string;
     email: string;
     password: string;
+    passwordConfirm: string;
+    nickname: string;
+    lastName: string;
+    firstName: string;
   }
 
   export interface LoginResponse {
