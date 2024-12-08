@@ -76,6 +76,7 @@ const styles = {
     loading: 'cursor-not-allowed opacity-70',
   },
   errorMessage: 'text-sm text-red-500 mt-1',
+  helpText: 'text-sm text-gray-500 mt-1',
 };
 
 const SignUpPage = () => {
@@ -301,46 +302,48 @@ const SignUpPage = () => {
 
             {/* 회원 개인정보 */}
             <div className="space-y-6">
-              <GridRow gapX={4} gapY={2}>
-                <div className={styles.inputWrapper}>
-                  <Label htmlFor="lastName">성</Label>
-                  <Input
-                    id="lastName"
-                    type="text"
-                    placeholder="성을 입력하세요"
-                    className={cn(
-                      styles.input.base,
-                      'w-full',
-                      errors.lastName && styles.input.error,
-                    )}
-                    {...register('lastName')}
-                  />
-                  {errors.lastName && (
-                    <p className={styles.errorMessage}>
-                      {errors.lastName.message}
-                    </p>
+              <div className={styles.inputWrapper}>
+                <Label htmlFor="lastName">
+                  성(姓) - 남녀를 구별하는 성별이 아닙니다. (예: 홍)
+                </Label>
+                <Input
+                  id="lastName"
+                  type="text"
+                  placeholder="성을 입력하세요"
+                  className={cn(
+                    styles.input.base,
+                    'w-full',
+                    errors.lastName && styles.input.error,
                   )}
-                </div>
-                <div className={styles.inputWrapper}>
-                  <Label htmlFor="firstName">이름</Label>
-                  <Input
-                    id="firstName"
-                    type="text"
-                    placeholder="이름을 입력하세요"
-                    className={cn(
-                      styles.input.base,
-                      'w-full',
-                      errors.firstName && styles.input.error,
-                    )}
-                    {...register('firstName')}
-                  />
-                  {errors.firstName && (
-                    <p className={styles.errorMessage}>
-                      {errors.firstName.message}
-                    </p>
+                  {...register('lastName')}
+                />
+                {errors.lastName && (
+                  <p className={styles.errorMessage}>
+                    {errors.lastName.message}
+                  </p>
+                )}
+              </div>
+              <div className={styles.inputWrapper}>
+                <Label htmlFor="firstName">
+                  이름 - 성을 빼고 이름만 입력해주세요. (예: 길동)
+                </Label>
+                <Input
+                  id="firstName"
+                  type="text"
+                  placeholder="이름을 입력하세요"
+                  className={cn(
+                    styles.input.base,
+                    'w-full',
+                    errors.firstName && styles.input.error,
                   )}
-                </div>
-              </GridRow>
+                  {...register('firstName')}
+                />
+                {errors.firstName && (
+                  <p className={styles.errorMessage}>
+                    {errors.firstName.message}
+                  </p>
+                )}
+              </div>
             </div>
           </GridRow>
 
