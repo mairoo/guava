@@ -23,7 +23,7 @@ const schema = yup.object().shape({
     .string()
     .min(8, '비밀번호는 최소 8자 이상이어야 합니다')
     .required('비밀번호를 입력해주세요'),
-  rememberMe: yup.boolean().required(), // required() 추가하여 필수 필드로 변경
+  rememberMe: yup.boolean().required(),
 });
 
 const SignInPage = () => {
@@ -54,11 +54,11 @@ const SignInPage = () => {
 
   const styles = {
     input: {
-      base: 'focus-visible:ring-0 focus-visible:ring-offset-0',
+      base: 'focus-visible:ring-0 focus-visible:ring-offset-0 border border-gray-400',
       error: 'border-red-500',
     },
     button: {
-      base: 'w-full h-11 border border-blue-600 bg-white text-blue-600 hover:bg-blue-50 transition-colors',
+      base: 'w-full h-11 bg-teal-800 text-white hover:bg-teal-700 transition-colors',
       loading: 'cursor-not-allowed opacity-70',
     },
     link: 'text-blue-600 hover:text-blue-800 transition-colors duration-200',
@@ -66,13 +66,13 @@ const SignInPage = () => {
 
   return (
     <TopSpace>
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader className="p-3">
+      <Card className="w-full max-w-md mx-auto sm:border sm:shadow-sm border-0 shadow-none">
+        <CardHeader className="p-2 sm:p-3">
           <CardTitle className="text-2xl font-bold text-center">
             로그인
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-3">
+        <CardContent className="p-2 sm:p-3">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">이메일</Label>
