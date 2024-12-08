@@ -30,7 +30,7 @@ const SignUpPage = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <FlexColumn spacing={4} marginY={2}>
+      <FlexColumn spacing={4}>
         {/* 약관 동의 섹션 */}
         <TitledSection
           title="회원가입"
