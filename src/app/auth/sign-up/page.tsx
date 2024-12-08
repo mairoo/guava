@@ -17,7 +17,7 @@ const styles = {
     base: 'focus-visible:ring-0 focus-visible:ring-offset-0 border border-gray-400',
   },
   inputWrapper: 'space-y-2',
-  sectionTitle: 'text-lg font-semibold mb-4',
+  sectionTitle: 'text-xl font-semibold',
   button: {
     base: 'w-full h-11 bg-teal-800 text-white hover:bg-teal-700 transition-colors',
     loading: 'cursor-not-allowed opacity-70',
@@ -32,15 +32,15 @@ const SignUpPage = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <FlexColumn spacing={2} marginY={2}>
+      <FlexColumn spacing={4} marginY={2}>
         {/* 약관 동의 섹션 */}
-        <Card className="w-full">
+        <Card className="w-full md:border-[1px] md:shadow-sm shadow-none border-0">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">
+            <CardTitle className="text-xl font-bold text-center">
               회원가입
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-3">
             <GridRow gapX={8} gapY={2}>
               <div className="flex-1 space-y-4">
                 <div className="space-y-2">
@@ -88,8 +88,8 @@ const SignUpPage = () => {
         </Card>
 
         {/* 계정 정보 & 개인 정보 입력 섹션 */}
-        <Card className="w-full">
-          <CardContent className="p-6">
+        <Card className="w-full md:border-[1px] md:shadow-sm shadow-none border-0">
+          <CardContent className="p-3">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* 로그인 계정 정보 */}
               <div className="space-y-6">
