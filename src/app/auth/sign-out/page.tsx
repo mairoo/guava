@@ -41,7 +41,7 @@ const LogoutPage = () => {
 
   return (
     <TopSpace>
-      <Card className="w-full max-w-md mx-auto sm:border sm:shadow-sm border-0 shadow-none">
+      <Card className="w-full max-w-xl mx-auto sm:border sm:shadow-sm border-0 shadow-none">
         <CardHeader className="p-2 sm:p-3">
           <CardTitle className="text-2xl font-bold text-center">
             로그아웃

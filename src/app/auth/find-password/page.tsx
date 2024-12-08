@@ -61,7 +61,7 @@ const FindPasswordPage = () => {
 
   return (
     <TopSpace>
-      <Card className="w-full max-w-md mx-auto sm:border sm:shadow-sm border-0 shadow-none">
+      <Card className="w-full max-w-xl mx-auto sm:border sm:shadow-sm border-0 shadow-none">
         <CardHeader className="p-2 sm:p-3">
           <CardTitle className="text-2xl font-bold text-center">
             비밀번호 찾기
@@ -69,8 +69,9 @@ const FindPasswordPage = () => {
         </CardHeader>
         <CardContent className="p-2 sm:p-3">
           <div className="mb-6 text-center text-gray-600">
-            <p>가입하신 이메일 주소를 입력해 주세요.</p>
-            <p>비밀번호 재설정 링크를 보내드립니다.</p>
+            <p>
+              가입하신 이메일 주소로 비밀번호 초기화를 위한 이메일을 발송합니다.
+            </p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
