@@ -1,26 +1,19 @@
 'use client';
 
+import { RootState } from '@/store';
+import { setAuth, setLoading } from '@/store/auth/slice';
 import { auth } from '@/utils/auth';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-interface AuthContextType {
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  setIsAuthenticated: (value: boolean) => void;
-}
-
-const AuthContext = createContext<AuthContextType>({
-  isAuthenticated: false,
-  isLoading: true,
-  setIsAuthenticated: () => {},
-});
-
+// Custom hook for auth state
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.accessToken !== null,
+  );
+  const isLoading = useSelector((state: RootState) => state.auth.isLoading);
+
+  return { isAuthenticated, isLoading };
 };
 
 const useMounted = () => {
@@ -38,31 +31,29 @@ interface AuthProviderProps {
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const dispatch = useDispatch();
   const isMounted = useMounted();
+  const { isLoading } = useAuth();
 
   useEffect(() => {
     const initAuth = async () => {
       try {
-        // auth.isAuthenticated()를 통해 인증 상태 확인
+        dispatch(setLoading(true));
         const authenticated = auth.isAuthenticated();
-        setIsAuthenticated(authenticated);
+        dispatch(setAuth(authenticated));
       } catch (error) {
         console.error('Auth initialization failed:', error);
-        setIsAuthenticated(false);
+        dispatch(setAuth(false));
       } finally {
-        setIsLoading(false);
+        dispatch(setLoading(false));
       }
     };
 
-    // 마운트 된 상태에서만 인증 체크
     if (isMounted) {
       initAuth();
     }
-  }, [isMounted]);
+  }, [dispatch, isMounted]);
 
-  // 마운트 되기 전이면서 로딩 중일 때는 placeholder 반환
   if (!isMounted && isLoading) {
     return (
       <div className="min-h-screen" aria-hidden="true">
@@ -71,13 +62,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     );
   }
 
-  return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, isLoading, setIsAuthenticated }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  return children;
 };
 
 export default AuthProvider;

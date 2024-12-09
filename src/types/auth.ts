@@ -36,6 +36,7 @@ export namespace Auth {
       accessToken: string | null;
       tokenType: string | null;
       expiresIn: number | null;
+      isLoading: boolean;
     }
   }
 }

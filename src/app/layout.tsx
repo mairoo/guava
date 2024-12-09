@@ -30,11 +30,11 @@ export const viewport: Viewport = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang="ko" className={nanum.className}>
     <body>
-      <AuthProvider>
-        <StoreProvider>
+      <StoreProvider>
+        <AuthProvider>
           <MainLayout>{children}</MainLayout>
-        </StoreProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </StoreProvider>
     </body>
   </html>
 );
