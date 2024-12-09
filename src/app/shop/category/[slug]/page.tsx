@@ -1,6 +1,12 @@
 'use client';
 
 import { FlexColumn } from '@/components/layout';
+import {
+  ErrorMessage,
+  InfoMessage,
+  LoadingMessage,
+  WarningMessage,
+} from '@/components/message';
 import { ProductGrid, ProductItemBuy } from '@/components/product';
 import { Card } from '@/components/ui/card';
 import { categories } from '@/data/categories';
@@ -24,19 +30,39 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
   } = useGetProductsQuery({ categorySlug });
 
   if (!category) {
-    return <div>카테고리를 찾을 수 없습니다.</div>;
+    return (
+      <WarningMessage
+        message="카테고리를 찾을 수 없습니다"
+        description="요청하신 카테고리가 존재하지 않습니다. URL을 다시 확인해주세요."
+      />
+    );
   }
 
   if (isLoading) {
-    return <div>로딩 중...</div>;
+    return (
+      <LoadingMessage
+        message="로딩 중"
+        description="상품 정보를 불러오고 있습니다. 잠시만 기다려주세요."
+      />
+    );
   }
 
   if (isError) {
-    return <div>상품을 불러오는데 실패했습니다.</div>;
+    return (
+      <ErrorMessage
+        message="상품을 불러오는데 실패했습니다"
+        description="잠시 후 다시 시도해주세요. 문제가 지속되면 고객센터로 문의해주세요."
+      />
+    );
   }
 
   if (!response?.data) {
-    return <div>데이터가 없습니다.</div>;
+    return (
+      <InfoMessage
+        message="데이터가 없습니다"
+        description="현재 이 카테고리에 등록된 상품이 없습니다."
+      />
+    );
   }
 
   return (
