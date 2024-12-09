@@ -1,3 +1,3 @@
 export * from './ProductGrid';
-export * from './ProductItem';
+export * from './CategoryItem';
 export * from './ProductItemBuy';

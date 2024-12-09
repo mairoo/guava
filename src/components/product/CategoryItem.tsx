@@ -3,25 +3,25 @@ import { ArrowDown } from 'lucide-react';
 import Link from 'next/link';
 import React, { ComponentPropsWithoutRef } from 'react';
 
-interface ProductItemProps extends ComponentPropsWithoutRef<'div'> {
+interface CategoryItemProps extends ComponentPropsWithoutRef<'div'> {
   imageUrl: string;
   title: string;
+  slug: string;
   discountRate: number;
-  url: string;
   showBorder?: boolean;
 }
 
-export const ProductItem = ({
-  imageUrl = 'https://placehold.co/170x100?text=Product',
+export const CategoryItem = ({
+  imageUrl = '/placeholders/170x100',
   title = '상품명',
+  slug = 'slug',
   discountRate = 1.0,
-  url = '#',
   showBorder = false,
-}: ProductItemProps) => {
+}: CategoryItemProps) => {
   const formattedRate = discountRate.toFixed(2);
 
   return (
-    <Link href={url} className="block w-full">
+    <Link href={`/shop/category/${slug}`} className="block w-full">
       <Card
         className={`
           w-full overflow-hidden shadow-none hover:shadow-md transition-shadow

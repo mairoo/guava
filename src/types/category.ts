@@ -10,13 +10,12 @@ export interface Category {
   naverSearchTag: string;
   naverBrandName: string;
   naverMakerName: string;
-  url: string;
   imageUrl: string;
 }
 
 export const getGiftCardItems = (categories: Category[]) => {
   return categories.map((category) => ({
-    href: category.url,
+    href: `/shop/category/${category.slug}`,
     label: category.title,
   }));
 };

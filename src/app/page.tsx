@@ -6,8 +6,8 @@ import {
   MessageTitleDateList,
   TitledSection,
 } from '@/components/layout';
-import { ProductGrid, ProductItem, ProductItemBuy } from '@/components/product';
-import {categories} from '@/data/categories';
+import { ProductGrid, CategoryItem, ProductItemBuy } from '@/components/product';
+import { categories } from '@/data/categories';
 
 import React from 'react';
 
@@ -76,30 +76,35 @@ const bestsellers = [
   {
     id: 1,
     name: '한게임상품권',
+    subtitle: '5만원',
     discountRate: 0.0,
     imageUrl: 'https://placehold.co/170x100',
   },
   {
     id: 2,
     name: '구글기프트카드',
+    subtitle: '5만원',
     discountRate: 4.0,
     imageUrl: 'https://placehold.co/170x100',
   },
   {
     id: 3,
     name: '아프리카별풍선',
+    subtitle: '5만원',
     discountRate: 5.0,
     imageUrl: 'https://placehold.co/170x100',
   },
   {
     id: 4,
     name: '에그머니',
+    subtitle: '5만원',
     discountRate: 9.0,
     imageUrl: 'https://placehold.co/170x100',
   },
   {
     id: 5,
     name: '플레이스테이션',
+    subtitle: '5만원',
     discountRate: 7.0,
     imageUrl: 'https://placehold.co/170x100',
   },
@@ -107,6 +112,7 @@ const bestsellers = [
     id: 6,
     name: '틴캐시',
     discountRate: 7.0,
+    subtitle: '5만원',
     imageUrl: 'https://placehold.co/170x100',
   },
 ];
@@ -115,13 +121,13 @@ const Page = () => (
   <FlexColumn>
     <TitledSection title="오늘의 최저가 상품권">
       <ProductGrid gap={2} py={0}>
-        {categories.map((product) => (
-          <ProductItem
-            key={product.id}
-            title={product.title}
-            discountRate={product.discountRate}
-            imageUrl={product.imageUrl}
-            url={product.url}
+        {categories.map((category) => (
+          <CategoryItem
+            key={category.id}
+            title={category.title}
+            slug={category.slug}
+            discountRate={category.discountRate}
+            imageUrl={category.imageUrl}
           />
         ))}
       </ProductGrid>
@@ -166,6 +172,7 @@ const Page = () => (
           <ProductItemBuy
             key={product.id}
             name={product.name}
+            subtitle={product.subtitle}
             discountRate={product.discountRate}
             price={3550}
             imageUrl={product.imageUrl}
