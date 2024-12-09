@@ -69,8 +69,6 @@ const SignInPage = () => {
 
       // 메인 페이지로 리다이렉트
       router.push('/');
-
-      console.log('logged in');
     } catch (error: any) {
       // 로그인 실패 시 에러 메시지 설정
       // 서버에서 받은 에러 메시지가 있으면 사용하고, 없으면 기본 메시지 사용

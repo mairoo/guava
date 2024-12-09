@@ -80,7 +80,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         // 쿠키에서 인증 상태 확인
         const isAuthenticatedCookie = auth.isAuthenticated();
         if (!isAuthenticatedCookie) {
-          router.push('/login'); // 인증되지 않은 경우 로그인 페이지로 이동
+          router.push('/auth/sign-in'); // 인증되지 않은 경우 로그인 페이지로 이동
           return;
         }
 
