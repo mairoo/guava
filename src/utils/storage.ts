@@ -1,3 +1,5 @@
+import { auth } from '@/utils/auth';
+
 export const storage = {
   keys: {
     rememberMe: 'rememberMe' as const,
@@ -49,14 +51,19 @@ export const storage = {
   },
 
   isTokenExpiring: (expiresIn: number): boolean => {
+    // 먼저 isAuthenticated 쿠키가 있는지 확인
+    if (!auth.isAuthenticated()) {
+      return true;
+    }
+
     const lastRefresh = storage.getLastRefreshTime();
     if (!lastRefresh) return true;
 
     const now = Date.now();
-    const tokenExpiration = lastRefresh + expiresIn * 1000; // expiresIn은 초 단위
+    const tokenExpiration = lastRefresh + expiresIn * 1000;
     const timeUntilExpiration = tokenExpiration - now;
 
-    // 토큰 만료 10분 전에 갱신
+    // 쿠키가 있더라도 만료 10분 전이면 갱신 필요
     return timeUntilExpiration < 10 * 60 * 1000;
   },
 

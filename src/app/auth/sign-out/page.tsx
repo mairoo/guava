@@ -37,6 +37,8 @@ const LogoutPage = () => {
         error.data?.message || '로그아웃 중 오류가 발생했습니다.';
       setError(errorMessage);
       console.error('Logout error:', error);
+    } finally {
+      auth.removeCookie('isAuthenticated');
     }
   };
 
