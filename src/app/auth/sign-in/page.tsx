@@ -47,8 +47,16 @@ const SignInPage = () => {
   const onSubmit = async (data: Auth.LoginRequest) => {
     try {
       await login(data).unwrap();
-    } catch (error) {
-      console.error('Login failed:', error);
+
+      console.log('logged in');
+    } catch (error: any) {
+      // RTK Query error handling
+      if (error.data?.message) {
+        // 서버에서 전달된 에러 메시지 처리
+        console.error('Login failed:', error.data.message);
+      } else {
+        console.error('Login failed:', error);
+      }
     }
   };
 

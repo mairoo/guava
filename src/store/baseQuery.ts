@@ -17,7 +17,7 @@ const mutex = new Mutex(); // 뮤텍스 잠금으로 동시 리프레시 방지
 let refreshAttempts = 0;
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:8080',
+  baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;
@@ -36,6 +36,31 @@ export const baseQueryWithRetry: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
+  const state = api.getState() as RootState;
+  const { accessToken, expiresIn } = state.auth;
+
+  // 토큰이 만료 예정인지 체크
+  if (accessToken && expiresIn && storage.isTokenExpiring(expiresIn)) {
+    if (!mutex.isLocked()) {
+      const release = await mutex.acquire();
+      try {
+        const refreshResult = await baseQuery(
+          { url: '/auth/refresh', method: 'POST' },
+          api,
+          extraOptions,
+        );
+
+        if (refreshResult.data) {
+          const refreshResponse = refreshResult.data as Auth.LoginResponse;
+          storage.setLastRefreshTime(Date.now());
+          api.dispatch(setCredentials(refreshResponse));
+        }
+      } finally {
+        release();
+      }
+    }
+  }
+
   await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
 
@@ -49,13 +74,13 @@ export const baseQueryWithRetry: BaseQueryFn<
         Date.now() - lastRefreshTime <= REFRESH_TOKEN_EXPIRY_BUFFER)
     ) {
       api.dispatch(logout());
-      return result;
+      window.location.href = '/auth/sign-in';
     }
 
     // 이미 3회 이상 시도했으면 로그아웃
     if (refreshAttempts >= MAX_REFRESH_ATTEMPTS) {
       api.dispatch(logout());
-      return result;
+      window.location.href = '/auth/sign-in';
     }
 
     // 동시 리프레시 방지
@@ -72,14 +97,17 @@ export const baseQueryWithRetry: BaseQueryFn<
 
         if (refreshResult.data) {
           const refreshResponse = refreshResult.data as Auth.LoginResponse;
+          storage.setLastRefreshTime(Date.now());
           api.dispatch(setCredentials(refreshResponse));
           refreshAttempts = 0; // 성공하면 카운터 리셋
           result = await baseQuery(args, api, extraOptions);
         } else {
           api.dispatch(logout());
+          window.location.href = '/auth/sign-in';
         }
       } catch (error) {
         api.dispatch(logout());
+        window.location.href = '/auth/sign-in';
       } finally {
         release();
       }

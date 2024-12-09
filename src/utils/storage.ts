@@ -1,7 +1,7 @@
 export const storage = {
   keys: {
     rememberMe: 'rememberMe' as const,
-    // 다른 키들도 여기에 추가 가능
+    lastRefreshTime: 'lastRefreshTime' as const,
   },
 
   getRememberMe: (): boolean => {
@@ -29,15 +29,15 @@ export const storage = {
   },
 
   getLastRefreshTime: () => {
-    return Number(localStorage.getItem('lastRefreshTime')) || null;
+    return Number(localStorage.getItem(storage.keys.lastRefreshTime)) || null;
   },
 
   setLastRefreshTime: (time: number) => {
-    localStorage.setItem('lastRefreshTime', String(time));
+    localStorage.setItem(storage.keys.lastRefreshTime, String(time));
   },
 
   clearLastRefreshTime: () => {
-    localStorage.removeItem('lastRefreshTime');
+    localStorage.removeItem(storage.keys.lastRefreshTime);
   },
 
   clearAll: (): void => {
@@ -46,6 +46,18 @@ export const storage = {
     } catch (error) {
       console.error('Failed to clear localStorage:', error);
     }
+  },
+
+  isTokenExpiring: (expiresIn: number): boolean => {
+    const lastRefresh = storage.getLastRefreshTime();
+    if (!lastRefresh) return true;
+
+    const now = Date.now();
+    const tokenExpiration = lastRefresh + expiresIn * 1000; // expiresIn은 초 단위
+    const timeUntilExpiration = tokenExpiration - now;
+
+    // 토큰 만료 10분 전에 갱신
+    return timeUntilExpiration < 10 * 60 * 1000;
   },
 
   // 일반적인 get/set 메서드 추가

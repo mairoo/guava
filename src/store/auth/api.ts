@@ -2,6 +2,7 @@ import { logout, setCredentials } from '@/store/auth/slice';
 import { baseQueryWithRetry } from '@/store/baseQuery';
 import { Auth } from '@/types/auth';
 import { storage } from '@/utils';
+import { auth } from '@/utils/auth';
 
 import { createApi } from '@reduxjs/toolkit/query/react';
 
@@ -15,12 +16,15 @@ const api = createApi({
         method: 'POST',
         body: credentials,
       }),
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+      async onQueryStarted(credentials, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
 
+          storage.setRememberMe(credentials.rememberMe);
+          storage.setLastRefreshTime(Date.now());
+
           // 쿠키에 인증 상태 저장 - Next.js 미들웨어 접근 로그인 유무 판단 기준
-          document.cookie = `isAuthenticated=true; path=/; max-age=${data.data.expiresIn}`;
+          auth.setAuthCookie(data.data.expiresIn);
 
           dispatch(setCredentials(data));
         } catch (error) {
@@ -38,7 +42,7 @@ const api = createApi({
           const { data } = await queryFulfilled;
 
           // 쿠키 인증 상태 갱신
-          document.cookie = `isAuthenticated=true; path=/; max-age=${data.data.expiresIn}`;
+          auth.setAuthCookie(data.data.expiresIn);
 
           // 리프레시 시간 저장 시점이 두 군데
           // - 명시적 refresh mutation 호출 시
@@ -61,8 +65,7 @@ const api = createApi({
           await queryFulfilled;
 
           // 쿠키 삭제
-          document.cookie =
-            'isAuthenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+          auth.removeCookie('isAuthenticated');
 
           dispatch(logout());
         } catch (error) {
