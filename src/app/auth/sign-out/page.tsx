@@ -4,6 +4,7 @@ import { TitledSection, TopSpace } from '@/components/layout';
 import { ErrorMessage, LoadingMessage } from '@/components/message';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/providers/auth/AuthProvider';
 import { useLogoutMutation } from '@/store/auth/api';
 import { storage } from '@/utils';
 import { auth } from '@/utils/auth';
@@ -11,6 +12,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const LogoutPage = () => {
+  const { setIsAuthenticated } = useAuth();
+
   const router = useRouter();
   const [logout, { isLoading }] = useLogoutMutation();
   const [error, setError] = useState<string | null>(null);
@@ -18,6 +21,7 @@ const LogoutPage = () => {
   const handleLogout = async () => {
     try {
       await logout().unwrap();
+      setIsAuthenticated(false);
 
       // 로컬 스토리지 클리어
       storage.clearRememberMe();

@@ -7,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import {useAuth} from '@/providers/auth/AuthProvider';
 import { useLoginMutation } from '@/store/auth/api';
 import { Auth } from '@/types/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -30,6 +31,8 @@ const schema = yup.object().shape({
 });
 
 const SignInPage = () => {
+  const { setIsAuthenticated } = useAuth();
+
   const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
   const [error, setError] = useState<string | null>(null);
@@ -52,8 +55,8 @@ const SignInPage = () => {
   const onSubmit = async (data: Auth.LoginRequest) => {
     try {
       await login(data).unwrap();
+      setIsAuthenticated(true);
       router.push('/');
-      router.refresh();
       console.log('logged in');
     } catch (error: any) {
       setError(

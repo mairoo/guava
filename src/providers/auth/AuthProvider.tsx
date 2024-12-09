@@ -6,11 +6,13 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
+  setIsAuthenticated: (value: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   isLoading: true,
+  setIsAuthenticated: () => {},
 });
 
 export const useAuth = () => {
@@ -70,7 +72,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, isLoading, setIsAuthenticated }}
+    >
       {children}
     </AuthContext.Provider>
   );
