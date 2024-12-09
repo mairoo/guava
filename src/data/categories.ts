@@ -1,6 +1,6 @@
-import { Product } from '@/types/product';
+import { Category } from '@/types/category';
 
-export const products: Product[] = [
+export const categories: Category[] = [
   {
     id: 2,
     title: '구글기프트카드',

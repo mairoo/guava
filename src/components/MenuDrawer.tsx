@@ -10,8 +10,8 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { commonMenuItems, guestMenuItems, memberMenuItems } from '@/data/menus';
-import { products } from '@/data/products';
-import { getGiftCardItems } from '@/types/product';
+import { categories } from '@/data/categories';
+import { getGiftCardItems } from '@/types/category';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
@@ -38,7 +38,7 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
     ...commonMenuItems,
   ];
 
-  const giftCardItems = getGiftCardItems(products);
+  const giftCardItems = getGiftCardItems(categories);
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChangeAction} modal={false}>

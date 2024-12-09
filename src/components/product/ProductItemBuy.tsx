@@ -6,6 +6,7 @@ import React from 'react';
 interface ProductItemBuyProps {
   imageUrl: string;
   name: string;
+  subtitle: string;
   discountRate: number;
   price: number;
   onAddToCart?: () => void;
@@ -14,6 +15,7 @@ interface ProductItemBuyProps {
 export const ProductItemBuy = ({
   imageUrl = 'https://placehold.co/170x100?text=Product',
   name = '상품명',
+  subtitle = '',
   discountRate = 1.0,
   price = 0,
   onAddToCart,
@@ -33,9 +35,12 @@ export const ProductItemBuy = ({
         </div>
 
         <div className="p-2 space-y-2 text-center">
-          <h3 className="font-medium text-sm text-gray-900 line-clamp-2">
+          <h1 className="font-medium text-sm text-gray-900 line-clamp-2">
             {name}
-          </h3>
+          </h1>
+          <h2 className="font-medium text-sm text-gray-900 line-clamp-2">
+            {subtitle}
+          </h2>
 
           <div className="flex items-center justify-center gap-1 text-red-500">
             <span className="text-sm font-semibold">최대 {formattedRate}%</span>

@@ -7,7 +7,7 @@ import {
   TitledSection,
 } from '@/components/layout';
 import { ProductGrid, ProductItem, ProductItemBuy } from '@/components/product';
-import {products} from '@/data/products';
+import {categories} from '@/data/categories';
 
 import React from 'react';
 
@@ -115,7 +115,7 @@ const Page = () => (
   <FlexColumn>
     <TitledSection title="오늘의 최저가 상품권">
       <ProductGrid gap={2} py={0}>
-        {products.map((product) => (
+        {categories.map((product) => (
           <ProductItem
             key={product.id}
             title={product.title}

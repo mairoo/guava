@@ -1,22 +1,60 @@
-export interface Product {
-  id: number;
-  title: string;
-  slug: string;
-  description: string;
-  description1: string;
-  discountRate: number;
-  pg: boolean;
-  pgDiscountRate: number;
-  naverSearchTag: string;
-  naverBrandName: string;
-  naverMakerName: string;
-  url: string;
-  imageUrl: string;
-}
+export namespace Products {
+  export interface Product {
+    id: number;
+    name: string;
+    subtitle: string;
+    code: string;
+    listPrice: number;
+    sellingPrice: number;
+    pg: boolean;
+    pgSellingPrice: number;
+    description: string;
+    position: number;
+    status: ProductStatus;
+    stockQuantity: number;
+    stock: ProductStock;
+    minimumStockLevel: number;
+    maximumStockLevel: number;
+    categoryId: number;
+    categoryTitle: string;
+    storeId: number;
+    storeName: string;
+    created: string;
+    modified: string;
+  }
 
-export const getGiftCardItems = (products: Product[]) => {
-  return products.map((product) => ({
-    href: product.url,
-    label: product.title,
-  }));
-};
+  export enum ProductStatus {
+    ACTIVE = 'ACTIVE',
+    INACTIVE = 'INACTIVE',
+    SOLD_OUT = 'SOLD_OUT',
+  }
+
+  export enum ProductStock {
+    IN_STOCK = 'IN_STOCK',
+    LOW_STOCK = 'LOW_STOCK',
+    OUT_OF_STOCK = 'OUT_OF_STOCK',
+  }
+
+  export interface ProductsRequest {
+    categorySlug?: string;
+  }
+
+  export interface SearchProductsRequest extends ProductsRequest {
+    keyword: string;
+  }
+
+  export interface ApiResponse<T> {
+    timestamp: number;
+    status: number;
+    message: string;
+    data: T;
+  }
+
+  export interface ProductsData {
+    products: Product[];
+    totalCount: number;
+  }
+
+  export type ProductsResponse = ApiResponse<Product[]>;
+  export type ProductResponse = ApiResponse<Product>;
+}
