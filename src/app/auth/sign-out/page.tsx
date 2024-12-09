@@ -1,30 +1,37 @@
 'use client';
 
 import { TitledSection, TopSpace } from '@/components/layout';
+import { ErrorMessage, LoadingMessage } from '@/components/message';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useLogoutMutation } from '@/store/auth/api';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { storage } from '@/utils';
+import { auth } from '@/utils/auth';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-
-const schema = yup.object().shape({});
+import { useState } from 'react';
 
 const LogoutPage = () => {
   const router = useRouter();
   const [logout, { isLoading }] = useLogoutMutation();
+  const [error, setError] = useState<string | null>(null);
 
-  const { handleSubmit } = useForm({
-    resolver: yupResolver(schema),
-  });
-
-  const onSubmit = async () => {
+  const handleLogout = async () => {
     try {
       await logout().unwrap();
-      console.log('로그아웃되었습니다');
-      router.push('/');
-    } catch (error) {
+
+      // 로컬 스토리지 클리어
+      storage.clearRememberMe();
+      storage.clearLastRefreshTime();
+
+      // 인증 쿠키 제거
+      auth.removeCookie('isAuthenticated');
+
+      // 홈으로 리다이렉트
+      router.push('/auth/sign-in');
+    } catch (error: any) {
+      const errorMessage =
+        error.data?.message || '로그아웃 중 오류가 발생했습니다.';
+      setError(errorMessage);
       console.error('Logout error:', error);
     }
   };
@@ -38,6 +45,15 @@ const LogoutPage = () => {
     },
   };
 
+  if (isLoading) {
+    return (
+      <LoadingMessage
+        message="로그아웃 처리 중"
+        description="잠시만 기다려주세요..."
+      />
+    );
+  }
+
   return (
     <TopSpace>
       <TitledSection
@@ -46,10 +62,18 @@ const LogoutPage = () => {
         spacing="space-y-4"
         className="w-full max-w-xl mx-auto"
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <p className="text-center text-gray-600">
-            정말 로그아웃 하시겠습니까?
-          </p>
+        <div className="space-y-4">
+          {error ? (
+            <ErrorMessage
+              message={error}
+              description="잠시 후 다시 시도해주세요. 문제가 지속되면 고객센터로 문의해주세요."
+            />
+          ) : (
+            <p className="text-center text-gray-600">
+              정말 로그아웃 하시겠습니까?
+            </p>
+          )}
+
           <div className="grid grid-cols-2 gap-4">
             <Button
               type="button"
@@ -64,7 +88,8 @@ const LogoutPage = () => {
               취소
             </Button>
             <Button
-              type="submit"
+              type="button"
+              onClick={handleLogout}
               disabled={isLoading}
               className={cn(
                 styles.button.base,
@@ -75,7 +100,7 @@ const LogoutPage = () => {
               {isLoading ? '로그아웃 중...' : '로그아웃'}
             </Button>
           </div>
-        </form>
+        </div>
       </TitledSection>
     </TopSpace>
   );

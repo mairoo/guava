@@ -1,6 +1,7 @@
 'use client';
 
 import { TitledSection, TopSpace } from '@/components/layout';
+import { ErrorMessage } from '@/components/message';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -11,6 +12,8 @@ import { Auth } from '@/types/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Key, Mail } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -27,7 +30,9 @@ const schema = yup.object().shape({
 });
 
 const SignInPage = () => {
+  const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -47,16 +52,14 @@ const SignInPage = () => {
   const onSubmit = async (data: Auth.LoginRequest) => {
     try {
       await login(data).unwrap();
-
+      router.push('/');
+      router.refresh();
       console.log('logged in');
     } catch (error: any) {
-      // RTK Query error handling
-      if (error.data?.message) {
-        // 서버에서 전달된 에러 메시지 처리
-        console.error('Login failed:', error.data.message);
-      } else {
-        console.error('Login failed:', error);
-      }
+      setError(
+        error.data?.message ||
+          '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.',
+      );
     }
   };
 
@@ -80,6 +83,12 @@ const SignInPage = () => {
         spacing="space-y-4"
         className="w-full max-w-xl mx-auto"
       >
+        {error && (
+          <ErrorMessage
+            message={error}
+            description="입력하신 정보를 다시 확인하시거나, 비밀번호 찾기를 이용해주세요."
+          />
+        )}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">이메일</Label>
