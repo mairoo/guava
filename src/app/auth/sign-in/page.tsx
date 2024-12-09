@@ -54,13 +54,26 @@ const SignInPage = () => {
     reValidateMode: 'onSubmit',
   });
 
+  /**
+   * 로그인 폼 제출 시 실행되는 핸들러 함수
+   * @param data 사용자가 입력한 로그인 정보 (이메일, 비밀번호, 자동로그인 여부)
+   */
   const onSubmit = async (data: Auth.LoginRequest) => {
     try {
+      // RTK Query의 login mutation을 실행하고 결과를 기다림
+      // unwrap()을 사용하여 성공/실패를 try-catch로 처리
       await login(data).unwrap();
+
+      // 로그인 성공 시 Redux store의 인증 상태를 true로 설정
       dispatch(setAuth(true));
+
+      // 메인 페이지로 리다이렉트
       router.push('/');
+
       console.log('logged in');
     } catch (error: any) {
+      // 로그인 실패 시 에러 메시지 설정
+      // 서버에서 받은 에러 메시지가 있으면 사용하고, 없으면 기본 메시지 사용
       setError(
         error.data?.message ||
           '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.',

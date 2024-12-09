@@ -18,26 +18,38 @@ const LogoutPage = () => {
   const [logout, { isLoading }] = useLogoutMutation();
   const [error, setError] = useState<string | null>(null);
 
+  /**
+   * 로그아웃 처리를 수행하는 핸들러 함수
+   * - 서버에 로그아웃 요청
+   * - 로컬 상태 및 저장소 초기화
+   * - 로그인 페이지로 리다이렉트
+   */
   const handleLogout = async () => {
     try {
+      // 서버에 로그아웃 요청을 보내고 완료될 때까지 대기
       await logout().unwrap();
+
+      // Redux store의 인증 상태를 false로 설정
       dispatch(setAuth(false));
 
-      // 로컬 스토리지 클리어
-      storage.clearRememberMe();
-      storage.clearLastRefreshTime();
+      // 로컬 스토리지에서 인증 관련 데이터 삭제
+      storage.clearRememberMe(); // 자동 로그인 설정 제거
+      storage.clearLastRefreshTime(); // 토큰 갱신 시간 제거
 
-      // 인증 쿠키 제거
+      // 브라우저 쿠키에서 인증 상태 제거
       auth.removeCookie('isAuthenticated');
 
-      // 홈으로 리다이렉트
+      // 로그인 페이지로 리다이렉트
       router.push('/auth/sign-in');
     } catch (error: any) {
+      // 로그아웃 실패 시 에러 처리
       const errorMessage =
         error.data?.message || '로그아웃 중 오류가 발생했습니다.';
-      setError(errorMessage);
-      console.error('Logout error:', error);
+      setError(errorMessage); // 사용자에게 에러 메시지 표시
+      console.error('Logout error:', error); // 개발자 콘솔에 상세 에러 기록
     } finally {
+      // 에러가 발생하더라도 항상 인증 쿠키는 제거
+      // (클라이언트 측 로그아웃은 보장)
       auth.removeCookie('isAuthenticated');
     }
   };
