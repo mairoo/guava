@@ -34,7 +34,7 @@ export const ProductItemBuy = ({
           />
         </div>
 
-        <div className="p-2 space-y-2 text-center">
+        <div className="px-2 space-y-2 text-center">
           <h1 className="font-medium text-sm text-gray-900 line-clamp-2">
             {name}
           </h1>
@@ -51,7 +51,7 @@ export const ProductItemBuy = ({
         </div>
       </CardContent>
 
-      <CardFooter className="p-2 bg-gray-100 justify-center">
+      <CardFooter className="mt-1 p-2 bg-gray-100 justify-center">
         <Button
           variant="outline"
           size="sm"
