@@ -10,6 +10,7 @@ import {
 import { ProductGrid, ProductItemBuy } from '@/components/product';
 import { Card } from '@/components/ui/card';
 import { categories } from '@/data/categories';
+import { toast } from '@/hooks/use-toast';
 import { useGetProductsQuery } from '@/store/products/api';
 import { CategoryDetailParams } from '@/types/params';
 import Link from 'next/link';
@@ -65,6 +66,22 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
     );
   }
 
+  const handleAddToCart = async (productId: number) => {
+    console.log(productId);
+    try {
+      toast({
+        title: '장바구니에 추가되었습니다',
+        description: '장바구니에서 수량을 변경하실 수 있습니다.',
+      });
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: '장바구니 추가 실패',
+        description: '잠시 후 다시 시도해주세요.',
+      });
+    }
+  };
+
   return (
     <FlexColumn spacing={2} marginY={2}>
       <Card className="w-full border border-yellow-200 bg-yellow-50 shadow-none p-1">
@@ -89,6 +106,10 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
               }
               price={product.sellingPrice}
               imageUrl={category.imageUrl}
+              onAddToCart={async (e) => {
+                e.stopPropagation();
+                await handleAddToCart(product.id);
+              }}
             />
           </Link>
         ))}

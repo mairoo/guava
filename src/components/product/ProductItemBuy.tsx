@@ -9,7 +9,7 @@ interface ProductItemBuyProps {
   subtitle: string;
   discountRate: number;
   price: number;
-  onAddToCart?: () => void;
+  onAddToCart?: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }
 
 export const ProductItemBuy = ({
