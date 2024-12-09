@@ -7,6 +7,7 @@ import {
   SheetContent,
   SheetOverlay,
   SheetPortal,
+  SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { categories } from '@/data/categories';
@@ -65,6 +66,7 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
           <div className="flex flex-col h-full bg-white">
             {/* 상단 고정 영역 */}
             <div className="relative border-b">
+              <SheetTitle className="sr-only">메뉴</SheetTitle>
               <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-green-50 text-lime-600">
                 핀코인 대표몰
               </h2>
