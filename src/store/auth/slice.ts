@@ -20,7 +20,7 @@ const initialState: Auth.State.AuthState = {
  * 인증 관련 Redux 슬라이스 생성
  * 인증 상태 관리를 위한 리듀서와 액션들을 정의
  */
-export const slice = createSlice({
+export const authSlice = createSlice({
   name: 'auth', // 슬라이스의 고유 이름
   initialState,
   reducers: {
@@ -79,7 +79,8 @@ export const slice = createSlice({
 });
 
 // 액션 생성자들을 외부로 내보내기
-export const { setCredentials, setAuth, setLoading, logout } = slice.actions;
+export const { setCredentials, setAuth, setLoading, logout } =
+  authSlice.actions;
 
 // 리듀서를 외부로 내보내기
-export default slice.reducer;
+export default authSlice.reducer;

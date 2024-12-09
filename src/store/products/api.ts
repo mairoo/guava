@@ -2,7 +2,7 @@ import { baseQueryWithRetry } from '@/store/baseQuery';
 import { Products } from '@/types/product';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
-const api = createApi({
+export const productApi = createApi({
   reducerPath: 'productsApi',
   baseQuery: baseQueryWithRetry,
   tagTypes: ['Products'],
@@ -37,6 +37,4 @@ const api = createApi({
   }),
 });
 
-export const { useGetProductsQuery, useSearchProductsQuery } = api;
-
-export { api };
+export const { useGetProductsQuery, useSearchProductsQuery } = productApi;

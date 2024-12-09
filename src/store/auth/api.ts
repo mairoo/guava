@@ -11,7 +11,7 @@ import {createApi} from '@reduxjs/toolkit/query/react';
  * - refresh: 토큰 갱신
  * - logout: 로그아웃 처리
  */
-const api = createApi({
+export const authApi = createApi({
   // API 슬라이스의 고유 식별자
   reducerPath: 'authApi',
   // 기본 API 설정 (재시도 로직이 포함된 baseQuery 사용)
@@ -109,6 +109,4 @@ const api = createApi({
 });
 
 // 각 엔드포인트에 대한 React hooks 내보내기
-export const { useLoginMutation, useRefreshMutation, useLogoutMutation } = api;
-
-export { api };
+export const { useLoginMutation, useRefreshMutation, useLogoutMutation } = authApi;

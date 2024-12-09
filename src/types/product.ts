@@ -52,7 +52,6 @@ export namespace Products {
 
   export interface ProductsData {
     products: Product[];
-    totalCount: number;
   }
 
   export type ProductsResponse = ApiResponse<Product[]>;

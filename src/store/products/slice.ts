@@ -3,19 +3,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ProductsState {
   products: Products.Product[];
-  totalCount: number;
   currentPage: number;
   selectedCategory: string | null;
 }
 
 const initialState: ProductsState = {
   products: [],
-  totalCount: 0,
   currentPage: 1,
   selectedCategory: null,
 };
 
-export const slice = createSlice({
+export const productSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
@@ -28,12 +26,6 @@ export const slice = createSlice({
     setSelectedCategory: (state, action: PayloadAction<string>) => {
       state.selectedCategory = action.payload;
     },
-    clearProducts: (state) => {
-      state.products = [];
-      state.totalCount = 0;
-      state.currentPage = 1;
-      state.selectedCategory = null;
-    },
   },
 });
 
@@ -41,7 +33,6 @@ export const {
   setProducts,
   setCurrentPage,
   setSelectedCategory,
-  clearProducts,
-} = slice.actions;
+} = productSlice.actions;
 
-export default slice.reducer;
+export default productSlice.reducer;
