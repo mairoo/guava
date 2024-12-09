@@ -5,6 +5,7 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
+  SheetDescription,
   SheetOverlay,
   SheetPortal,
   SheetTitle,
@@ -67,6 +68,9 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
             {/* 상단 고정 영역 */}
             <div className="relative border-b">
               <SheetTitle className="sr-only">메뉴</SheetTitle>
+              <SheetDescription className="sr-only">
+                사이트의 주요 메뉴와 상품권 목록을 탐색할 수 있습니다.
+              </SheetDescription>
               <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-green-50 text-lime-600">
                 핀코인 대표몰
               </h2>

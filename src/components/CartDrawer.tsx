@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetClose,
-  SheetContent,
+  SheetContent, SheetDescription,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
@@ -89,6 +89,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         <div className="flex flex-col h-full bg-white">
           <div className="relative border-b">
             <SheetTitle className="sr-only">장바구니</SheetTitle>
+            <SheetDescription className="sr-only">
+              장바구니에 담긴 상품들을 확인하고 주문할 수 있습니다.
+            </SheetDescription>
             <h2 className="h-14 flex items-center px-4 text-lg font-semibold bg-green-50 text-lime-600">
               장바구니
             </h2>
