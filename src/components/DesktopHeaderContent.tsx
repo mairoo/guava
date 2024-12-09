@@ -2,20 +2,17 @@
 
 import { Container, NavList } from '@/components/layout';
 import { commonMenuItems, guestMenuItems, memberMenuItems } from '@/data/menus';
+import { useAuth } from '@/providers/auth/AuthProvider';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
-interface DesktopHeaderContentProps {
-  isLoggedIn?: boolean;
-}
+export const DesktopHeaderContent = ({}) => {
+  const { isAuthenticated } = useAuth();
 
-export const DesktopHeaderContent: React.FC<DesktopHeaderContentProps> = ({
-  isLoggedIn = false,
-}) => {
   const currentMenuItems = [
     ...commonMenuItems,
-    ...(isLoggedIn ? memberMenuItems : guestMenuItems),
+    ...(isAuthenticated ? memberMenuItems : guestMenuItems),
   ];
 
   return (
@@ -31,7 +28,9 @@ export const DesktopHeaderContent: React.FC<DesktopHeaderContentProps> = ({
                 title="핀코인"
                 className="h-8 object-contain"
               />
-              <span className="text-xl font-semibold text-orange-500">핀코인</span>
+              <span className="text-xl font-semibold text-orange-500">
+                핀코인
+              </span>
             </Link>
           </div>
 

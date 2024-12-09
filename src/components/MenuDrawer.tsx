@@ -9,8 +9,9 @@ import {
   SheetPortal,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { commonMenuItems, guestMenuItems, memberMenuItems } from '@/data/menus';
 import { categories } from '@/data/categories';
+import { commonMenuItems, guestMenuItems, memberMenuItems } from '@/data/menus';
+import { useAuth } from '@/providers/auth/AuthProvider';
 import { getGiftCardItems } from '@/types/category';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
@@ -19,22 +20,22 @@ import React from 'react';
 interface MenuDrawerProps {
   isOpen: boolean;
   isSearching: boolean;
-  isLoggedIn: boolean;
   onOpenChangeAction: (open: boolean) => void;
 }
 
 export const MenuDrawer: React.FC<MenuDrawerProps> = ({
   isOpen,
   isSearching,
-  isLoggedIn,
   onOpenChangeAction,
 }) => {
+  const { isAuthenticated } = useAuth();
+
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
     e.stopPropagation();
   };
 
   const currentMenuItems = [
-    ...(isLoggedIn ? memberMenuItems : guestMenuItems),
+    ...(isAuthenticated ? memberMenuItems : guestMenuItems),
     ...commonMenuItems,
   ];
 
