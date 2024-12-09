@@ -1,10 +1,12 @@
+'use client';
+
 import { FlexColumn } from '@/components/layout';
 import { ProductGrid, ProductItemBuy } from '@/components/product';
 import { Card } from '@/components/ui/card';
 import { products } from '@/data/products';
-import { DetailPageParams } from '@/types/params';
+import { CategoryDetailParams } from '@/types/params';
 import Link from 'next/link';
-import React from 'react';
+import React, { use } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 const bestsellers = [
@@ -46,8 +48,8 @@ const bestsellers = [
   },
 ];
 
-const CategoryDetailPage = async ({ params }: DetailPageParams) => {
-  const resolvedParams = await params;
+const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
+  const resolvedParams = use(params);
 
   const decodedSlug = decodeURIComponent(resolvedParams.slug);
 

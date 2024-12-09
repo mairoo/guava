@@ -5,10 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { ProductDetailParams } from '@/types/params';
 import { formatKRW } from '@/utils';
 import { ArrowDown, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, use, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 const breadcrumbItems = [
@@ -148,7 +149,12 @@ const QuantitySelector = ({
   </div>
 );
 
-const ProductDetailPage = () => {
+const ProductDetailPage = ({ params }: ProductDetailParams) => {
+  const resolvedParams = use(params);
+
+  const code = decodeURIComponent(resolvedParams.code);
+  const id = decodeURIComponent(resolvedParams.id);
+
   const [quantity, setQuantity] = useState(1);
 
   const { matches: isDesktop } = useMediaQuery('(min-width: 1280px)');
@@ -180,6 +186,7 @@ const ProductDetailPage = () => {
           {productDescription}
           <div className="space-y-8 w-full">
             {productImage}
+            {code} {id}
             {productInfo}
             {quantitySelector}
           </div>

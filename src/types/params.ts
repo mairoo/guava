@@ -3,7 +3,14 @@ export interface PageParams {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export interface DetailPageParams {
+export interface ProductDetailParams {
+  params: Promise<{
+    id: string;
+    code: string;
+  }>;
+}
+
+export interface CategoryDetailParams {
   params: Promise<{ slug: string }>;
 }
 
