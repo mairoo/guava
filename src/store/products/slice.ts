@@ -20,8 +20,7 @@ export const slice = createSlice({
   initialState,
   reducers: {
     setProducts: (state, action: PayloadAction<Products.ProductsResponse>) => {
-      state.products = action.payload.data.products;
-      state.totalCount = action.payload.data.totalCount;
+      state.products = action.payload.data;
     },
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
