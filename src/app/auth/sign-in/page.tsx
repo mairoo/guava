@@ -40,13 +40,15 @@ const SignInPage = () => {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<Auth.LoginRequest>({
     resolver: yupResolver(schema),
     defaultValues: {
       email: '',
       password: '',
-      rememberMe: false,
+      rememberMe: true,
     },
     mode: 'onBlur',
     reValidateMode: 'onSubmit',
@@ -140,7 +142,13 @@ const SignInPage = () => {
           </div>
 
           <div className="flex items-center space-x-2">
-            <Checkbox id="rememberMe" {...register('rememberMe')} />
+            <Checkbox
+              id="rememberMe"
+              checked={watch('rememberMe')}
+              onCheckedChange={(checked) => {
+                setValue('rememberMe', checked as boolean);
+              }}
+            />
             <Label htmlFor="rememberMe" className="cursor-pointer">
               로그인 상태 유지
             </Label>
