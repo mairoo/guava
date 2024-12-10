@@ -1,10 +1,11 @@
 'use client';
 
+import {useLogout} from '@/hooks/useLogout';
 import {RootState, store} from '@/store';
 import {useRefreshMutation} from '@/store/auth/api';
-import {setAuth, setCredentials, setLoading} from '@/store/auth/slice';
+import {setCredentials, setLoading} from '@/store/auth/slice';
 import {cartApi, useSyncCartMutation} from '@/store/cart/api';
-import {clearCart, mergeCart} from '@/store/cart/slice';
+import {mergeCart} from '@/store/cart/slice';
 import {storage} from '@/utils';
 import {auth} from '@/utils/auth';
 import {useRouter} from 'next/navigation';
@@ -60,21 +61,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const router = useRouter();
   const isMounted = useMounted();
   const { isLoading, accessToken } = useAuth();
-
-  /**
-   * 로그아웃 처리를 위한 함수
-   * - 인증 상태 초기화
-   * - 저장된 인증 정보 삭제
-   * - 로그인 페이지로 리다이렉트
-   */
-  const handleLogout = () => {
-    dispatch(setAuth(false));
-    dispatch(clearCart());
-    storage.clearRememberMe();
-    storage.clearLastRefreshTime();
-    auth.removeCookie('isAuthenticated');
-    router.push('/auth/sign-in');
-  };
+  const { handleLogout } = useLogout({
+    skipApi: true,
+    redirect: true,
+  });
 
   /**
    * 장바구니 동기화 처리 함수
