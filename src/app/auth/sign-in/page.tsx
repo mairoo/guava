@@ -9,7 +9,11 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { useLoginMutation } from '@/store/auth/api';
 import { setAuth } from '@/store/auth/slice';
+import { cartApi, useSyncCartMutation } from '@/store/cart/api';
+import { hydrateCart } from '@/store/cart/slice';
 import { Auth } from '@/types/auth';
+import { CartItem } from '@/types/cart';
+import { storage } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Key, Mail } from 'lucide-react';
 import Link from 'next/link';
@@ -35,7 +39,29 @@ const SignInPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
+  const [syncCart] = useSyncCartMutation();
+  const [getCart] = cartApi.endpoints.getCart.useLazyQuery();
   const [error, setError] = useState<string | null>(null);
+
+  const mergeCartItems = (
+    localItems: CartItem[],
+    serverItems: CartItem[],
+  ): CartItem[] => {
+    const mergedItems = [...serverItems];
+
+    localItems.forEach((localItem) => {
+      const existingItem = mergedItems.find(
+        (item) => item.productId === localItem.productId,
+      );
+      if (existingItem) {
+        existingItem.quantity += localItem.quantity;
+      } else {
+        mergedItems.push(localItem);
+      }
+    });
+
+    return mergedItems;
+  };
 
   const {
     register,
@@ -60,14 +86,36 @@ const SignInPage = () => {
    */
   const onSubmit = async (data: Auth.LoginRequest) => {
     try {
-      // RTK Query의 login mutation을 실행하고 결과를 기다림
+      // 1. RTK Query의 login mutation을 실행하고 결과를 기다림
       // unwrap()을 사용하여 성공/실패를 try-catch로 처리
       await login(data).unwrap();
 
       // 로그인 성공 시 Redux store의 인증 상태를 true로 설정
       dispatch(setAuth(true));
 
-      // 메인 페이지로 리다이렉트
+      // 2. 장바구니 동기화
+      try {
+        // 로컬 장바구니 데이터 가져오기
+        const localCartItems = storage.get('cart_items', []);
+
+        if (localCartItems.length > 0) {
+          // 서버의 장바구니 데이터 조회
+          const { data: serverCart = [] } = await getCart();
+
+          // 로컬과 서버의 장바구니 병합
+          const mergedCart = mergeCartItems(localCartItems, serverCart);
+
+          // 병합된 장바구니를 서버에 동기화
+          await syncCart(mergedCart).unwrap();
+        }
+
+        // Redux store의 장바구니 상태 업데이트
+        dispatch(hydrateCart());
+      } catch (cartError) {
+        console.error('장바구니 동기화 실패:', cartError);
+      }
+
+      // 3. 메인 페이지로 리다이렉트
       router.push('/');
     } catch (error: any) {
       // 로그인 실패 시 에러 메시지 설정

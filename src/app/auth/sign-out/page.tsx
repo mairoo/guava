@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useLogoutMutation } from '@/store/auth/api';
 import { setAuth } from '@/store/auth/slice';
+import { clearCart } from '@/store/cart/slice';
 import { storage } from '@/utils';
 import { auth } from '@/utils/auth';
 import { useRouter } from 'next/navigation';
@@ -26,20 +27,23 @@ const LogoutPage = () => {
    */
   const handleLogout = async () => {
     try {
-      // 서버에 로그아웃 요청을 보내고 완료될 때까지 대기
+      // 1. 서버에 로그아웃 요청을 보내고 완료될 때까지 대기
       await logout().unwrap();
 
       // Redux store의 인증 상태를 false로 설정
       dispatch(setAuth(false));
 
-      // 로컬 스토리지에서 인증 관련 데이터 삭제
+      // 2. 장바구니 관련 로컬 상태 초기화
+      dispatch(clearCart());
+
+      // 3. 로컬 스토리지에서 인증 관련 데이터 삭제
       storage.clearRememberMe(); // 자동 로그인 설정 제거
       storage.clearLastRefreshTime(); // 토큰 갱신 시간 제거
 
       // 브라우저 쿠키에서 인증 상태 제거
       auth.removeCookie('isAuthenticated');
 
-      // 로그인 페이지로 리다이렉트
+      // 4. 로그인 페이지로 리다이렉트
       router.push('/auth/sign-in');
     } catch (error: any) {
       // 로그아웃 실패 시 에러 처리
