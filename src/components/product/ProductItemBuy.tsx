@@ -4,9 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/providers/auth/AuthProvider';
+import { store } from '@/store';
 import { useSyncCartMutation } from '@/store/cart/api';
 import { addItem } from '@/store/cart/slice';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useAppDispatch } from '@/store/hooks';
 import { CartItem } from '@/types/cart';
 import { ArrowDown, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
@@ -30,7 +31,6 @@ export const ProductItemBuy = ({
   price = 0,
 }: ProductItemBuyProps) => {
   const dispatch = useAppDispatch();
-  const cartItems = useAppSelector((state) => state.cart.items);
   const [syncCart] = useSyncCartMutation();
 
   const { isAuthenticated } = useAuth();
@@ -51,7 +51,9 @@ export const ProductItemBuy = ({
       dispatch(addItem(cartItem));
 
       if (isAuthenticated) {
-        await syncCart(cartItems);
+        // dispatch 이후의 최신 상태를 가져옴
+        const currentCart = store.getState().cart.items;
+        await syncCart(currentCart);
       }
 
       toast({
