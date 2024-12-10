@@ -6,21 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useLogin } from '@/hooks/useLogin';
 import { cn } from '@/lib/utils';
-import { store } from '@/store';
-import { useLoginMutation } from '@/store/auth/api';
-import { setAuth } from '@/store/auth/slice';
-import { cartApi, useSyncCartMutation } from '@/store/cart/api';
-import { mergeCart } from '@/store/cart/slice';
 import { Auth } from '@/types/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Key, Mail } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import * as yup from 'yup';
+import * as yup from 'yup'; // 폼 유효성 검사 스키마 정의
 
 // 폼 유효성 검사 스키마 정의
 const schema = yup.object().shape({
@@ -37,16 +30,9 @@ const schema = yup.object().shape({
 
 const SignInPage = () => {
   // 1. 기본 훅 및 상태 관리
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const [error, setError] = useState<string | null>(null);
+  const { login, isLoading, error } = useLogin({ redirectTo: '/' });
 
-  // 2. API 관련 훅
-  const [login, { isLoading: isLoginLoading }] = useLoginMutation();
-  const [getCart] = cartApi.endpoints.getCart.useLazyQuery();
-  const [syncCart, { isLoading: isSyncCartLoading }] = useSyncCartMutation();
-
-  // 3. 폼 설정
+  // 2. 폼 설정
   const {
     register,
     handleSubmit,
@@ -64,63 +50,20 @@ const SignInPage = () => {
     reValidateMode: 'onSubmit',
   });
 
-  // 4. 전체 처리 상태 계산
-  const isProcessing = isSubmitting || isLoginLoading || isSyncCartLoading;
-
-  // 5. 핸들러 함수들
-  /**
-   * 장바구니 동기화 함수
-   * - 서버의 장바구니 데이터를 가져와 로컬 장바구니와 병합
-   * - 병합된 데이터를 다시 서버에 동기화
-   */
-  const syncCartData = async () => {
-    try {
-      // 서버의 장바구니 데이터 조회
-      const { data: serverCart = [] } = await getCart();
-
-      // 서버 장바구니와 로컬 장바구니 병합
-      dispatch(mergeCart(serverCart));
-
-      // 병합된 최신 상태를 서버에 동기화
-      const currentCart = store.getState().cart.items;
-      await syncCart(currentCart).unwrap();
-    } catch (error) {
-      console.error('장바구니 동기화 실패:', error);
-      // 필요시 사용자에게 장바구니 동기화 실패 알림 추가 가능
-    }
-  };
+  // 3. 전체 처리 상태 계산
+  const isProcessing = isSubmitting || isLoading;
 
   /**
-   * 로그인 폼 제출 핸들러
+   * 4. 로그인 폼 제출 핸들러
    * @param data 사용자가 입력한 로그인 정보 (이메일, 비밀번호, 자동로그인 여부)
    */
   const onSubmit = async (data: Auth.LoginRequest) => {
     // 이미 처리 중이면 중복 제출 방지
     if (isProcessing) return;
-
-    try {
-      // 이전 에러 메시지 초기화
-      setError(null);
-
-      // 로그인 시도
-      await login(data).unwrap();
-      dispatch(setAuth(true));
-
-      // 장바구니 동기화
-      await syncCartData();
-
-      // 메인 페이지로 이동
-      router.push('/');
-    } catch (error: any) {
-      // 로그인 실패 시 에러 메시지 설정
-      setError(
-        error.data?.message ||
-          '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.',
-      );
-    }
+    await login(data);
   };
 
-  // 6. 스타일 정의
+  // 5. 스타일 정의
   const styles = {
     input: {
       base: 'focus-visible:ring-0 focus-visible:ring-offset-0 border border-gray-400',
@@ -133,7 +76,7 @@ const SignInPage = () => {
     link: 'text-blue-600 hover:text-blue-800 transition-colors duration-200',
   };
 
-  // 7. 렌더링
+  // 6. 렌더링
   return (
     <TopSpace>
       <TitledSection
