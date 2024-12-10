@@ -11,13 +11,23 @@ import { ProductGrid, ProductItemBuy } from '@/components/product';
 import { Card } from '@/components/ui/card';
 import { categories } from '@/data/categories';
 import { toast } from '@/hooks/use-toast';
+import { useAuth } from '@/providers/auth/AuthProvider';
+import { useSyncCartMutation } from '@/store/cart/api';
+import { addItem } from '@/store/cart/slice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useGetProductsQuery } from '@/store/products/api';
+import { CartItem } from '@/types/cart';
 import { CategoryDetailParams } from '@/types/params';
-import Link from 'next/link';
 import React, { use } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
+  const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.items);
+  const [syncCart] = useSyncCartMutation();
+
+  const { isAuthenticated } = useAuth();
+
   const resolvedParams = use(params);
 
   const categorySlug = decodeURIComponent(resolvedParams.slug);
@@ -66,14 +76,33 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
     );
   }
 
-  const handleAddToCart = async (productId: number) => {
-    console.log(productId);
+  const handleAddToCart = async (
+    productId: number,
+    name: string,
+    subtitle: string,
+    price: number,
+  ) => {
     try {
+      const cartItem: CartItem = {
+        productId: productId,
+        name: name,
+        subtitle: subtitle,
+        price: price,
+        quantity: 1,
+      };
+
+      dispatch(addItem(cartItem));
+
+      if (isAuthenticated) {
+        await syncCart(cartItems);
+      }
+
       toast({
         title: '장바구니에 추가되었습니다',
         description: '장바구니에서 수량을 변경하실 수 있습니다.',
       });
     } catch (error) {
+      console.error('장바구니 추가 실패:', error);
       toast({
         variant: 'destructive',
         title: '장바구니 추가 실패',
@@ -91,27 +120,26 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
       </Card>
       <ProductGrid gap={2} py={0}>
         {response.data.map((product) => (
-          <Link
+          <ProductItemBuy
             key={product.id}
-            href={`/shop/product/${product.id}/${product.name}`}
-            className="block"
-          >
-            <ProductItemBuy
-              name={product.name}
-              subtitle={product.subtitle}
-              discountRate={
-                ((product.listPrice - product.sellingPrice) /
-                  product.listPrice) *
-                100
-              }
-              price={product.sellingPrice}
-              imageUrl={category.imageUrl}
-              onAddToCart={async (e) => {
-                e.stopPropagation();
-                await handleAddToCart(product.id);
-              }}
-            />
-          </Link>
+            id={product.id}
+            name={product.name}
+            subtitle={product.subtitle}
+            discountRate={
+              ((product.listPrice - product.sellingPrice) / product.listPrice) *
+              100
+            }
+            price={product.sellingPrice}
+            imageUrl={category.imageUrl}
+            onAddToCart={async (_) => {
+              await handleAddToCart(
+                product.id,
+                product.name,
+                product.subtitle,
+                product.sellingPrice,
+              );
+            }}
+          />
         ))}
       </ProductGrid>
     </FlexColumn>

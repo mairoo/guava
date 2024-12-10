@@ -14,7 +14,7 @@ export const CartItemMobile = ({ item }: Props) => {
     <Card className="hover:bg-slate-50 transition-colors">
       <CardContent className="pt-6 p-3 space-y-3">
         <div className="flex justify-between items-center">
-          <span className="text-sm font-semibold">{item.name}</span>
+          <span className="text-sm font-semibold">{item.name} {item.subtitle}</span>
           <span className="text-sm">{formatKRW.format(item.price)}</span>
         </div>
         <div className="flex items-center border rounded-lg w-full">

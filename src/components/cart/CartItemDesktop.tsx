@@ -11,7 +11,9 @@ interface Props {
 export const CartItemDesktop = ({ item }: Props) => {
   return (
     <div className="grid grid-cols-4 gap-4 p-3 items-center hover:bg-slate-50 transition-colors">
-      <div className="text-sm font-semibold">{item.name}</div>
+      <div className="text-sm font-semibold">
+        {item.name} {item.subtitle}
+      </div>
       <div className="text-sm text-right">{formatKRW.format(item.price)}</div>
       <div className="text-sm text-center">
         <div className="inline-flex items-center border rounded-lg">

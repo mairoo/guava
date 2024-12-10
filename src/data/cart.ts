@@ -1,11 +1,41 @@
 import { CartItem, PaymentMethod } from '@/types/cart';
 
 export const CART_ITEMS: CartItem[] = [
-  { id: 1, name: '넥슨카드 5만원', price: 47500, quantity: 2 },
-  { id: 2, name: '구글 5만원', price: 47500, quantity: 2 },
-  { id: 3, name: '구글 5만원', price: 47500, quantity: 2 },
-  { id: 4, name: '구글 5만원', price: 47500, quantity: 2 },
-  { id: 5, name: '구글 5만원', price: 47500, quantity: 2 },
+  {
+    productId: 1,
+    name: '넥슨카드',
+    subtitle: '5만원',
+    price: 47500,
+    quantity: 2,
+  },
+  {
+    productId: 2,
+    name: '구글기프트카드',
+    subtitle: '10만원',
+    price: 47500,
+    quantity: 2,
+  },
+  {
+    productId: 3,
+    name: '컬쳐랜드상품권',
+    subtitle: '1만원',
+    price: 47500,
+    quantity: 2,
+  },
+  {
+    productId: 4,
+    name: '도서문화상품권',
+    subtitle: '5만원',
+    price: 47500,
+    quantity: 2,
+  },
+  {
+    productId: 5,
+    name: '문화상품권',
+    subtitle: '3만원',
+    price: 47500,
+    quantity: 2,
+  },
 ];
 
 export const PAYMENT_METHODS: PaymentMethod[] = [

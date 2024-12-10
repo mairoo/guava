@@ -1,7 +1,7 @@
 import { CartItem, CartState } from '@/types/cart';
 import { storage } from '@/utils/storage';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { cartApi } from './api';
+import { cartApi } from './api'; // 장바구니 데이터의 localStorage 키
 
 // 장바구니 데이터의 localStorage 키
 const CART_STORAGE_KEY = 'cart_items';
@@ -36,7 +36,7 @@ export const cartSlice = createSlice({
     addItem: (state, action: PayloadAction<CartItem>) => {
       // 동일한 상품이 이미 장바구니에 있는지 확인
       const existingItem = state.items.find(
-        (item) => item.id === action.payload.id,
+        (item) => item.productId === action.payload.productId,
       );
 
       if (existingItem) {
@@ -57,9 +57,11 @@ export const cartSlice = createSlice({
      */
     updateItemQuantity: (
       state,
-      action: PayloadAction<{ id: number; quantity: number }>,
+      action: PayloadAction<{ productId: number; quantity: number }>,
     ) => {
-      const item = state.items.find((item) => item.id === action.payload.id);
+      const item = state.items.find(
+        (item) => item.productId === action.payload.productId,
+      );
       if (item) {
         item.quantity = action.payload.quantity;
         storage.set(CART_STORAGE_KEY, state.items);
@@ -73,7 +75,9 @@ export const cartSlice = createSlice({
      */
     removeItem: (state, action: PayloadAction<number>) => {
       // id가 일치하지 않는 아이템만 필터링하여 유지
-      state.items = state.items.filter((item) => item.id !== action.payload);
+      state.items = state.items.filter(
+        (item) => item.productId !== action.payload,
+      );
       storage.set(CART_STORAGE_KEY, state.items);
     },
 
