@@ -46,22 +46,33 @@ interface UseLogoutReturn {
 /**
  * 로그아웃 처리를 위한 커스텀 훅
  */
+/**
+ * 로그아웃 처리를 위한 커스텀 훅
+ */
 export const useLogout = ({
   skipApi = false,
   redirect = true,
 }: UseLogoutOptions = {}): UseLogoutReturn => {
+  // 1. 기본 훅 초기화
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [logoutMutation, { isLoading }] = useLogoutMutation();
+
+  // 2. API 관련 상태
+  const [logoutMutation, { isLoading: isLogoutLoading }] = useLogoutMutation();
   const [error, setError] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const clearError = () => setError(null);
 
   const logout = async () => {
-    try {
-      clearError(); // 새 요청 시작할 때 이전 에러 초기화
+    // 이미 처리 중이면 중복 실행 방지
+    if (isProcessing) return;
 
-      // 백엔드 로그아웃 API 호출 (skipApi가 false인 경우에만)
+    try {
+      setIsProcessing(true);
+      clearError();
+
+      // 백엔드 로그아웃 API 호출
       if (!skipApi) {
         await logoutMutation().unwrap();
       }
@@ -70,33 +81,27 @@ export const useLogout = ({
       dispatch(setAuth(false));
       dispatch(clearCart());
 
-      // 로컬 스토리지 데이터 삭제
+      // 로컬 데이터 정리
       storage.clearRememberMe();
       storage.clearLastRefreshTime();
-
-      // 인증 쿠키 제거
       auth.removeCookie('isAuthenticated');
 
-      // 로그인 페이지로 리다이렉트 (옵션)
+      // 리다이렉트 처리
       if (redirect) {
         router.push('/auth/sign-in');
       }
     } catch (error: any) {
       console.error('로그아웃 중 오류 발생:', error);
-
-      // 에러 메시지 설정
-      const errorMessage =
-        error.data?.message || '로그아웃 중 오류가 발생했습니다.';
-      setError(errorMessage);
-
-      // API 호출 실패하더라도 항상 인증 쿠키는 제거
-      auth.removeCookie('isAuthenticated');
+      setError(error.data?.message || '로그아웃 중 오류가 발생했습니다.');
+      auth.removeCookie('isAuthenticated'); // 실패해도 쿠키 제거
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   return {
     logout,
-    isLoading,
+    isLoading: isProcessing || isLogoutLoading, // 통합된 로딩 상태
     error,
     clearError,
   };
