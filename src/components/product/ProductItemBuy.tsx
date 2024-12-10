@@ -57,8 +57,10 @@ export const ProductItemBuy = ({
       }
 
       toast({
-        title: '장바구니에 추가되었습니다',
-        description: '장바구니에서 수량을 변경하실 수 있습니다.',
+        title: `${name} ${subtitle}`,
+        description: '장바구니에 담았습니다.',
+        duration: 1500,
+        className: 'bg-white border border-gray-200 shadow-lg',
       });
     } catch (error) {
       console.error('장바구니 추가 실패:', error);

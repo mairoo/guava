@@ -1,5 +1,6 @@
 import '@/styles/globals.css';
 import { MainLayout } from '@/components/layout';
+import { Toaster } from '@/components/ui/toaster';
 import AuthProvider from '@/providers/auth/AuthProvider';
 import { Metadata, Viewport } from 'next';
 import { Nanum_Gothic } from 'next/font/google';
@@ -33,6 +34,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
       <StoreProvider>
         <AuthProvider>
           <MainLayout>{children}</MainLayout>
+          <Toaster />
         </AuthProvider>
       </StoreProvider>
     </body>
