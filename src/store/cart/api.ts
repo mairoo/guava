@@ -1,6 +1,7 @@
-import { baseQueryWithRetry } from '@/store/baseQuery';
-import { CartItem } from '@/types/cart';
-import { createApi } from '@reduxjs/toolkit/query/react';
+import {baseQueryWithRetry} from '@/store/baseQuery';
+import {CartItem, CartResponse, CartSyncRequest} from '@/types/cart';
+import {ApiResponse} from '@/types/response';
+import {createApi} from '@reduxjs/toolkit/query/react';
 
 /**
  * 장바구니 관련 API 엔드포인트 정의
@@ -22,13 +23,17 @@ export const cartApi = createApi({
      *
      * @returns Promise<CartItem[]> 장바구니 아이템 배열
      * @description
-     * - GET /shop/cart 엔드포인트 호출
+     * - GET /cart 엔드포인트 호출
      * - 캐시된 데이터가 있으면 재사용
      * - 데이터가 없거나 만료된 경우 서버에서 새로 조회
      */
     getCart: builder.query<CartItem[], void>({
-      query: () => '/shop/cart',
-      providesTags: ['Cart'], // 캐시 태그 설정
+      query: () => '/cart',
+      // 응답 변환: JSON 문자열을 파싱하여 CartItem[] 으로 변환
+      transformResponse: (response: ApiResponse<CartResponse>) => {
+        return JSON.parse(response.data.cartData) as CartItem[];
+      },
+      providesTags: ['Cart'],
     }),
 
     /**
@@ -37,24 +42,31 @@ export const cartApi = createApi({
      * @param items CartItem[] - 동기화할 장바구니 아이템 배열
      * @returns Promise<CartItem[]> 서버에서 응답받은 최신 장바구니 상태
      * @description
-     * - PUT /shop/cart/sync 엔드포인트 호출
+     * - PUT /cart/sync 엔드포인트 호출
      * - 클라이언트의 전체 장바구니 상태를 서버로 전송
      * - 응답으로 서버의 최신 상태를 받아서 동기화
      * - 캐시를 무효화하여 getCart가 최신 데이터를 조회하도록 함
      */
     syncCart: builder.mutation<CartItem[], CartItem[]>({
       query: (items) => ({
-        url: '/shop/cart/sync',
+        url: '/cart/sync',
         method: 'PUT',
-        body: { items },
+        // 요청 데이터를 CartSyncRequest 형식으로 변환
+        body: {
+          cartData: JSON.stringify(items),
+        } as CartSyncRequest,
       }),
-      invalidatesTags: ['Cart'], // 캐시 무효화
+      // 응답 변환: JSON 문자열을 파싱하여 CartItem[] 으로 변환
+      transformResponse: (response: ApiResponse<CartResponse>) => {
+        return JSON.parse(response.data.cartData) as CartItem[];
+      },
+      invalidatesTags: ['Cart'],
     }),
   }),
 });
 
 // 생성된 리액트 훅 익스포트
 export const {
-  useGetCartQuery,    // 장바구니 조회 훅
-  useSyncCartMutation // 장바구니 동기화 훅
+  useGetCartQuery, // 장바구니 조회 훅
+  useSyncCartMutation, // 장바구니 동기화 훅
 } = cartApi;

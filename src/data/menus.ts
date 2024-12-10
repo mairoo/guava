@@ -21,6 +21,6 @@ export const guestMenuItems: MenuItem[] = [
 
 export const commonMenuItems: MenuItem[] = [
   { href: '/orders', label: '주문/발송', icon: PackageCheck },
-  { href: '/shop/cart', label: '장바구니', icon: ShoppingBag },
+  { href: '/cart', label: '장바구니', icon: ShoppingBag },
   { href: '/support', label: '고객센터', icon: HelpCircle },
 ];

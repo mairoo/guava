@@ -1,3 +1,5 @@
+import { ApiResponse } from '@/types/response';
+
 export namespace Products {
   export interface Product {
     id: number;
@@ -41,13 +43,6 @@ export namespace Products {
 
   export interface SearchProductsRequest extends ProductsRequest {
     keyword: string;
-  }
-
-  export interface ApiResponse<T> {
-    timestamp: number;
-    status: number;
-    message: string;
-    data: T;
   }
 
   export interface ProductsData {

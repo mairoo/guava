@@ -16,3 +16,11 @@ export interface PaymentMethod {
   id: string;
   name: string;
 }
+
+export interface CartSyncRequest {
+  cartData: string;
+}
+
+export interface CartResponse {
+  cartData: string;
+}

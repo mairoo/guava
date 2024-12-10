@@ -44,7 +44,7 @@ const CartPage = () => {
     <div className="hidden lg:block">
       <div className="divide-y">
         {CART_ITEMS.map((item) => (
-          <CartItemDesktop key={item.id} item={item} />
+          <CartItemDesktop key={item.productId} item={item} />
         ))}
       </div>
       <div className="flex justify-end p-3 bg-lime-50 rounded-b-lg">
@@ -58,7 +58,7 @@ const CartPage = () => {
   const MobileView = (
     <div className="lg:hidden space-y-2">
       {CART_ITEMS.map((item) => (
-        <CartItemMobile key={item.id} item={item} />
+        <CartItemMobile key={item.productId} item={item} />
       ))}
       <Card className="bg-lime-50">
         <CardContent className="pt-6 p-3">
