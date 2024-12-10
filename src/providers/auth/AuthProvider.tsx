@@ -1,18 +1,16 @@
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
+import { useCartSync } from '@/hooks/useCartSync';
 import { useLogout } from '@/hooks/useLogout';
 import { useMounted } from '@/hooks/useMounted';
-import { store } from '@/store';
 import { useRefreshMutation } from '@/store/auth/api';
 import { setCredentials, setLoading } from '@/store/auth/slice';
-import { cartApi, useSyncCartMutation } from '@/store/cart/api';
-import { mergeCart } from '@/store/cart/slice';
+import { useAppDispatch } from '@/store/hooks';
 import { storage } from '@/utils';
 import { auth } from '@/utils/auth';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -24,9 +22,8 @@ interface AuthProviderProps {
  */
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [refresh] = useRefreshMutation(); // 토큰 갱신을 위한 API 훅
-  const [getCart] = cartApi.endpoints.getCart.useLazyQuery();
-  const [syncCart] = useSyncCartMutation();
-  const dispatch = useDispatch();
+  const { syncCart } = useCartSync();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const isMounted = useMounted();
   const { isLoading, accessToken } = useAuth();
@@ -34,24 +31,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     skipApi: true,
     redirect: true,
   });
-
-  /**
-   * 장바구니 동기화 처리 함수
-   */
-  const syncCartItems = async () => {
-    try {
-      const { data: serverCart = [] } = await getCart();
-
-      // 로컬 장바구니와 서버 장바구니를 병합
-      dispatch(mergeCart(serverCart));
-
-      // 병합된 최신 상태를 서버에 동기화
-      const currentCart = store.getState().cart.items;
-      await syncCart(currentCart).unwrap();
-    } catch (error) {
-      console.error('장바구니 동기화 실패:', error);
-    }
-  };
 
   useEffect(() => {
     /**
@@ -78,7 +57,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         // 현재 토큰이 유효한지 확인 - 토큰 만료 1시간 전부터 갱신 시도
         if (accessToken && !storage.isTokenExpiring(3600)) {
           // 토큰이 유효한 경우에도 장바구니 동기화 실행
-          await syncCartItems();
+          await syncCart();
           return;
         }
 
@@ -92,7 +71,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           storage.setLastRefreshTime(Date.now());
 
           // 토큰 갱신 후 장바구니 동기화 실행
-          await syncCartItems();
+          await syncCart();
         }
       } catch (error) {
         console.error('Auth initialization failed:', error);

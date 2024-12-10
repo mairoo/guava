@@ -1,8 +1,6 @@
-import { store } from '@/store';
+import { useCartSync } from '@/hooks/useCartSync';
 import { useLoginMutation } from '@/store/auth/api';
 import { setAuth } from '@/store/auth/slice';
-import { cartApi, useSyncCartMutation } from '@/store/cart/api';
-import { mergeCart } from '@/store/cart/slice';
 import { useAppDispatch } from '@/store/hooks';
 import { Auth } from '@/types/auth';
 import { useRouter } from 'next/navigation';
@@ -47,26 +45,11 @@ export const useLogin = ({
 
   // 2. API 관련 상태
   const [loginMutation, { isLoading: isLoginLoading }] = useLoginMutation();
-  const [getCart] = cartApi.endpoints.getCart.useLazyQuery();
-  const [syncCart, { isLoading: isSyncCartLoading }] = useSyncCartMutation();
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const { syncCart, isLoading: isSyncCartLoading } = useCartSync();
 
   const clearError = () => setError(null);
-
-  /**
-   * 장바구니 동기화 함수
-   */
-  const syncCartData = async () => {
-    try {
-      const { data: serverCart = [] } = await getCart();
-      dispatch(mergeCart(serverCart));
-      const currentCart = store.getState().cart.items;
-      await syncCart(currentCart).unwrap();
-    } catch (error) {
-      console.error('장바구니 동기화 실패:', error);
-    }
-  };
 
   const handleLogin = async (data: Auth.LoginRequest) => {
     // 이미 처리 중이면 중복 실행 방지
@@ -81,7 +64,7 @@ export const useLogin = ({
       dispatch(setAuth(true));
 
       // 장바구니 동기화
-      await syncCartData();
+      await syncCart();
 
       // 리다이렉트
       router.push(redirectTo);
