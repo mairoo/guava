@@ -1,34 +1,76 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { toast } from '@/hooks/use-toast';
+import { useAuth } from '@/providers/auth/AuthProvider';
+import { useSyncCartMutation } from '@/store/cart/api';
+import { addItem } from '@/store/cart/slice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { CartItem } from '@/types/cart';
 import { ArrowDown, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
 interface ProductItemBuyProps {
-  id: number;
+  productId: number;
   imageUrl: string;
   name: string;
   subtitle: string;
   discountRate: number;
   price: number;
-  onAddToCart?: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }
 
 export const ProductItemBuy = ({
-  id,
+  productId,
   imageUrl = 'https://placehold.co/170x100?text=Product',
   name = '상품명',
   subtitle = '',
   discountRate = 1.0,
   price = 0,
-  onAddToCart,
 }: ProductItemBuyProps) => {
+  const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.items);
+  const [syncCart] = useSyncCartMutation();
+
+  const { isAuthenticated } = useAuth();
+
   const formattedRate = discountRate.toFixed(2);
   const formattedPrice = price.toLocaleString();
 
+  const handleAddToCart = async () => {
+    try {
+      const cartItem: CartItem = {
+        productId,
+        name,
+        subtitle,
+        price,
+        quantity: 1,
+      };
+
+      dispatch(addItem(cartItem));
+
+      if (isAuthenticated) {
+        await syncCart(cartItems);
+      }
+
+      toast({
+        title: '장바구니에 추가되었습니다',
+        description: '장바구니에서 수량을 변경하실 수 있습니다.',
+      });
+    } catch (error) {
+      console.error('장바구니 추가 실패:', error);
+      toast({
+        variant: 'destructive',
+        title: '장바구니 추가 실패',
+        description: '잠시 후 다시 시도해주세요.',
+      });
+    }
+  };
+
   return (
     <Card className="w-full overflow-hidden shadow-none hover:shadow-md transition-shadow border-gray-200">
-      <Link href={`/shop/product/${id}/${name}`} className="block">
+      <Link href={`/shop/product/${productId}/${name}`} className="block">
         <CardContent className="p-0">
           <div className="relative aspect-[157/100] w-full overflow-hidden">
             <img
@@ -63,7 +105,7 @@ export const ProductItemBuy = ({
           variant="outline"
           size="sm"
           className="border-gray-900 text-gray-900 hover:bg-white"
-          onClick={onAddToCart}
+          onClick={handleAddToCart}
         >
           <ShoppingCart className="w-4 h-4" />
           담기
