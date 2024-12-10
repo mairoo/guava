@@ -4,7 +4,7 @@ import {RootState, store} from '@/store';
 import {useRefreshMutation} from '@/store/auth/api';
 import {setAuth, setCredentials, setLoading} from '@/store/auth/slice';
 import {cartApi, useSyncCartMutation} from '@/store/cart/api';
-import {mergeCart} from '@/store/cart/slice';
+import {clearCart, mergeCart} from '@/store/cart/slice';
 import {storage} from '@/utils';
 import {auth} from '@/utils/auth';
 import {useRouter} from 'next/navigation';
@@ -69,9 +69,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
    */
   const handleLogout = () => {
     dispatch(setAuth(false));
+    dispatch(clearCart());
     storage.clearRememberMe();
-    auth.removeCookie('isAuthenticated');
     storage.clearLastRefreshTime();
+    auth.removeCookie('isAuthenticated');
     router.push('/auth/sign-in');
   };
 
