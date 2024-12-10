@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 
 const SignOutPage = () => {
   const router = useRouter();
-  const { handleLogout, isLoading, error } = useLogout({
+  const { logout, isLoading, error } = useLogout({
     skipApi: false,
     redirect: true,
   });
@@ -67,7 +67,7 @@ const SignOutPage = () => {
             </Button>
             <Button
               type="button"
-              onClick={handleLogout}
+              onClick={logout}
               disabled={isLoading}
               className={cn(
                 styles.button.base,

@@ -61,7 +61,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const router = useRouter();
   const isMounted = useMounted();
   const { isLoading, accessToken } = useAuth();
-  const { handleLogout } = useLogout({
+  const { logout } = useLogout({
     skipApi: true,
     redirect: true,
   });
@@ -102,7 +102,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
         // 둘 중 하나만 있는 경우 - 불일치 상태이므로 로그아웃 처리
         if (!isAuthenticatedCookie || !rememberMe) {
-          handleLogout();
+          logout();
           return;
         }
 
@@ -127,7 +127,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         }
       } catch (error) {
         console.error('Auth initialization failed:', error);
-        handleLogout(); // 오류 발생 시 로그아웃 처리
+        logout(); // 오류 발생 시 로그아웃 처리
       } finally {
         dispatch(setLoading(false));
       }

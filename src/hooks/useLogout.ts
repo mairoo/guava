@@ -25,7 +25,7 @@ interface UseLogoutReturn {
   /**
    * 로그아웃 처리 함수
    */
-  handleLogout: () => Promise<void>;
+  logout: () => Promise<void>;
 
   /**
    * 로그아웃 처리 중 여부
@@ -57,7 +57,7 @@ export const useLogout = ({
 
   const clearError = () => setError(null);
 
-  const handleLogout = async () => {
+  const logout = async () => {
     try {
       clearError(); // 새 요청 시작할 때 이전 에러 초기화
 
@@ -95,7 +95,7 @@ export const useLogout = ({
   };
 
   return {
-    handleLogout,
+    logout,
     isLoading,
     error,
     clearError,
