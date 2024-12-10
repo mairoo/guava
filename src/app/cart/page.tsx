@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { PAYMENT_METHODS } from '@/data/cart';
 import { toast } from '@/hooks/use-toast';
-import { useAuth } from '@/providers/auth/AuthProvider';
+import { useAuth } from '@/hooks/useAuth';
 import { useSyncCartMutation } from '@/store/cart/api';
 import { useAppSelector } from '@/store/hooks';
 import { formatKRW } from '@/utils';

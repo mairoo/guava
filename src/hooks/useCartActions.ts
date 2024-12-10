@@ -1,5 +1,5 @@
 import { toast } from '@/hooks/use-toast'; // 디바운스 타임아웃 (밀리초)
-import { useAuth } from '@/providers/auth/AuthProvider';
+import { useAuth } from '@/hooks/useAuth';
 import { useSyncCartMutation } from '@/store/cart/api';
 import { removeItem, updateItemQuantity } from '@/store/cart/slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';

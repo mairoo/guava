@@ -2,7 +2,7 @@
 
 import { Container, NavList } from '@/components/layout';
 import { commonMenuItems, guestMenuItems, memberMenuItems } from '@/data/menus';
-import { useAuth } from '@/providers/auth/AuthProvider';
+import { useAuth } from '@/hooks/useAuth';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';

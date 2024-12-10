@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
-import { useAuth } from '@/providers/auth/AuthProvider';
+import { useAuth } from '@/hooks/useAuth';
 import { store } from '@/store';
 import { useSyncCartMutation } from '@/store/cart/api';
 import { addItem } from '@/store/cart/slice';

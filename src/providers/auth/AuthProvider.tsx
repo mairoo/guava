@@ -1,49 +1,18 @@
 'use client';
 
-import {useLogout} from '@/hooks/useLogout';
-import {RootState, store} from '@/store';
-import {useRefreshMutation} from '@/store/auth/api';
-import {setCredentials, setLoading} from '@/store/auth/slice';
-import {cartApi, useSyncCartMutation} from '@/store/cart/api';
-import {mergeCart} from '@/store/cart/slice';
-import {storage} from '@/utils';
-import {auth} from '@/utils/auth';
-import {useRouter} from 'next/navigation';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-
-/**
- * 사용자의 인증 상태를 관리하는 커스텀 훅
- * @returns {object} 인증 관련 상태값들을 포함한 객체
- * - isAuthenticated: 사용자가 로그인되어 있는지 여부
- * - isLoading: 인증 처리 중인지 여부
- * - accessToken: 현재 저장된 액세스 토큰
- */
-export const useAuth = () => {
-  // Redux store에서 인증 관련 상태들을 가져옴
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.accessToken !== null,
-  );
-  const isLoading = useSelector((state: RootState) => state.auth.isLoading);
-  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
-
-  return { isAuthenticated, isLoading, accessToken };
-};
-
-/**
- * 컴포넌트가 마운트되었는지 확인하는 커스텀 훅
- * Next.js의 SSR과 관련된 hydration 이슈를 방지하기 위해 사용
- * @returns {boolean} 컴포넌트가 마운트되었는지 여부
- */
-const useMounted = () => {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  return mounted;
-};
+import { useAuth } from '@/hooks/useAuth';
+import { useLogout } from '@/hooks/useLogout';
+import { useMounted } from '@/hooks/useMounted';
+import { store } from '@/store';
+import { useRefreshMutation } from '@/store/auth/api';
+import { setCredentials, setLoading } from '@/store/auth/slice';
+import { cartApi, useSyncCartMutation } from '@/store/cart/api';
+import { mergeCart } from '@/store/cart/slice';
+import { storage } from '@/utils';
+import { auth } from '@/utils/auth';
+import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 interface AuthProviderProps {
   children: React.ReactNode;

@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/sheet';
 import { categories } from '@/data/categories';
 import { commonMenuItems, guestMenuItems, memberMenuItems } from '@/data/menus';
-import { useAuth } from '@/providers/auth/AuthProvider';
+import { useAuth } from '@/hooks/useAuth';
 import { getGiftCardItems } from '@/types/category';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
