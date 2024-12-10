@@ -68,7 +68,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     storage.clearRememberMe();
     auth.removeCookie('isAuthenticated');
     storage.clearLastRefreshTime();
-    router.push('/login');
+    router.push('/auth/sign-in');
   };
 
   useEffect(() => {
@@ -77,25 +77,24 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
      */
     const initAuth = async () => {
       try {
-        // 쿠키에서 인증 상태 확인
+        // 인증 쿠키와 자동 로그인 설정 먼저 확인
         const isAuthenticatedCookie = auth.isAuthenticated();
-        if (!isAuthenticatedCookie) {
-          router.push('/auth/sign-in'); // 인증되지 않은 경우 로그인 페이지로 이동
-          return;
-        }
-
-        // "자동 로그인" 설정 확인
         const rememberMe = storage.getRememberMe();
-        if (!rememberMe) {
-          handleLogout(); // 자동 로그인이 비활성화된 경우 로그아웃 처리
+
+        // 둘 다 없으면 인증 체크 자체를 건너뜀 (비로그인 상태로 간주)
+        if (!isAuthenticatedCookie && !rememberMe) {
+          dispatch(setLoading(false));
           return;
         }
 
-        // 현재 토큰이 유효한지 확인
-        if (
-          accessToken &&
-          !storage.isTokenExpiring(3600) // 토큰 만료 1시간 전부터 갱신 시도
-        ) {
+        // 둘 중 하나만 있는 경우 - 불일치 상태이므로 로그아웃 처리
+        if (!isAuthenticatedCookie || !rememberMe) {
+          handleLogout();
+          return;
+        }
+
+        // 현재 토큰이 유효한지 확인 - 토큰 만료 1시간 전부터 갱신 시도
+        if (accessToken && !storage.isTokenExpiring(3600)) {
           return;
         }
 
