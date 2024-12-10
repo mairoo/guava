@@ -1,11 +1,11 @@
 import { useLogoutMutation } from '@/store/auth/api';
 import { setAuth } from '@/store/auth/slice';
 import { clearCart } from '@/store/cart/slice';
+import { useAppDispatch } from '@/store/hooks';
 import { storage } from '@/utils';
 import { auth } from '@/utils/auth';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 interface UseLogoutOptions {
   /**
@@ -51,7 +51,7 @@ export const useLogout = ({
   redirect = true,
 }: UseLogoutOptions = {}): UseLogoutReturn => {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [logoutMutation, { isLoading }] = useLogoutMutation();
   const [error, setError] = useState<string | null>(null);
 

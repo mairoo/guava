@@ -22,6 +22,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
+// 폼 유효성 검사 스키마 정의
 const schema = yup.object().shape({
   email: yup
     .string()
@@ -35,19 +36,23 @@ const schema = yup.object().shape({
 });
 
 const SignInPage = () => {
+  // 1. 기본 훅 및 상태 관리
   const router = useRouter();
   const dispatch = useDispatch();
-  const [login, { isLoading }] = useLoginMutation();
-  const [syncCart] = useSyncCartMutation();
-  const [getCart] = cartApi.endpoints.getCart.useLazyQuery();
   const [error, setError] = useState<string | null>(null);
 
+  // 2. API 관련 훅
+  const [login, { isLoading: isLoginLoading }] = useLoginMutation();
+  const [getCart] = cartApi.endpoints.getCart.useLazyQuery();
+  const [syncCart, { isLoading: isSyncCartLoading }] = useSyncCartMutation();
+
+  // 3. 폼 설정
   const {
     register,
     handleSubmit,
     watch,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<Auth.LoginRequest>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -59,44 +64,55 @@ const SignInPage = () => {
     reValidateMode: 'onSubmit',
   });
 
+  // 4. 전체 처리 상태 계산
+  const isProcessing = isSubmitting || isLoginLoading || isSyncCartLoading;
+
+  // 5. 핸들러 함수들
   /**
-   * 로그인 폼 제출 시 실행되는 핸들러 함수
+   * 장바구니 동기화 함수
+   * - 서버의 장바구니 데이터를 가져와 로컬 장바구니와 병합
+   * - 병합된 데이터를 다시 서버에 동기화
+   */
+  const syncCartData = async () => {
+    try {
+      // 서버의 장바구니 데이터 조회
+      const { data: serverCart = [] } = await getCart();
+
+      // 서버 장바구니와 로컬 장바구니 병합
+      dispatch(mergeCart(serverCart));
+
+      // 병합된 최신 상태를 서버에 동기화
+      const currentCart = store.getState().cart.items;
+      await syncCart(currentCart).unwrap();
+    } catch (error) {
+      console.error('장바구니 동기화 실패:', error);
+      // 필요시 사용자에게 장바구니 동기화 실패 알림 추가 가능
+    }
+  };
+
+  /**
+   * 로그인 폼 제출 핸들러
    * @param data 사용자가 입력한 로그인 정보 (이메일, 비밀번호, 자동로그인 여부)
    */
   const onSubmit = async (data: Auth.LoginRequest) => {
-    try {
-      // 1. RTK Query의 login mutation을 실행하고 결과를 기다림
-      // unwrap()을 사용하여 성공/실패를 try-catch로 처리
-      await login(data).unwrap();
+    // 이미 처리 중이면 중복 제출 방지
+    if (isProcessing) return;
 
-      // 로그인 성공 시 Redux store의 인증 상태를 true로 설정
+    try {
+      // 이전 에러 메시지 초기화
+      setError(null);
+
+      // 로그인 시도
+      await login(data).unwrap();
       dispatch(setAuth(true));
 
-      // 2. 장바구니 동기화
-      try {
-        // 서버의 장바구니 데이터 조회
-        const { data: serverCart = [] } = await getCart();
+      // 장바구니 동기화
+      await syncCartData();
 
-        // 서버 장바구니와 로컬 장바구니 병합
-        dispatch(mergeCart(serverCart));
-
-        // 현재 Redux store의 병합된 장바구니 상태를 가져옴
-        // dispatch(mergeWithServerCart(serverCart)) 직후의 "즉각적인" 최신 상태가 필요
-        // useSelector/useAppSelector는 React의 렌더링 사이클과 연동되어 작동하는 훅으로
-        // 상태 변화가 생기면 다음 렌더링에서 새 값을 받아오기 때문에 늦다.
-        const currentCart = store.getState().cart.items;
-
-        // 병합된 최신 상태를 서버에 동기화
-        await syncCart(currentCart).unwrap();
-      } catch (cartError) {
-        console.error('장바구니 동기화 실패:', cartError);
-      }
-
-      // 3. 메인 페이지로 리다이렉트
+      // 메인 페이지로 이동
       router.push('/');
     } catch (error: any) {
       // 로그인 실패 시 에러 메시지 설정
-      // 서버에서 받은 에러 메시지가 있으면 사용하고, 없으면 기본 메시지 사용
       setError(
         error.data?.message ||
           '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.',
@@ -104,6 +120,7 @@ const SignInPage = () => {
     }
   };
 
+  // 6. 스타일 정의
   const styles = {
     input: {
       base: 'focus-visible:ring-0 focus-visible:ring-offset-0 border border-gray-400',
@@ -116,6 +133,7 @@ const SignInPage = () => {
     link: 'text-blue-600 hover:text-blue-800 transition-colors duration-200',
   };
 
+  // 7. 렌더링
   return (
     <TopSpace>
       <TitledSection
@@ -124,6 +142,7 @@ const SignInPage = () => {
         spacing="space-y-4"
         className="w-full max-w-xl mx-auto"
       >
+        {/* 에러 메시지 */}
         {error && (
           <ErrorMessage
             message={error}
@@ -131,6 +150,7 @@ const SignInPage = () => {
           />
         )}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* 이메일 입력 필드 */}
           <div className="space-y-2">
             <Label htmlFor="email">이메일</Label>
             <div className="relative">
@@ -154,6 +174,7 @@ const SignInPage = () => {
             )}
           </div>
 
+          {/* 비밀번호 입력 필드 */}
           <div className="space-y-2">
             <Label htmlFor="password">비밀번호</Label>
             <div className="relative">
@@ -177,6 +198,7 @@ const SignInPage = () => {
             )}
           </div>
 
+          {/* 자동 로그인 체크박스 */}
           <div className="flex items-center space-x-2">
             <Checkbox
               id="rememberMe"
@@ -190,17 +212,19 @@ const SignInPage = () => {
             </Label>
           </div>
 
+          {/* 로그인 버튼 */}
           <Button
             type="submit"
-            disabled={isLoading}
+            disabled={isProcessing}
             className={cn(
               styles.button.base,
-              isLoading && styles.button.loading,
+              isProcessing && styles.button.loading,
             )}
           >
-            {isLoading ? '로그인 중...' : '로그인'}
+            {isProcessing ? '로그인 중...' : '로그인'}
           </Button>
 
+          {/* 링크 영역 */}
           <div className="flex justify-between pt-4 text-sm">
             <Link href="/auth/find-password" className={styles.link}>
               비밀번호 찾기
