@@ -7,13 +7,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { store } from '@/store';
 import { useLoginMutation } from '@/store/auth/api';
 import { setAuth } from '@/store/auth/slice';
 import { cartApi, useSyncCartMutation } from '@/store/cart/api';
-import { hydrateCart } from '@/store/cart/slice';
+import { mergeCart } from '@/store/cart/slice';
 import { Auth } from '@/types/auth';
-import { CartItem } from '@/types/cart';
-import { storage } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Key, Mail } from 'lucide-react';
 import Link from 'next/link';
@@ -42,26 +41,6 @@ const SignInPage = () => {
   const [syncCart] = useSyncCartMutation();
   const [getCart] = cartApi.endpoints.getCart.useLazyQuery();
   const [error, setError] = useState<string | null>(null);
-
-  const mergeCartItems = (
-    localItems: CartItem[],
-    serverItems: CartItem[],
-  ): CartItem[] => {
-    const mergedItems = [...serverItems];
-
-    localItems.forEach((localItem) => {
-      const existingItem = mergedItems.find(
-        (item) => item.productId === localItem.productId,
-      );
-      if (existingItem) {
-        existingItem.quantity += localItem.quantity;
-      } else {
-        mergedItems.push(localItem);
-      }
-    });
-
-    return mergedItems;
-  };
 
   const {
     register,
@@ -95,22 +74,20 @@ const SignInPage = () => {
 
       // 2. 장바구니 동기화
       try {
-        // 로컬 장바구니 데이터 가져오기
-        const localCartItems = storage.get('cart_items', []);
+        // 서버의 장바구니 데이터 조회
+        const { data: serverCart = [] } = await getCart();
 
-        if (localCartItems.length > 0) {
-          // 서버의 장바구니 데이터 조회
-          const { data: serverCart = [] } = await getCart();
+        // 서버 장바구니와 로컬 장바구니 병합
+        dispatch(mergeCart(serverCart));
 
-          // 로컬과 서버의 장바구니 병합
-          const mergedCart = mergeCartItems(localCartItems, serverCart);
+        // 현재 Redux store의 병합된 장바구니 상태를 가져옴
+        // dispatch(mergeWithServerCart(serverCart)) 직후의 "즉각적인" 최신 상태가 필요
+        // useSelector/useAppSelector는 React의 렌더링 사이클과 연동되어 작동하는 훅으로
+        // 상태 변화가 생기면 다음 렌더링에서 새 값을 받아오기 때문에 늦다.
+        const currentCart = store.getState().cart.items;
 
-          // 병합된 장바구니를 서버에 동기화
-          await syncCart(mergedCart).unwrap();
-        }
-
-        // Redux store의 장바구니 상태 업데이트
-        dispatch(hydrateCart());
+        // 병합된 최신 상태를 서버에 동기화
+        await syncCart(currentCart).unwrap();
       } catch (cartError) {
         console.error('장바구니 동기화 실패:', cartError);
       }

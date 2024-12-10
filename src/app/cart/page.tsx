@@ -9,41 +9,62 @@ import { FlexColumn, TitledSection } from '@/components/layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { CART_ITEMS, PAYMENT_METHODS } from '@/data/cart';
+import { PAYMENT_METHODS } from '@/data/cart';
+import { toast } from '@/hooks/use-toast';
+import { useAuth } from '@/providers/auth/AuthProvider';
+import { useSyncCartMutation } from '@/store/cart/api';
+import { useAppSelector } from '@/store/hooks';
 import { formatKRW } from '@/utils';
 import { useState } from 'react';
 
 const CartPage = () => {
+  const { isAuthenticated } = useAuth();
+  const cartItems = useAppSelector((state) => state.cart.items);
+  const [syncCart] = useSyncCartMutation();
   const [paymentMethod, setPaymentMethod] = useState('bank-transfer');
 
-  const totalAmount = CART_ITEMS.reduce(
+  const totalAmount = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
 
   const handlePaymentMethodChange = async (method: string) => {
     try {
-      // await updatePaymentMethodAction(method);
       setPaymentMethod(method);
+      if (isAuthenticated) {
+        await syncCart(cartItems);
+      }
     } catch (error) {
       console.error('Failed to update payment method:', error);
-      // 에러 처리 로직 추가 (예: 토스트 메시지)
+      toast({
+        variant: 'destructive',
+        title: '결제 수단 변경 실패',
+        description: '잠시 후 다시 시도해주세요.',
+      });
     }
   };
 
   const handleOrderSubmit = async () => {
     try {
+      if (isAuthenticated) {
+        await syncCart(cartItems);
+      }
       // 주문 제출 로직 구현
       console.log('Order submitted');
     } catch (error) {
       console.error('Failed to submit order:', error);
+      toast({
+        variant: 'destructive',
+        title: '주문 실패',
+        description: '잠시 후 다시 시도해주세요.',
+      });
     }
   };
 
   const DesktopView = (
     <div className="hidden lg:block">
       <div className="divide-y">
-        {CART_ITEMS.map((item) => (
+        {cartItems.map((item) => (
           <CartItemDesktop key={item.productId} item={item} />
         ))}
       </div>
@@ -57,7 +78,7 @@ const CartPage = () => {
 
   const MobileView = (
     <div className="lg:hidden space-y-2">
-      {CART_ITEMS.map((item) => (
+      {cartItems.map((item) => (
         <CartItemMobile key={item.productId} item={item} />
       ))}
       <Card className="bg-lime-50">
@@ -126,19 +147,31 @@ const CartPage = () => {
   return (
     <FlexColumn>
       <TitledSection title="장바구니 / 주문결제" showBorder>
-        {DesktopView}
-        {MobileView}
+        {cartItems.length > 0 ? (
+          <>
+            {DesktopView}
+            {MobileView}
+          </>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-gray-500">장바구니가 비어있습니다.</p>
+          </div>
+        )}
       </TitledSection>
-      <TitledSection title="입금 / 결제수단" showBorder>
-        {PaymentMethodsDesktopView}
-        {PaymentMethodsMobileView}
-      </TitledSection>
-      <TitledSection title="주문 동의" showBorder>
-        <CartAgreements onSubmit={handleOrderSubmit} />
-      </TitledSection>
-      <TitledSection title="주의사항" showBorder>
-        <div>주문 전 확인사항 영역</div>
-      </TitledSection>
+      {cartItems.length > 0 && (
+        <>
+          <TitledSection title="입금 / 결제수단" showBorder>
+            {PaymentMethodsDesktopView}
+            {PaymentMethodsMobileView}
+          </TitledSection>
+          <TitledSection title="주문 동의" showBorder>
+            <CartAgreements onSubmit={handleOrderSubmit} />
+          </TitledSection>
+          <TitledSection title="주의사항" showBorder>
+            <div>주문 전 확인사항 영역</div>
+          </TitledSection>
+        </>
+      )}
     </FlexColumn>
   );
 };

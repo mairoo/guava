@@ -98,6 +98,37 @@ export const cartSlice = createSlice({
     hydrateCart: (state) => {
       state.items = storage.get(CART_STORAGE_KEY, []);
     },
+
+    /**
+     * 서버의 장바구니와 로컬 장바구니를 병합하는 리듀서 추가
+     * @param state
+     * @param action
+     */
+    mergeCart: (state, action: PayloadAction<CartItem[]>) => {
+      const serverItems = action.payload;
+      const localItems = state.items;
+
+      // 새로운 배열로 초기화
+      state.items = [];
+
+      // 모든 서버 아이템을 기본으로 사용
+      serverItems.forEach((serverItem) => {
+        state.items.push({ ...serverItem });
+      });
+
+      // 서버에 없는 로컬 아이템만 추가
+      localItems.forEach((localItem) => {
+        const existingItem = state.items.find(
+          (item) => item.productId === localItem.productId,
+        );
+        if (!existingItem) {
+          state.items.push({ ...localItem });
+        }
+      });
+
+      // localStorage 업데이트
+      storage.set(CART_STORAGE_KEY, state.items);
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
@@ -120,5 +151,6 @@ export const {
   removeItem,
   clearCart,
   hydrateCart,
+  mergeCart,
 } = cartSlice.actions;
 export default cartSlice.reducer;
