@@ -1,8 +1,10 @@
 'use client';
 
-import {RootState} from '@/store';
+import {RootState, store} from '@/store';
 import {useRefreshMutation} from '@/store/auth/api';
 import {setAuth, setCredentials, setLoading} from '@/store/auth/slice';
+import {cartApi, useSyncCartMutation} from '@/store/cart/api';
+import {mergeCart} from '@/store/cart/slice';
 import {storage} from '@/utils';
 import {auth} from '@/utils/auth';
 import {useRouter} from 'next/navigation';
@@ -52,6 +54,8 @@ interface AuthProviderProps {
  */
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [refresh] = useRefreshMutation(); // 토큰 갱신을 위한 API 훅
+  const [getCart] = cartApi.endpoints.getCart.useLazyQuery();
+  const [syncCart] = useSyncCartMutation();
   const dispatch = useDispatch();
   const router = useRouter();
   const isMounted = useMounted();
@@ -69,6 +73,24 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     auth.removeCookie('isAuthenticated');
     storage.clearLastRefreshTime();
     router.push('/auth/sign-in');
+  };
+
+  /**
+   * 장바구니 동기화 처리 함수
+   */
+  const syncCartItems = async () => {
+    try {
+      const { data: serverCart = [] } = await getCart();
+
+      // 로컬 장바구니와 서버 장바구니를 병합
+      dispatch(mergeCart(serverCart));
+
+      // 병합된 최신 상태를 서버에 동기화
+      const currentCart = store.getState().cart.items;
+      await syncCart(currentCart).unwrap();
+    } catch (error) {
+      console.error('장바구니 동기화 실패:', error);
+    }
   };
 
   useEffect(() => {
@@ -95,6 +117,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
         // 현재 토큰이 유효한지 확인 - 토큰 만료 1시간 전부터 갱신 시도
         if (accessToken && !storage.isTokenExpiring(3600)) {
+          // 토큰이 유효한 경우에도 장바구니 동기화 실행
+          await syncCartItems();
           return;
         }
 
@@ -106,6 +130,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           dispatch(setCredentials(refreshResult));
           auth.setAuthCookie(refreshResult.data.expiresIn);
           storage.setLastRefreshTime(Date.now());
+
+          // 토큰 갱신 후 장바구니 동기화 실행
+          await syncCartItems();
         }
       } catch (error) {
         console.error('Auth initialization failed:', error);
