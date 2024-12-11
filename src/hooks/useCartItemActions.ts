@@ -1,9 +1,6 @@
-import { toast } from '@/hooks/use-toast';
-import { useCartActions } from '@/hooks/useCartActions';
-import { addItem } from '@/store/cart/slice';
-import { useAppDispatch } from '@/store/hooks';
 import { CartItem } from '@/types/cart';
 import { ChangeEvent, useState } from 'react';
+import { useCartActions } from './useCartActions';
 
 interface UseCartItemActionsProps {
   item?: CartItem;
@@ -17,90 +14,90 @@ interface UseCartItemActionsProps {
   initialQuantity?: number;
 }
 
+/**
+ * 장바구니 아이템 UI 동작을 관리하는 훅
+ * 수량 변경, 아이템 추가/제거 등의 UI 레벨 동작 처리
+ */
 export const useCartItemActions = ({
   item,
   product,
   initialQuantity = 1,
 }: UseCartItemActionsProps = {}) => {
-  const dispatch = useAppDispatch();
-  const { handleQuantityChange: syncQuantityChange, handleRemove } =
+  const { handleQuantityChange, handleRemove, handleAddToCart } =
     useCartActions();
   const [quantity, setQuantity] = useState(initialQuantity);
 
+  /**
+   * 수량 증가 처리
+   */
   const increaseQuantity = () => {
     if (item) {
-      syncQuantityChange(item.productId, 1, item.quantity);
+      handleQuantityChange(item.productId, 1, item.quantity);
     } else if (product) {
       setQuantity((prev) => prev + 1);
     }
   };
 
+  /**
+   * 수량 감소 처리
+   */
   const decreaseQuantity = () => {
     if (item) {
-      syncQuantityChange(item.productId, -1, item.quantity);
+      handleQuantityChange(item.productId, -1, item.quantity);
     } else if (quantity > 1) {
       setQuantity((prev) => Math.max(1, prev - 1));
     }
   };
 
-  const onQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // 이름 변경
+  /**
+   * 수량 직접 변경 처리
+   */
+  const changeQuantity = (e: ChangeEvent<HTMLInputElement>) => {
     const newQuantity = parseInt(e.target.value) || 1;
     const validQuantity = Math.max(1, newQuantity);
 
     if (item) {
       const delta = validQuantity - item.quantity;
-      syncQuantityChange(item.productId, delta, item.quantity);
+      handleQuantityChange(item.productId, delta, item.quantity);
     } else {
       setQuantity(validQuantity);
     }
   };
 
-  const removeItem = () => {
+  /**
+   * 장바구니 아이템 제거
+   */
+  const removeCartItem = () => {
     if (item) {
       handleRemove(item.productId);
     }
   };
 
+  /**
+   * 장바구니에 새 아이템 추가
+   */
   const addToCart = async () => {
     if (!product) return;
 
-    try {
-      const cartItem: CartItem = {
-        productId: product.id,
-        name: product.name,
-        subtitle: product.subtitle || '',
-        code: product.code,
-        price: product.sellingPrice,
-        quantity: quantity,
-      };
+    const cartItem: CartItem = {
+      productId: product.id,
+      name: product.name,
+      subtitle: product.subtitle || '',
+      code: product.code,
+      price: product.sellingPrice,
+      quantity: quantity,
+    };
 
-      dispatch(addItem(cartItem));
-
-      toast({
-        title: `${product.name} ${product.subtitle || ''}`,
-        description: '장바구니에 담았습니다.',
-        duration: 1500,
-        className: 'bg-white border border-gray-200 shadow-lg',
-      });
-
-      setQuantity(1);
-    } catch (error) {
-      console.error('장바구니 추가 실패:', error);
-      toast({
-        variant: 'destructive',
-        title: '장바구니 추가 실패',
-        description: '잠시 후 다시 시도해주세요.',
-      });
-    }
+    await handleAddToCart(cartItem);
+    setQuantity(1); // 추가 후 수량 초기화
   };
 
   return {
     quantity,
     increaseQuantity,
     decreaseQuantity,
-    onQuantityChange, // 이름 변경
-    removeItem,
+    changeQuantity,
+    removeItem: removeCartItem,
     addToCart,
   };
 };

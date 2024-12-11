@@ -1,9 +1,12 @@
-export interface CartItem {
+export interface CartItemBase {
   productId: number;
   name: string;
   subtitle: string;
   code: string;
   price: number;
+}
+
+export interface CartItem extends CartItemBase {
   quantity: number;
 }
 

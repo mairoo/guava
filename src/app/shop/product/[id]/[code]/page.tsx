@@ -160,7 +160,7 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
     quantity,
     increaseQuantity,
     decreaseQuantity,
-    onQuantityChange,
+    changeQuantity,
     addToCart,
   } = useCartItemActions({ product, initialQuantity: MINIMUM_QUANTITY });
 
@@ -192,7 +192,7 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
       quantity={quantity}
       onIncrease={increaseQuantity}
       onDecrease={decreaseQuantity}
-      onQuantityChange={onQuantityChange}
+      onQuantityChange={changeQuantity}
       onCartAdd={addToCart}
     />
   );
