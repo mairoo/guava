@@ -5,8 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { categories } from '@/data/categories';
+import { toast } from '@/hooks/use-toast';
+import { useCartActions } from '@/hooks/useCartActions';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { addItem } from '@/store/cart/slice';
+import { useAppDispatch } from '@/store/hooks';
 import { useGetProductQuery } from '@/store/products/api';
+import { CartItem } from '@/types/cart';
 
 import { ProductDetailParams } from '@/types/params';
 import { Products } from '@/types/product';
@@ -24,6 +29,7 @@ interface QuantitySelectorProps {
   onIncrement: () => void;
   onDecrement: () => void;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onAddToCart: () => Promise<void>;
 }
 
 /**
@@ -35,7 +41,7 @@ const ProductImage = ({ imageUrl }: { imageUrl?: string }) => (
       src={imageUrl || '/placeholders/170x100.svg'}
       alt="Product placeholder"
       fill
-      sizes="100vw"
+      sizes="(min-width: 1280px) 25vw, 100vw"
       className="object-contain"
       priority
     />
@@ -55,7 +61,7 @@ const ProductInfo = ({ product }: ProductInfoProps) => (
       {product?.name || '상품 이름'} {product?.subtitle || '상품 가격'}
     </h2>
     <p className="text-sm text-gray-600">
-      정가:{' '}
+      정가:
       <span className="line-through">
         {formatKRW.format(product?.listPrice || 0)}
       </span>
@@ -65,7 +71,7 @@ const ProductInfo = ({ product }: ProductInfoProps) => (
     </p>
     {product && (
       <div className="text-sm text-gray-600 flex items-center gap-1">
-        할인율{' '}
+        할인율
         <span className="text-red-500">
           {(
             ((product.listPrice - product.sellingPrice) / product.listPrice) *
@@ -98,6 +104,7 @@ const QuantitySelector = ({
   onIncrement,
   onDecrement,
   onChange,
+  onAddToCart,
 }: QuantitySelectorProps) => (
   <div className="space-y-2 w-full">
     <div className="text-sm">수량</div>
@@ -128,6 +135,7 @@ const QuantitySelector = ({
       variant="outline"
       size="sm"
       className="w-full border-gray-900 text-gray-900 hover:bg-white"
+      onClick={onAddToCart}
     >
       <ShoppingCart className="w-4 h-4" />
       담기
@@ -142,6 +150,9 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
   // URL 파라미터 처리
   const resolvedParams = use(params);
   const id = parseInt(decodeURIComponent(resolvedParams.id));
+
+  const dispatch = useAppDispatch();
+  const { handleQuantityChange: syncQuantityChange } = useCartActions();
 
   // 상품 정보 조회
   const {
@@ -161,12 +172,63 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
   const { matches: isDesktop } = useMediaQuery('(min-width: 1280px)');
 
   // 이벤트 핸들러
-  const handleIncrement = () => setQuantity((prev) => prev + 1);
-  const handleDecrement = () =>
-    setQuantity((prev) => Math.max(MINIMUM_QUANTITY, prev - 1));
-  const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value) || MINIMUM_QUANTITY;
-    setQuantity(Math.max(MINIMUM_QUANTITY, value));
+  // 수량 조절 핸들러 수정
+  const handleIncrement = () => {
+    if (!product) return;
+    syncQuantityChange(product.id, 1, quantity);
+    setQuantity((prev) => prev + 1);
+  };
+
+  const handleDecrement = () => {
+    if (!product) return;
+    if (quantity > MINIMUM_QUANTITY) {
+      syncQuantityChange(product.id, -1, quantity);
+      setQuantity((prev) => Math.max(MINIMUM_QUANTITY, prev - 1));
+    }
+  };
+
+  const handleQuantityInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!product) return;
+    const newQuantity = parseInt(e.target.value) || MINIMUM_QUANTITY;
+    const validQuantity = Math.max(MINIMUM_QUANTITY, newQuantity);
+    const delta = validQuantity - quantity;
+    syncQuantityChange(product.id, delta, quantity);
+    setQuantity(validQuantity);
+  };
+
+  // 장바구니 추가 핸들러
+  const handleAddToCart = async () => {
+    if (!product) return;
+
+    try {
+      const cartItem: CartItem = {
+        productId: product.id,
+        name: product.name,
+        subtitle: product.subtitle || '',
+        code: product.code,
+        price: product.sellingPrice,
+        quantity: quantity,
+      };
+
+      dispatch(addItem(cartItem));
+
+      toast({
+        title: `${product.name} ${product.subtitle || ''}`,
+        description: '장바구니에 담았습니다.',
+        duration: 1500,
+        className: 'bg-white border border-gray-200 shadow-lg',
+      });
+
+      // 수량을 다시 1로 리셋
+      setQuantity(MINIMUM_QUANTITY);
+    } catch (error) {
+      console.error('장바구니 추가 실패:', error);
+      toast({
+        variant: 'destructive',
+        title: '장바구니 추가 실패',
+        description: '잠시 후 다시 시도해주세요.',
+      });
+    }
   };
 
   // breadcrumb 아이템 동적 생성
@@ -189,7 +251,8 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
       quantity={quantity}
       onIncrement={handleIncrement}
       onDecrement={handleDecrement}
-      onChange={handleQuantityChange}
+      onChange={handleQuantityInputChange}
+      onAddToCart={handleAddToCart}
     />
   );
   const productDescription = category && (
