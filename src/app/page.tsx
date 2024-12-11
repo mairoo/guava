@@ -6,11 +6,7 @@ import {
   MessageTitleDateList,
   TitledSection,
 } from '@/components/layout';
-import {
-  CategoryItem,
-  ProductGrid,
-  ProductItemBuy,
-} from '@/components/product';
+import { CategoryItem, ProductGrid } from '@/components/product';
 import { categories } from '@/data/categories';
 
 import React from 'react';
@@ -76,57 +72,6 @@ const testimonialData = [
   },
 ];
 
-const bestsellers = [
-  {
-    productId: 1,
-    name: '한게임상품권',
-    subtitle: '5만원',
-    code: '한게임5만',
-    discountRate: 0.0,
-    imageUrl: 'https://placehold.co/170x100',
-  },
-  {
-    productId: 2,
-    name: '구글기프트카드',
-    subtitle: '5만원',
-    code: '구글5만',
-    discountRate: 4.0,
-    imageUrl: 'https://placehold.co/170x100',
-  },
-  {
-    productId: 3,
-    name: '아프리카별풍선',
-    subtitle: '5만원',
-    code: '아프리카500개',
-    discountRate: 5.0,
-    imageUrl: 'https://placehold.co/170x100',
-  },
-  {
-    productId: 4,
-    name: '에그머니',
-    subtitle: '5만원',
-    code: '에그5만',
-    discountRate: 9.0,
-    imageUrl: 'https://placehold.co/170x100',
-  },
-  {
-    productId: 5,
-    name: '플레이스테이션',
-    subtitle: '5만원',
-    code: '플스5만',
-    discountRate: 7.0,
-    imageUrl: 'https://placehold.co/170x100',
-  },
-  {
-    productId: 6,
-    name: '틴캐시',
-    subtitle: '5만원',
-    code: '틴캐시5만',
-    discountRate: 7.0,
-    imageUrl: 'https://placehold.co/170x100',
-  },
-];
-
 const Page = () => (
   <FlexColumn>
     <TitledSection title="오늘의 최저가 상품권">
@@ -176,22 +121,6 @@ const Page = () => (
         <MessageTitleDateList messages={testimonialData} />
       </TitledSection>
     </GridRow>
-    <TitledSection title="베스트셀러">
-      <ProductGrid gap={2} py={0}>
-        {bestsellers.map((product) => (
-          <ProductItemBuy
-            key={product.productId}
-            productId={product.productId}
-            name={product.name}
-            subtitle={product.subtitle}
-            code={product.code}
-            discountRate={product.discountRate}
-            price={3550}
-            imageUrl={product.imageUrl}
-          />
-        ))}
-      </ProductGrid>
-    </TitledSection>
   </FlexColumn>
 );
 export default Page;
