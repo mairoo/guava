@@ -13,6 +13,7 @@ import { useCartActions } from '@/hooks/useCartActions';
 import { useAppSelector } from '@/store/hooks';
 import { formatKRW } from '@/utils';
 import { ShoppingBag, Trash2, X } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react';
 
 interface CartDrawerProps {
@@ -80,7 +81,14 @@ export const CartDrawer = ({ isOpen, onOpenChangeAction }: CartDrawerProps) => {
                     className="flex items-center justify-between px-3 py-3 border-b last:border-b-0"
                   >
                     <div className="flex-1">
-                      <div className="font-medium">{item.name}</div>
+                      <Link
+                        href={`/shop/product/${item.productId}/${item.code}`}
+                        className="font-medium"
+                        onClick={() => onOpenChangeAction(false)}
+                      >
+                        {item.name}
+                        <br /> {item.subtitle}
+                      </Link>
                       <div className="text-sm text-gray-500 mt-1">
                         {formatKRW.format(item.price)} x {item.quantity}개
                       </div>
