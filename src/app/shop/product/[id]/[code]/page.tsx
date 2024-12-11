@@ -5,12 +5,17 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useGetProductQuery } from '@/store/products/api';
 import { ProductDetailParams } from '@/types/params';
+import { Products } from '@/types/product';
 import { formatKRW } from '@/utils';
 import { ArrowDown, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import React, { ChangeEvent, use, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown'; // 상수 정의
+
+// 상수 정의
+const MINIMUM_QUANTITY = 1;
 
 const breadcrumbItems = [
   { text: '홈', url: '/' },
@@ -64,21 +69,21 @@ const productDescription = `
 14. 이용약관: [g.co/playtermskr](https://g.co/playtermskr)
 `;
 
-const ProductInfo = () => (
-  <div className="space-y-2">
-    <h2 className="text-lg font-bold">상품 이름</h2>
-    <p className="text-sm text-gray-600">
-      정가: <span className="line-through">{formatKRW.format(47500)}</span>
-    </p>
-    <p className="text-sm text-gray-600">판매가 {formatKRW.format(45000)}</p>
-    <div className="text-sm text-gray-600 flex items-center gap-1">
-      할인율 <span className="text-red-500">9.00</span>
-      <span className="text-red-500">%</span>
-      <ArrowDown className="w-4 h-4 text-red-500" />
-    </div>
-  </div>
-);
+// 타입 정의
+interface QuantitySelectorProps {
+  quantity: number;
+  onIncrement: () => void;
+  onDecrement: () => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}
 
+interface ProductInfoProps {
+  product?: Products.Product; // optional로 지정
+}
+
+/**
+ * 상품 이미지 컴포넌트
+ */
 const ProductImage = () => (
   <div className="w-full relative aspect-[170/100]">
     <Image
@@ -92,6 +97,40 @@ const ProductImage = () => (
   </div>
 );
 
+/**
+ * 상품 정보 (가격, 할인율 등) 컴포넌트
+ */
+const ProductInfo = ({ product }: ProductInfoProps) => (
+  <div className="space-y-2">
+    <h2 className="text-lg font-bold">{product?.name || '상품 이름'}</h2>
+    <p className="text-sm text-gray-600">
+      정가:{' '}
+      <span className="line-through">
+        {formatKRW.format(product?.listPrice || 0)}
+      </span>
+    </p>
+    <p className="text-sm text-gray-600">
+      판매가 {formatKRW.format(product?.sellingPrice || 0)}
+    </p>
+    {product && (
+      <div className="text-sm text-gray-600 flex items-center gap-1">
+        할인율{' '}
+        <span className="text-red-500">
+          {(
+            ((product.listPrice - product.sellingPrice) / product.listPrice) *
+            100
+          ).toFixed(2)}
+        </span>
+        <span className="text-red-500">%</span>
+        <ArrowDown className="w-4 h-4 text-red-500" />
+      </div>
+    )}
+  </div>
+);
+
+/**
+ * 상품 상세 설명 컴포넌트
+ */
 const ProductDescription = () => (
   <Card className="w-full border-0 shadow-none">
     <div className="prose prose-sm max-w-none">
@@ -100,13 +139,9 @@ const ProductDescription = () => (
   </Card>
 );
 
-interface QuantitySelectorProps {
-  quantity: number;
-  onIncrement: () => void;
-  onDecrement: () => void;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}
-
+/**
+ * 수량 선택 컴포넌트
+ */
 const QuantitySelector = ({
   quantity,
   onIncrement,
@@ -128,7 +163,7 @@ const QuantitySelector = ({
         value={quantity}
         onChange={onChange}
         className="text-center rounded-none w-full"
-        min="1"
+        min={MINIMUM_QUANTITY}
       />
       <Button
         variant="outline"
@@ -149,25 +184,39 @@ const QuantitySelector = ({
   </div>
 );
 
+/**
+ * 상품 상세 페이지 컴포넌트
+ */
 const ProductDetailPage = ({ params }: ProductDetailParams) => {
+  // URL 파라미터 처리
   const resolvedParams = use(params);
-
   const code = decodeURIComponent(resolvedParams.code);
-  const id = decodeURIComponent(resolvedParams.id);
+  const id = parseInt(decodeURIComponent(resolvedParams.id));
 
-  const [quantity, setQuantity] = useState(1);
+  // 상품 정보 조회
+  const {
+    data: productResponse,
+    isLoading,
+    error,
+  } = useGetProductQuery({ id });
+  const product = productResponse?.data;
 
-  const { matches: isDesktop } = useMediaQuery('(min-width: 1280px)');
+  // 상태 관리
+  const [quantity, setQuantity] = useState(MINIMUM_QUANTITY);
+  const { matches: isDesktop } = useMediaQuery('(min-width: 1280xl)');
 
+  // 이벤트 핸들러
   const handleIncrement = () => setQuantity((prev) => prev + 1);
-  const handleDecrement = () => setQuantity((prev) => Math.max(1, prev - 1));
+  const handleDecrement = () =>
+    setQuantity((prev) => Math.max(MINIMUM_QUANTITY, prev - 1));
   const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value) || 1;
-    setQuantity(Math.max(1, value));
+    const value = parseInt(e.target.value) || MINIMUM_QUANTITY;
+    setQuantity(Math.max(MINIMUM_QUANTITY, value));
   };
 
+  // 컴포넌트 렌더링
   const productImage = <ProductImage />;
-  const productInfo = <ProductInfo />;
+  const productInfo = <ProductInfo product={product} />;
   const quantitySelector = (
     <QuantitySelector
       quantity={quantity}
@@ -178,6 +227,9 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
   );
   const productDescription = <ProductDescription />;
 
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div>오류가 발생했습니다.</div>;
+
   return (
     <FlexColumn spacing={2} marginY={2} className="w-full">
       <Breadcrumbs items={breadcrumbItems} marginY={1} />
@@ -186,7 +238,7 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
           {productDescription}
           <div className="space-y-8 w-full">
             {productImage}
-            {code} {id}
+            {code}
             {productInfo}
             {quantitySelector}
           </div>
