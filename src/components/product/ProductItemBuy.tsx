@@ -9,7 +9,7 @@ import React from 'react';
 
 interface ProductItemBuyProps {
   productId: number;
-  imageUrl: string;
+  thumbnail: string;
   name: string;
   subtitle: string;
   code: string;
@@ -19,7 +19,7 @@ interface ProductItemBuyProps {
 
 export const ProductItemBuy = ({
   productId,
-  imageUrl = 'https://placehold.co/170x100?text=Product',
+  thumbnail = 'https://placehold.co/170x100?text=Product',
   name = '상품명',
   subtitle = '',
   code = '',
@@ -45,7 +45,7 @@ export const ProductItemBuy = ({
         <CardContent className="p-0">
           <div className="relative aspect-[157/100] w-full overflow-hidden">
             <img
-              src={imageUrl}
+              src={thumbnail}
               alt={name}
               className="object-cover w-full h-full"
             />

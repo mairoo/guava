@@ -82,7 +82,7 @@ const Page = () => (
             title={category.title}
             slug={category.slug}
             discountRate={category.discountRate}
-            imageUrl={category.thumbnail}
+            thumbnail={category.thumbnail}
           />
         ))}
       </ProductGrid>

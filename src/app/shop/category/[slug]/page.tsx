@@ -103,7 +103,7 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
               100
             }
             price={product.sellingPrice}
-            imageUrl={`https://pincoin-s3.s3.amazonaws.com/media/${category.thumbnail}`}
+            thumbnail={`https://pincoin-s3.s3.amazonaws.com/media/${category.thumbnail}`}
           />
         ))}
       </ProductGrid>

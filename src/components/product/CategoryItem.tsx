@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { ComponentPropsWithoutRef } from 'react';
 
 interface CategoryItemProps extends ComponentPropsWithoutRef<'div'> {
-  imageUrl: string;
+  thumbnail: string;
   title: string;
   slug: string;
   discountRate: number;
@@ -12,7 +12,7 @@ interface CategoryItemProps extends ComponentPropsWithoutRef<'div'> {
 }
 
 export const CategoryItem = ({
-  imageUrl = '/placeholders/170x100',
+  thumbnail = '/placeholders/170x100',
   title = '상품명',
   slug = 'slug',
   discountRate = 1.0,
@@ -31,7 +31,7 @@ export const CategoryItem = ({
         <CardContent className="p-1">
           <div className="relative aspect-[157/100] w-full mb-2 border border-gray-800 rounded-md overflow-hidden">
             <img
-              src={imageUrl}
+              src={thumbnail}
               alt={title}
               className="object-cover w-full h-full"
             />

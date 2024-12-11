@@ -1,14 +1,14 @@
 'use client';
 
 import { Breadcrumbs, FlexColumn } from '@/components/layout';
+import { ErrorMessage, LoadingMessage } from '@/components/message';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { categories } from '@/data/categories';
 import { useCartItemActions } from '@/hooks/useCartItemActions';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useGetCategoryQuery } from '@/store/categories/api';
 import { useGetProductQuery } from '@/store/products/api';
-
 import { ProductDetailParams } from '@/types/params';
 import { Products } from '@/types/product';
 import { formatKRW } from '@/utils';
@@ -31,10 +31,13 @@ interface QuantitySelectorProps {
 /**
  * 상품 이미지 컴포넌트
  */
-const ProductImage = ({ imageUrl }: { imageUrl?: string }) => (
+const ProductImage = ({ thumbnail }: { thumbnail?: string }) => (
   <div className="w-full relative aspect-[170/100] border border-gray-800 rounded-lg">
     <Image
-      src={imageUrl || '/placeholders/170x100.svg'}
+      src={
+        `https://pincoin-s3.s3.amazonaws.com/media/${thumbnail}` ||
+        '/placeholders/170x100.svg'
+      }
       alt="Product placeholder"
       fill
       sizes="(min-width: 1280px) 25vw, 100vw"
@@ -143,19 +146,29 @@ const QuantitySelector = ({
  * 상품 상세 페이지 컴포넌트
  */
 const ProductDetailPage = ({ params }: ProductDetailParams) => {
-  // URL 파라미터 처리
+  // 1. URL 파라미터 처리
   const resolvedParams = use(params);
   const id = parseInt(decodeURIComponent(resolvedParams.id));
 
-  // 상품 정보 조회
+  // 2. 상품 정보 조회
   const {
     data: productResponse,
-    isLoading,
-    error,
+    isLoading: isLoadingProduct,
+    error: errorProduct,
   } = useGetProductQuery({ id });
   const product = productResponse?.data;
 
-  // useCartItemActions 훅 사용
+  // 3. 카테고리 정보 조회
+  const {
+    data: categoryResponse,
+    isLoading: isLoadingCategory,
+    error: errorCategory,
+  } = useGetCategoryQuery(product?.categoryId || '', {
+    skip: !product?.categoryId,
+  });
+  const category = categoryResponse?.data;
+
+  // 4. useCartItemActions 훅 사용
   const {
     quantity,
     increaseQuantity,
@@ -164,28 +177,45 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
     addToCart,
   } = useCartItemActions({ product, initialQuantity: MINIMUM_QUANTITY });
 
-  // 카테고리 정보 조회
-  const category = product
-    ? categories.find((c) => c.id === product.categoryId)
-    : undefined;
-
-  // 상태 관리
+  // 5. 반응형 처리
   const { matches: isDesktop } = useMediaQuery('(min-width: 1280px)');
 
-  // breadcrumb 아이템 동적 생성
+  // 6. breadcrumb 아이템 동적 생성
   const breadcrumbItems = [
     { text: '홈', url: '/' },
-    { text: '상품', url: '/products' },
     {
-      text: category?.title || '상품',
-      url: category ? `/categories/${category.slug}` : undefined,
+      text: category?.title || '분류',
+      url: category ? `/shop/category/${category.slug}` : undefined,
+    },
+    {
+      text: product?.subtitle || '상품',
+      url: product ? `/shop/product/${product.id}/${product.code}` : undefined,
     },
   ];
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div>오류가 발생했습니다.</div>;
+  // 7. 상태별 UI 렌더링
+  // 7-1. 로딩 상태
+  if (isLoadingProduct || isLoadingCategory) {
+    return (
+      <LoadingMessage
+        message="로딩 중"
+        description="상품 정보를 불러오고 있습니다. 잠시만 기다려주세요."
+      />
+    );
+  }
 
-  const productImage = <ProductImage imageUrl={category?.thumbnail} />;
+  // 7-2. 에러 상태
+  if (errorProduct || errorCategory) {
+    return (
+      <ErrorMessage
+        message="상품 정보를 불러오는데 실패했습니다"
+        description="잠시 후 다시 시도해주세요. 문제가 지속되면 고객센터로 문의해주세요."
+      />
+    );
+  }
+
+  // 8. 컴포넌트 준비
+  const productImage = <ProductImage thumbnail={category?.thumbnail} />;
   const productInfo = <ProductInfo product={product} />;
   const quantitySelector = (
     <QuantitySelector
@@ -197,9 +227,10 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
     />
   );
   const productDescription = category && (
-    <ProductDescription description={category.description1} />
+    <ProductDescription description={category.description} />
   );
 
+  // 9. 메인 UI 렌더링
   return (
     <FlexColumn spacing={2} marginY={2} className="w-full">
       <Breadcrumbs items={breadcrumbItems} marginY={1} />
