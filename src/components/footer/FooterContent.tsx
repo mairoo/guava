@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from './layout/Container';
+import { Container } from '../layout/Container';
 
 export const FooterContent = () => {
   const links = [

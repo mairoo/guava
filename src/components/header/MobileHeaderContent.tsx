@@ -5,8 +5,8 @@ import { useScrollLock } from '@/hooks/useScrollLock';
 import { Search, X } from 'lucide-react';
 import Link from 'next/link';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { CartDrawer } from './CartDrawer';
-import { MenuDrawer } from './MenuDrawer';
+import { CartDrawer } from '../drawer/CartDrawer';
+import { MenuDrawer } from '../drawer/MenuDrawer';
 
 export const MobileHeaderContent = () => {
   const [isSearching, setIsSearching] = useState(false);
@@ -92,7 +92,7 @@ export const MobileHeaderContent = () => {
                 autoFocus
               />
             ) : (
-              <Link href="/" className="flex items-center gap-2">
+              <Link href="/public" className="flex items-center gap-2">
                 <img
                   src="/pincoin_logo.svg"
                   alt="핀코인"

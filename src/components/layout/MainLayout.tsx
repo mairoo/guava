@@ -1,7 +1,6 @@
-import { FooterContent } from '@/components/FooterContent';
-import { DesktopHeaderContent } from '@/components/DesktopHeaderContent';
-import { Container, Footer, Header, Main } from '@/components/layout';
-
+import { Footer, FooterContent } from '@/components/footer';
+import { DesktopHeaderContent, Header } from '@/components/header';
+import { Container, Main } from '@/components/layout';
 import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 interface MainLayoutProps extends ComponentPropsWithoutRef<'div'> {

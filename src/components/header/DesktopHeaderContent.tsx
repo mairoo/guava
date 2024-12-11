@@ -21,7 +21,7 @@ export const DesktopHeaderContent = ({}) => {
         <Container className="py-1 flex justify-between items-center">
           {/* Logo */}
           <div>
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/public" className="flex items-center gap-2">
               <img
                 src="/pincoin_logo.svg"
                 alt="핀코인"

@@ -1,5 +1,5 @@
-import { DesktopHeaderContent } from '@/components/DesktopHeaderContent';
-import { MobileHeaderContent } from '@/components/MobileHeaderContent';
+import { DesktopHeaderContent } from '@/components/header/DesktopHeaderContent';
+import { MobileHeaderContent } from '@/components/header/MobileHeaderContent';
 
 import { cn } from '@/lib/utils';
 import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
