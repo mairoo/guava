@@ -2,13 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { toast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth';
-import { store } from '@/store';
-import { useSyncCartMutation } from '@/store/cart/api';
-import { addItem } from '@/store/cart/slice';
-import { useAppDispatch } from '@/store/hooks';
-import { CartItem } from '@/types/cart';
+import { useCartItemActions } from '@/hooks/useCartItemActions';
 import { ArrowDown, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
@@ -32,48 +26,18 @@ export const ProductItemBuy = ({
   discountRate = 1.0,
   price = 0,
 }: ProductItemBuyProps) => {
-  const dispatch = useAppDispatch();
-  const [syncCart] = useSyncCartMutation();
-
-  const { isAuthenticated } = useAuth();
+  const { addToCart } = useCartItemActions({
+    product: {
+      id: productId,
+      name,
+      subtitle,
+      code,
+      sellingPrice: price,
+    },
+  });
 
   const formattedRate = discountRate.toFixed(2);
   const formattedPrice = price.toLocaleString();
-
-  const handleAddToCart = async () => {
-    try {
-      const cartItem: CartItem = {
-        productId,
-        name,
-        subtitle,
-        code,
-        price,
-        quantity: 1,
-      };
-
-      dispatch(addItem(cartItem));
-
-      if (isAuthenticated) {
-        // dispatch 이후의 최신 상태를 가져옴
-        const currentCart = store.getState().cart.items;
-        await syncCart(currentCart);
-      }
-
-      toast({
-        title: `${name} ${subtitle}`,
-        description: '장바구니에 담았습니다.',
-        duration: 1500,
-        className: 'bg-white border border-gray-200 shadow-lg',
-      });
-    } catch (error) {
-      console.error('장바구니 추가 실패:', error);
-      toast({
-        variant: 'destructive',
-        title: '장바구니 추가 실패',
-        description: '잠시 후 다시 시도해주세요.',
-      });
-    }
-  };
 
   return (
     <Card className="w-full overflow-hidden shadow-none hover:shadow-md transition-shadow border-gray-200">
@@ -112,7 +76,7 @@ export const ProductItemBuy = ({
           variant="outline"
           size="sm"
           className="border-gray-900 text-gray-900 hover:bg-white"
-          onClick={handleAddToCart}
+          onClick={addToCart}
         >
           <ShoppingCart className="w-4 h-4" />
           담기

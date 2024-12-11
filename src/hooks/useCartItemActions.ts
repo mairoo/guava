@@ -3,12 +3,17 @@ import { useCartActions } from '@/hooks/useCartActions';
 import { addItem } from '@/store/cart/slice';
 import { useAppDispatch } from '@/store/hooks';
 import { CartItem } from '@/types/cart';
-import { Products } from '@/types/product';
 import { ChangeEvent, useState } from 'react';
 
 interface UseCartItemActionsProps {
   item?: CartItem;
-  product?: Products.Product;
+  product?: {
+    id: number;
+    name: string;
+    subtitle: string;
+    code: string;
+    sellingPrice: number;
+  };
   initialQuantity?: number;
 }
 
