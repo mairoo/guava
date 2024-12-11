@@ -16,11 +16,11 @@ interface MessageTitleDateListProps {
   cardBorder?: boolean;
 }
 
-export const MessageTitleDateList: React.FC<MessageTitleDateListProps> = ({
+export const MessageTitleDateList = ({
   messages,
   spacing = 1,
   cardBorder = false,
-}) => {
+}: MessageTitleDateListProps) => {
   return (
     <Card
       className={cn('w-full max-w-2xl shadow-none', {

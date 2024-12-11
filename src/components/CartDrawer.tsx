@@ -20,10 +20,7 @@ interface CartDrawerProps {
   onOpenChangeAction: (open: boolean) => void;
 }
 
-export const CartDrawer: React.FC<CartDrawerProps> = ({
-  isOpen,
-  onOpenChangeAction,
-}) => {
+export const CartDrawer = ({ isOpen, onOpenChangeAction }: CartDrawerProps) => {
   const cartItems = useAppSelector((state) => state.cart.items);
   const { handleRemove } = useCartActions();
 

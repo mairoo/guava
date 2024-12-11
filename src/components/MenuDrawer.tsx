@@ -25,11 +25,11 @@ interface MenuDrawerProps {
   onOpenChangeAction: (open: boolean) => void;
 }
 
-export const MenuDrawer: React.FC<MenuDrawerProps> = ({
+export const MenuDrawer = ({
   isOpen,
   isSearching,
   onOpenChangeAction,
-}) => {
+}: MenuDrawerProps) => {
   const { isAuthenticated } = useAuth();
 
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
