@@ -1,28 +1,27 @@
+'use client';
+
 import { Pagination } from '@/components/common';
 import { FlexColumn, GridRow, TitledSection } from '@/components/layout';
 import { InquiryList, LoginHistory, OrderList } from '@/components/order';
-
-import React from 'react';
+import { useGetMyOrdersQuery } from '@/store/order/api';
+import React, { useState } from 'react';
 
 const OrderListPage = () => {
-  const orders = [
-    {
-      id: 'e3d12d89-1234-5678-90ab-cdef01234567',
-      status: '입금확인중',
-      paymentMethod: '계좌이체/무통장입금',
-      orderDate: '2024-12-07 20:52',
-      totalAmount: 91000,
-      url: '/orders/e3d12d89-1234-5678-90ab',
-    },
-    {
-      id: 'f4e23e90-2345-6789-01bc-defa12345678',
-      status: '발송완료',
-      paymentMethod: '카드결제',
-      orderDate: '2024-12-07 19:30',
-      totalAmount: 128000,
-      url: '/orders/f4e23e90-2345-6789-01bc-defa12345678',
-    },
-  ];
+  const [page, setPage] = useState(0);
+  const {
+    data: orderData,
+    isLoading,
+    error,
+  } = useGetMyOrdersQuery({
+    page,
+    size: 20,
+  });
+
+  const orders = orderData?.data.content ?? [];
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   const logins = [
     {
@@ -61,8 +60,20 @@ const OrderListPage = () => {
   return (
     <FlexColumn>
       <TitledSection title="주문 및 발송 내역" showBorder>
-        <OrderList orders={orders} />
-        <Pagination />
+        {isLoading ? (
+          <div>로딩 중...</div>
+        ) : error ? (
+          <div>주문 내역을 불러오는데 실패했습니다.</div>
+        ) : (
+          <>
+            <OrderList orders={orders} />
+            <Pagination
+              page={page}
+              totalPages={orderData?.data.totalPages ?? 0}
+              onChange={handlePageChange}
+            />
+          </>
+        )}
       </TitledSection>
 
       <GridRow cols={2} gapX={8} gapY={0}>

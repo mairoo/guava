@@ -3,6 +3,7 @@ import { authSlice } from '@/store/auth/slice';
 import { cartApi } from '@/store/cart/api';
 import { cartSlice } from '@/store/cart/slice';
 import { categoryApi } from '@/store/categories/api';
+import { orderApi } from '@/store/order/api';
 import { productApi } from '@/store/products/api';
 
 import { configureStore } from '@reduxjs/toolkit';
@@ -15,6 +16,7 @@ export const store = configureStore({
     [cartApi.reducerPath]: cartApi.reducer,
     [productApi.reducerPath]: productApi.reducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
+    [orderApi.reducerPath]: orderApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -22,6 +24,7 @@ export const store = configureStore({
       cartApi.middleware,
       productApi.middleware,
       categoryApi.middleware,
+      orderApi.middleware,
     ),
 });
 
