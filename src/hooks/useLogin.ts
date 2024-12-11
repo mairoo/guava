@@ -18,7 +18,7 @@ interface UseLoginReturn {
   /**
    * 로그인 처리 함수
    */
-  login: (data: Auth.LoginRequest) => Promise<void>;
+  login: (data: Auth.SignInRequest) => Promise<void>;
 
   /**
    * 로그인 처리 중 여부
@@ -51,7 +51,7 @@ export const useLogin = ({
 
   const clearError = () => setError(null);
 
-  const handleLogin = async (data: Auth.LoginRequest) => {
+  const handleLogin = async (data: Auth.SignInRequest) => {
     // 이미 처리 중이면 중복 실행 방지
     if (isProcessing) return;
 

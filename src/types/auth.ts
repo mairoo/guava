@@ -5,7 +5,7 @@ export namespace Auth {
    * @property password - 사용자 비밀번호
    * @property rememberMe - 자동 로그인 활성화 여부
    */
-  export interface LoginRequest {
+  export interface SignInRequest {
     email: string;
     password: string;
     rememberMe: boolean;
@@ -39,7 +39,7 @@ export namespace Auth {
    * @property data.tokenType - 토큰 타입 (예: "Bearer")
    * @property data.expiresIn - 토큰 만료 시간 (초)
    */
-  export interface LoginResponse {
+  export interface SignInResponse {
     status: number;
     timestamp: string;
     message: string;
@@ -57,7 +57,7 @@ export namespace Auth {
    * @property email - 사용자 이메일
    * @property password - 사용자 비밀번호
    */
-  export interface LogoutResponse {
+  export interface SignOutResponse {
     username: string;
     email: string;
     password: string;

@@ -29,7 +29,7 @@ export const authSlice = createSlice({
      * @param state - 현재 상태
      * @param action - 로그인 응답 데이터를 페이로드로 포함하는 액션
      */
-    setCredentials: (state, action: PayloadAction<Auth.LoginResponse>) => {
+    setCredentials: (state, action: PayloadAction<Auth.SignInResponse>) => {
       state.accessToken = action.payload.data.accessToken;
       state.tokenType = action.payload.data.tokenType;
       state.expiresIn = action.payload.data.expiresIn;

@@ -39,7 +39,7 @@ const SignInPage = () => {
     watch,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<Auth.LoginRequest>({
+  } = useForm<Auth.SignInRequest>({
     resolver: yupResolver(schema),
     defaultValues: {
       email: '',
@@ -57,7 +57,7 @@ const SignInPage = () => {
    * 4. 로그인 폼 제출 핸들러
    * @param data 사용자가 입력한 로그인 정보 (이메일, 비밀번호, 자동로그인 여부)
    */
-  const onSubmit = async (data: Auth.LoginRequest) => {
+  const onSubmit = async (data: Auth.SignInRequest) => {
     // 이미 처리 중이면 중복 제출 방지
     if (isProcessing) return;
     await login(data);

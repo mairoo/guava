@@ -23,7 +23,7 @@ export const authApi = createApi({
      * @param credentials - 로그인에 필요한 인증 정보 (이메일, 비밀번호, 자동로그인 여부)
      * @returns 로그인 응답 데이터 (액세스 토큰, 만료 시간 등)
      */
-    login: builder.mutation<Auth.LoginResponse, Auth.LoginRequest>({
+    login: builder.mutation<Auth.SignInResponse, Auth.SignInRequest>({
       // API 요청 설정
       query: (credentials) => ({
         url: '/auth/sign-in',
@@ -56,7 +56,7 @@ export const authApi = createApi({
      * 토큰 갱신 엔드포인트
      * 액세스 토큰이 만료되었을 때 새로운 토큰을 발급받음
      */
-    refresh: builder.mutation<Auth.LoginResponse, void>({
+    refresh: builder.mutation<Auth.SignInResponse, void>({
       query: () => ({
         url: '/auth/refresh',
         method: 'POST',
@@ -86,7 +86,7 @@ export const authApi = createApi({
      * 로그아웃 엔드포인트
      * 서버에 로그아웃 요청을 보내고 클라이언트의 인증 상태를 초기화
      */
-    logout: builder.mutation<Auth.LogoutResponse, void>({
+    logout: builder.mutation<Auth.SignOutResponse, void>({
       query: () => ({
         url: '/auth/sign-out',
         method: 'POST',

@@ -72,7 +72,7 @@ export const baseQueryWithRetry: BaseQueryFn<
         );
 
         if (refreshResult.data) {
-          const refreshResponse = refreshResult.data as Auth.LoginResponse;
+          const refreshResponse = refreshResult.data as Auth.SignInResponse;
           storage.setLastRefreshTime(Date.now());
           api.dispatch(setCredentials(refreshResponse));
         }
@@ -121,7 +121,7 @@ export const baseQueryWithRetry: BaseQueryFn<
 
         if (refreshResult.data) {
           // 토큰 갱신 성공
-          const refreshResponse = refreshResult.data as Auth.LoginResponse;
+          const refreshResponse = refreshResult.data as Auth.SignInResponse;
           storage.setLastRefreshTime(Date.now());
           api.dispatch(setCredentials(refreshResponse));
           refreshAttempts = 0; // 성공하면 시도 횟수 초기화
