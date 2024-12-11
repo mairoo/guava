@@ -1,5 +1,6 @@
 import { baseQueryWithRetry } from '@/store/baseQuery';
 import { Products } from '@/types/product';
+import { ApiResponse } from '@/types/response';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 export const productApi = createApi({
@@ -8,7 +9,7 @@ export const productApi = createApi({
   tagTypes: ['Products'],
   endpoints: (builder) => ({
     getProducts: builder.query<
-      Products.ProductsResponse,
+      ApiResponse<Products.Product[]>,
       Products.ProductsRequest
     >({
       query: ({ categorySlug }) => ({
@@ -21,7 +22,7 @@ export const productApi = createApi({
       providesTags: ['Products'],
     }),
 
-    getProduct: builder.query<Products.ProductResponse, { id: number }>({
+    getProduct: builder.query<ApiResponse<Products.Product>, { id: number }>({
       query: ({ id }) => ({
         url: `/products/${id}`,
         method: 'GET',
@@ -30,7 +31,7 @@ export const productApi = createApi({
     }),
 
     searchProducts: builder.query<
-      Products.ProductsResponse,
+      ApiResponse<Products.Product>,
       Products.SearchProductsRequest
     >({
       query: ({ categorySlug, keyword }) => ({

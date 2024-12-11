@@ -9,7 +9,7 @@ import {
 } from '@/components/message';
 import { ProductGrid, ProductItemBuy } from '@/components/product';
 import { Card } from '@/components/ui/card';
-import { categories } from '@/data/categories';
+import { useGetCategoryQuery } from '@/store/categories/api';
 import { useGetProductsQuery } from '@/store/products/api';
 import { CategoryDetailParams } from '@/types/params';
 import React, { use } from 'react';
@@ -20,13 +20,37 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
 
   const categorySlug = decodeURIComponent(resolvedParams.slug);
 
-  const category = categories.find((c) => c.slug === categorySlug);
+  const {
+    data: categoryResponse,
+    isLoading: isLoadingCategory,
+    error: errorCategory,
+  } = useGetCategoryQuery(categorySlug);
+
+  const category = categoryResponse?.data;
 
   const {
-    data: response,
-    isLoading,
-    isError,
+    data: productResponse,
+    isLoading: isLoadingProduct,
+    isError: isErrorProduct,
   } = useGetProductsQuery({ categorySlug });
+
+  if (isLoadingProduct || isLoadingCategory) {
+    return (
+      <LoadingMessage
+        message="로딩 중"
+        description="카테고리와 상품 정보를 불러오고 있습니다. 잠시만 기다려주세요."
+      />
+    );
+  }
+
+  if (errorCategory || isErrorProduct) {
+    return (
+      <ErrorMessage
+        message="카테고리 또는 상품을 불러오는데 실패했습니다"
+        description="잠시 후 다시 시도해주세요. 문제가 지속되면 고객센터로 문의해주세요."
+      />
+    );
+  }
 
   if (!category) {
     return (
@@ -37,25 +61,7 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
     );
   }
 
-  if (isLoading) {
-    return (
-      <LoadingMessage
-        message="로딩 중"
-        description="상품 정보를 불러오고 있습니다. 잠시만 기다려주세요."
-      />
-    );
-  }
-
-  if (isError) {
-    return (
-      <ErrorMessage
-        message="상품을 불러오는데 실패했습니다"
-        description="잠시 후 다시 시도해주세요. 문제가 지속되면 고객센터로 문의해주세요."
-      />
-    );
-  }
-
-  if (!response?.data) {
+  if (!productResponse?.data) {
     return (
       <InfoMessage
         message="데이터가 없습니다"
@@ -72,7 +78,7 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
         </div>
       </Card>
       <ProductGrid gap={2} py={0}>
-        {response.data.map((product) => (
+        {productResponse.data.map((product) => (
           <ProductItemBuy
             key={product.id}
             productId={product.id}
@@ -84,7 +90,7 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
               100
             }
             price={product.sellingPrice}
-            imageUrl={category.imageUrl}
+            imageUrl={`https://pincoin-s3.s3.amazonaws.com/media/${category.thumbnail}`}
           />
         ))}
       </ProductGrid>

@@ -185,7 +185,7 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>오류가 발생했습니다.</div>;
 
-  const productImage = <ProductImage imageUrl={category?.imageUrl} />;
+  const productImage = <ProductImage imageUrl={category?.thumbnail} />;
   const productInfo = <ProductInfo product={product} />;
   const quantitySelector = (
     <QuantitySelector

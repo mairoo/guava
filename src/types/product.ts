@@ -1,5 +1,3 @@
-import { ApiResponse } from '@/types/response';
-
 export namespace Products {
   // 일반 사용자용 상품 정보
   export interface Product {
@@ -52,11 +50,4 @@ export namespace Products {
   export interface SearchProductsRequest extends ProductsRequest {
     keyword: string;
   }
-
-  // API 응답 타입
-  export type ProductsResponse = ApiResponse<Product[]>;
-  export type ProductResponse = ApiResponse<Product>;
-
-  export type AdminProductsResponse = ApiResponse<AdminProduct[]>;
-  export type AdminProductResponse = ApiResponse<AdminProduct>;
 }

@@ -1,6 +1,6 @@
-import { Category } from '@/types/category';
+import { Categories } from '@/types/category';
 
-export const categories: Category[] = [
+export const categories: Categories.Category[] = [
   {
     id: 2,
     title: '구글기프트카드',
@@ -61,7 +61,7 @@ export const categories: Category[] = [
       '구글기프트코드|온라인|구매|할인|코드|구글플레이스토어|핀번호|구글플레이',
     naverBrandName: '구글플레이',
     naverMakerName: 'Google Payment Korea Limited',
-    imageUrl: '/categories/google.jpg',
+    thumbnail: '/categories/google.jpg',
   },
   {
     id: 3,
@@ -92,7 +92,7 @@ export const categories: Category[] = [
       '넥슨캐시|넥슨핀|핀번호|온라인상품권|던파|메이플|피파온라인|서든어택',
     naverBrandName: '넥슨카드',
     naverMakerName: '(주)넥슨코리아',
-    imageUrl: '/categories/nexon.png',
+    thumbnail: '/categories/nexon.png',
   },
   {
     id: 8,
@@ -121,7 +121,7 @@ export const categories: Category[] = [
     naverSearchTag: '컬쳐랜드|문상|구글환전|지마켓|G마켓|스마일페이',
     naverBrandName: '컬쳐랜드상품권-컬쳐캐시',
     naverMakerName: '(주)한국문화진흥',
-    imageUrl: '/categories/cultureland.jpg',
+    thumbnail: '/categories/cultureland.jpg',
   },
   {
     id: 7,
@@ -149,7 +149,7 @@ export const categories: Category[] = [
     naverSearchTag: '북앤라이프|도서문화|도서문상|넥슨충전|넥슨캐시',
     naverBrandName: '도서문화상품권',
     naverMakerName: '(주)티알엔',
-    imageUrl: '/categories/booknlife.png',
+    thumbnail: '/categories/booknlife.png',
   },
   {
     id: 27,
@@ -176,7 +176,7 @@ export const categories: Category[] = [
     naverSearchTag: '컬쳐랜드|문상|구글환전|지마켓|G마켓|스마일페이',
     naverBrandName: '문화상품권',
     naverMakerName: '(주)문화상품권',
-    imageUrl: '/categories/culturegift.jpg',
+    thumbnail: '/categories/culturegift.jpg',
   },
   {
     id: 22,
@@ -218,7 +218,7 @@ export const categories: Category[] = [
       '아프리카|아프리카TV|개인방송|BJ|유튜버|별풍선|별풍|별풍선상품권',
     naverBrandName: '별풍선상품권',
     naverMakerName: '아프리카TV',
-    imageUrl: '/categories/afreecatv.png',
+    thumbnail: '/categories/afreecatv.png',
   },
   {
     id: 10,
@@ -247,7 +247,7 @@ export const categories: Category[] = [
     naverSearchTag: '엠게임|거상|로아|로스트아크|다크에덴|온라인상품권|핀번호',
     naverBrandName: '에그머니',
     naverMakerName: '(주)한국선불카드',
-    imageUrl: '/categories/eggmoney.png',
+    thumbnail: '/categories/eggmoney.png',
   },
   {
     id: 14,
@@ -275,7 +275,7 @@ export const categories: Category[] = [
     naverSearchTag: '틴캐쉬|리그오브레전드|롤|LOL|로스트아크|로아|구글환전',
     naverBrandName: '틴캐시',
     naverMakerName: '(주)플레이통',
-    imageUrl: '/categories/teencash.png',
+    thumbnail: '/categories/teencash.png',
   },
   {
     id: 6,
@@ -305,7 +305,7 @@ export const categories: Category[] = [
     naverSearchTag: '리그오브레전드|롤|LOL|스마트문상|게임문상|게임문화상품권',
     naverBrandName: '스마트문화상품권',
     naverMakerName: '(주)한국문화진흥',
-    imageUrl: '/categories/smart.png',
+    thumbnail: '/categories/smart.png',
   },
   {
     id: 24,
@@ -329,7 +329,7 @@ export const categories: Category[] = [
     naverSearchTag: '플레이스테이션,기프트카드,교환권,페이즈',
     naverBrandName: '플레이스테이션교환권',
     naverMakerName: '(주)한국페이즈서비스',
-    imageUrl: '/categories/playstation.jpg',
+    thumbnail: '/categories/playstation.jpg',
   },
   {
     id: 26,
@@ -358,7 +358,7 @@ export const categories: Category[] = [
     naverSearchTag: '요기요',
     naverBrandName: '요기요상품권',
     naverMakerName: '(주)위대한상상',
-    imageUrl: '/categories/yogiyo.png',
+    thumbnail: '/categories/yogiyo.png',
   },
   {
     id: 28,
@@ -390,7 +390,7 @@ export const categories: Category[] = [
     naverSearchTag: '스타벅스',
     naverBrandName: '스타벅스 상품권',
     naverMakerName: 'SSG',
-    imageUrl: '/categories/starbucks.jpg',
+    thumbnail: '/categories/starbucks.jpg',
   },
   {
     id: 17,
@@ -412,7 +412,7 @@ export const categories: Category[] = [
     naverSearchTag: '와우|오버워치|월드오브크래프트',
     naverBrandName: '와우캐시',
     naverMakerName: '블리자드 엔터테인먼트 유한회사',
-    imageUrl: '/categories/wow.png',
+    thumbnail: '/categories/wow.png',
   },
   {
     id: 16,
@@ -433,7 +433,7 @@ export const categories: Category[] = [
     naverSearchTag: '리니지|블레이드앤소울|엔씨소프트',
     naverBrandName: 'N코인',
     naverMakerName: '(주)엔씨소프트',
-    imageUrl: '/categories/ncoin.png',
+    thumbnail: '/categories/ncoin.png',
   },
   {
     id: 4,
@@ -461,7 +461,7 @@ export const categories: Category[] = [
     naverSearchTag: '한게임|피망|넷마블|엠게임|온라인상품권',
     naverBrandName: '퍼니카드',
     naverMakerName: '(주)KG모빌리언스',
-    imageUrl: '/categories/funnycard.png',
+    thumbnail: '/categories/funnycard.png',
   },
   {
     id: 19,
@@ -482,7 +482,7 @@ export const categories: Category[] = [
     naverSearchTag: '아이템거래|아이템베이',
     naverBrandName: '아이템베이선불쿠폰',
     naverMakerName: '(주)아이템베이',
-    imageUrl: '/categories/itembay.png',
+    thumbnail: '/categories/itembay.png',
   },
   {
     id: 18,
@@ -503,6 +503,6 @@ export const categories: Category[] = [
     naverSearchTag: '아이템거래|아이템매니아',
     naverBrandName: '매니아선불쿠폰',
     naverMakerName: '(주)아이엠아이',
-    imageUrl: '/categories/itemmania.png',
+    thumbnail: '/categories/itemmania.png',
   },
 ];
