@@ -6,6 +6,7 @@ import { useLogout } from '@/hooks/useLogout';
 import { useMounted } from '@/hooks/useMounted';
 import { useRefreshMutation } from '@/store/auth/api';
 import { setCredentials, setLoading } from '@/store/auth/slice';
+import { hydrateCart } from '@/store/cart/slice';
 import { useAppDispatch } from '@/store/hooks';
 import { storage } from '@/utils';
 import { auth } from '@/utils/auth';
@@ -45,6 +46,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         // 둘 다 없으면 인증 체크 자체를 건너뜀 (비로그인 상태로 간주)
         if (!isAuthenticatedCookie && !rememberMe) {
           dispatch(setLoading(false));
+
+          // 비회원도 로컬스토리지에 장바구니가 있으면 리덕스 스토어에 복원
+          dispatch(hydrateCart());
           return;
         }
 
