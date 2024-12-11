@@ -4,10 +4,13 @@ import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetClose,
-  SheetContent, SheetDescription,
+  SheetContent,
+  SheetDescription,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { useAppSelector } from '@/store/hooks';
+import { formatKRW } from '@/utils';
 import { ShoppingBag, X } from 'lucide-react';
 import React from 'react';
 
@@ -20,56 +23,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   isOpen,
   onOpenChangeAction,
 }) => {
-  const cartItems = [
-    {
-      id: 1,
-      name: '구글플레이 기프트카드 1만원',
-      price: 10000,
-      quantity: 2,
-    },
-    {
-      id: 2,
-      name: '구글플레이 기프트카드 3만원',
-      price: 30000,
-      quantity: 1,
-    },
-    {
-      id: 3,
-      name: '구글플레이 기프트카드 5만원',
-      price: 50000,
-      quantity: 1,
-    },
-    {
-      id: 4,
-      name: '넷플릭스 기프트카드 3개월',
-      price: 45000,
-      quantity: 2,
-    },
-    {
-      id: 5,
-      name: '플레이스테이션 기프트카드 5만원',
-      price: 50000,
-      quantity: 1,
-    },
-    {
-      id: 6,
-      name: '닌텐도 기프트카드 3만원',
-      price: 30000,
-      quantity: 3,
-    },
-    {
-      id: 7,
-      name: '아이튠즈 기프트카드 3만원',
-      price: 30000,
-      quantity: 2,
-    },
-    {
-      id: 8,
-      name: '로블록스 기프트카드 1만원',
-      price: 10000,
-      quantity: 4,
-    },
-  ];
+  const cartItems = useAppSelector((state) => state.cart.items);
+  const totalAmount = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
 
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
     e.stopPropagation();
@@ -118,17 +76,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <div className="py-2">
                 {cartItems.map((item) => (
                   <div
-                    key={item.id}
+                    key={item.productId}
                     className="flex items-center justify-between px-4 py-3 border-b last:border-b-0"
                   >
                     <div className="flex-1">
                       <div className="font-medium">{item.name}</div>
                       <div className="text-sm text-gray-500 mt-1">
-                        {item.price.toLocaleString()}원 x {item.quantity}개
+                        {formatKRW.format(item.price)} x {item.quantity}개
                       </div>
                     </div>
                     <div className="font-medium ml-4 text-right">
-                      {(item.price * item.quantity).toLocaleString()}원
+                      {formatKRW.format(item.price * item.quantity)}
                     </div>
                   </div>
                 ))}
@@ -140,27 +98,21 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             )}
           </div>
 
-          {cartItems.length > 0 && (
-            <div className="border-t">
-              <h2 className="h-14 flex items-center justify-between px-4 text-lg font-semibold bg-green-50 text-lime-600">
-                <span>총 상품금액</span>
-                <span>
-                  {cartItems
-                    .reduce((sum, item) => sum + item.price * item.quantity, 0)
-                    .toLocaleString()}
-                  원
-                </span>
-              </h2>
-              <div className="p-4">
-                <Button
-                  variant="outline"
-                  className="w-full bg-white hover:bg-gray-50"
-                >
-                  주문하기
-                </Button>
-              </div>
+          <div className="border-t">
+            <h2 className="h-14 flex items-center justify-between px-4 text-lg font-semibold bg-green-50 text-lime-600">
+              <span>총 상품금액</span>
+              <span>{formatKRW.format(totalAmount)}</span>
+            </h2>
+            <div className="p-4">
+              <Button
+                variant="outline"
+                disabled={cartItems.length === 0}
+                className="w-full bg-white hover:bg-gray-50"
+              >
+                주문하기
+              </Button>
             </div>
-          )}
+          </div>
         </div>
       </SheetContent>
     </Sheet>
