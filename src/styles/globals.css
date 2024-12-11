@@ -18,3 +18,37 @@ html {
     margin-left: auto;
     margin-right: auto;
 }
+
+/* Radix UI의 Toast 요소 직접 변경 */
+/* styles/globals.css에 추가 */
+@media (max-width: 640px) {
+    [role="region"] > ol {
+        top: auto !important;
+        bottom: 0 !important;
+        right: 50% !important;
+        transform: translateX(50%) !important;
+        flex-direction: column !important;
+    }
+
+    [role="status"][data-radix-collection-item] {
+        width: calc(100vw - 2rem) !important;
+        max-width: 420px !important;
+    }
+
+    /* 애니메이션 수정 */
+    [data-state="open"] {
+        --tw-enter-translate-y: 100% !important;
+        animation-name: enterFromBottom !important;
+    }
+}
+
+@keyframes enterFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
