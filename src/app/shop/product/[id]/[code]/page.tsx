@@ -30,7 +30,7 @@ interface QuantitySelectorProps {
  * 상품 이미지 컴포넌트
  */
 const ProductImage = ({ imageUrl }: { imageUrl?: string }) => (
-  <div className="w-full relative aspect-[170/100] border border-gray-800 rounded-md">
+  <div className="w-full relative aspect-[170/100] border border-gray-800 rounded-lg">
     <Image
       src={imageUrl || '/placeholders/170x100.svg'}
       alt="Product placeholder"
