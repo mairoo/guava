@@ -14,7 +14,7 @@ export const CartItemMobile = ({ item }: Props) => {
   const { handleQuantityChange, handleRemove } = useCartActions();
 
   return (
-    <Card className="hover:bg-slate-50 transition-colors">
+    <Card>
       <CardContent className="pt-6 p-3 space-y-3">
         <div className="flex justify-between items-center">
           <span className="text-sm font-semibold">
