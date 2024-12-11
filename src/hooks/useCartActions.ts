@@ -120,7 +120,7 @@ export const useCartActions = () => {
           title: `${cartItem.name} ${cartItem.subtitle || ''}`,
           description: '장바구니에 담았습니다.',
           duration: 1500,
-          className: 'bg-amber-100 border border-amber-300 shadow-lg',
+          className: 'bg-blue-100 border border-blue-300 shadow-lg',
         });
       } catch (error) {
         console.error('장바구니 추가 실패:', error);
