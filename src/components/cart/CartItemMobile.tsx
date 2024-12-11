@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent } from '@/components/ui/card';
-import { useCartActions } from '@/hooks/useCartActions';
+import { useCartItemActions } from '@/hooks/useCartItemActions';
 import { CartItem } from '@/types/cart';
 import { formatKRW } from '@/utils';
 import { Minus, Plus, X } from 'lucide-react';
@@ -12,7 +12,9 @@ interface Props {
 }
 
 export const CartItemMobile = ({ item }: Props) => {
-  const { handleQuantityChange, handleRemove } = useCartActions();
+  const { increaseQuantity, decreaseQuantity, removeItem } = useCartItemActions(
+    { item },
+  );
 
   return (
     <Card>
@@ -29,9 +31,7 @@ export const CartItemMobile = ({ item }: Props) => {
         <div className="flex items-center border rounded-lg w-full">
           <button
             className="px-3 py-1 hover:bg-slate-100"
-            onClick={() =>
-              handleQuantityChange(item.productId, -1, item.quantity)
-            }
+            onClick={() => decreaseQuantity()}
           >
             <Minus size={16} className="text-slate-500" />
           </button>
@@ -40,15 +40,13 @@ export const CartItemMobile = ({ item }: Props) => {
           </span>
           <button
             className="px-3 py-1 hover:bg-slate-100"
-            onClick={() =>
-              handleQuantityChange(item.productId, 1, item.quantity)
-            }
+            onClick={() => increaseQuantity()}
           >
             <Plus size={16} className="text-slate-500" />
           </button>
           <button
             className="px-3 py-1 border-l hover:bg-slate-100"
-            onClick={() => handleRemove(item.productId)}
+            onClick={() => removeItem()}
           >
             <X size={16} className="text-slate-500" />
           </button>
