@@ -30,7 +30,7 @@ interface QuantitySelectorProps {
  * 상품 이미지 컴포넌트
  */
 const ProductImage = ({ imageUrl }: { imageUrl?: string }) => (
-  <div className="w-full relative aspect-[170/100]">
+  <div className="w-full relative aspect-[170/100] border border-gray-800 rounded-md">
     <Image
       src={imageUrl || '/placeholders/170x100.svg'}
       alt="Product placeholder"
@@ -200,16 +200,16 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
     <FlexColumn spacing={2} marginY={2} className="w-full">
       <Breadcrumbs items={breadcrumbItems} marginY={1} />
       {isDesktop ? (
-        <div className="grid grid-cols-[2fr,1fr] gap-8 w-full">
-          {productDescription}
-          <div className="space-y-8 w-full">
+        <div className="grid grid-cols-[3fr,1fr] gap-8 w-full">
+          <Card className="p-6">{productDescription}</Card>
+          <div className="space-y-2 w-full">
             {productImage}
             {productInfo}
             {quantitySelector}
           </div>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-2">
           {productImage}
           {productInfo}
           {quantitySelector}
