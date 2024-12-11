@@ -18,6 +18,7 @@ interface ProductItemBuyProps {
   imageUrl: string;
   name: string;
   subtitle: string;
+  code: string;
   discountRate: number;
   price: number;
 }
@@ -27,6 +28,7 @@ export const ProductItemBuy = ({
   imageUrl = 'https://placehold.co/170x100?text=Product',
   name = '상품명',
   subtitle = '',
+  code = '',
   discountRate = 1.0,
   price = 0,
 }: ProductItemBuyProps) => {
@@ -44,6 +46,7 @@ export const ProductItemBuy = ({
         productId,
         name,
         subtitle,
+        code,
         price,
         quantity: 1,
       };
@@ -74,7 +77,7 @@ export const ProductItemBuy = ({
 
   return (
     <Card className="w-full overflow-hidden shadow-none hover:shadow-md transition-shadow border-gray-200">
-      <Link href={`/shop/product/${productId}/${name}`} className="block">
+      <Link href={`/shop/product/${productId}/${code}`} className="block">
         <CardContent className="p-0">
           <div className="relative aspect-[157/100] w-full overflow-hidden">
             <img

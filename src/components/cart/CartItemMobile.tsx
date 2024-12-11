@@ -5,6 +5,7 @@ import { useCartActions } from '@/hooks/useCartActions';
 import { CartItem } from '@/types/cart';
 import { formatKRW } from '@/utils';
 import { Minus, Plus, X } from 'lucide-react';
+import Link from 'next/link';
 
 interface Props {
   item: CartItem;
@@ -17,9 +18,12 @@ export const CartItemMobile = ({ item }: Props) => {
     <Card>
       <CardContent className="pt-6 p-3 space-y-3">
         <div className="flex justify-between items-center">
-          <span className="text-sm font-semibold">
+          <Link
+            href={`/shop/product/${item.productId}/${item.code}`}
+            className="text-sm font-semibold"
+          >
             {item.name} {item.subtitle}
-          </span>
+          </Link>
           <span className="text-sm">{formatKRW.format(item.price)}</span>
         </div>
         <div className="flex items-center border rounded-lg w-full">

@@ -2,6 +2,7 @@ export interface CartItem {
   productId: number;
   name: string;
   subtitle: string;
+  code: string;
   price: number;
   quantity: number;
 }

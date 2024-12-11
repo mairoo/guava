@@ -6,7 +6,11 @@ import {
   MessageTitleDateList,
   TitledSection,
 } from '@/components/layout';
-import { ProductGrid, CategoryItem, ProductItemBuy } from '@/components/product';
+import {
+  CategoryItem,
+  ProductGrid,
+  ProductItemBuy,
+} from '@/components/product';
 import { categories } from '@/data/categories';
 
 import React from 'react';
@@ -74,45 +78,51 @@ const testimonialData = [
 
 const bestsellers = [
   {
-    id: 1,
+    productId: 1,
     name: '한게임상품권',
     subtitle: '5만원',
+    code: '한게임5만',
     discountRate: 0.0,
     imageUrl: 'https://placehold.co/170x100',
   },
   {
-    id: 2,
+    productId: 2,
     name: '구글기프트카드',
     subtitle: '5만원',
+    code: '구글5만',
     discountRate: 4.0,
     imageUrl: 'https://placehold.co/170x100',
   },
   {
-    id: 3,
+    productId: 3,
     name: '아프리카별풍선',
     subtitle: '5만원',
+    code: '아프리카500개',
     discountRate: 5.0,
     imageUrl: 'https://placehold.co/170x100',
   },
   {
-    id: 4,
+    productId: 4,
     name: '에그머니',
     subtitle: '5만원',
+    code: '에그5만',
     discountRate: 9.0,
     imageUrl: 'https://placehold.co/170x100',
   },
   {
-    id: 5,
+    productId: 5,
     name: '플레이스테이션',
     subtitle: '5만원',
+    code: '플스5만',
     discountRate: 7.0,
     imageUrl: 'https://placehold.co/170x100',
   },
   {
-    id: 6,
+    productId: 6,
     name: '틴캐시',
-    discountRate: 7.0,
     subtitle: '5만원',
+    code: '틴캐시5만',
+    discountRate: 7.0,
     imageUrl: 'https://placehold.co/170x100',
   },
 ];
@@ -170,9 +180,11 @@ const Page = () => (
       <ProductGrid gap={2} py={0}>
         {bestsellers.map((product) => (
           <ProductItemBuy
-            key={product.id}
+            key={product.productId}
+            productId={product.productId}
             name={product.name}
             subtitle={product.subtitle}
+            code={product.code}
             discountRate={product.discountRate}
             price={3550}
             imageUrl={product.imageUrl}

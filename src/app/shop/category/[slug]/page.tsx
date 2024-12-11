@@ -78,6 +78,7 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
             productId={product.id}
             name={product.name}
             subtitle={product.subtitle}
+            code={product.code}
             discountRate={
               ((product.listPrice - product.sellingPrice) / product.listPrice) *
               100
