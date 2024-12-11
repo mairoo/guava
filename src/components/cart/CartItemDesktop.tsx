@@ -4,6 +4,7 @@ import { useCartItemActions } from '@/hooks/useCartItemActions';
 import { CartItem } from '@/types/cart';
 import { formatKRW } from '@/utils';
 import { Minus, Plus, X } from 'lucide-react';
+import Link from 'next/link';
 
 interface Props {
   item: CartItem;
@@ -16,9 +17,12 @@ export const CartItemDesktop = ({ item }: Props) => {
 
   return (
     <div className="grid grid-cols-4 gap-4 p-3 items-center hover:bg-slate-50 transition-colors">
-      <div className="text-sm font-semibold">
+      <Link
+        href={`/shop/product/${item.productId}/${item.code}`}
+        className="text-sm font-semibold"
+      >
         {item.name} {item.subtitle}
-      </div>
+      </Link>
       <div className="text-sm text-right">{formatKRW.format(item.price)}</div>
       <div className="text-sm text-center">
         <div className="inline-flex items-center border rounded-lg">
