@@ -9,9 +9,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { useCartActions } from '@/hooks/useCartActions';
 import { useAppSelector } from '@/store/hooks';
 import { formatKRW } from '@/utils';
-import { ShoppingBag, X } from 'lucide-react';
+import { ShoppingBag, Trash2, X } from 'lucide-react';
 import React from 'react';
 
 interface CartDrawerProps {
@@ -24,6 +25,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onOpenChangeAction,
 }) => {
   const cartItems = useAppSelector((state) => state.cart.items);
+  const { handleRemove } = useCartActions();
+
   const totalAmount = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
@@ -77,7 +80,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 {cartItems.map((item) => (
                   <div
                     key={item.productId}
-                    className="flex items-center justify-between px-4 py-3 border-b last:border-b-0"
+                    className="flex items-center justify-between px-3 py-3 border-b last:border-b-0"
                   >
                     <div className="flex-1">
                       <div className="font-medium">{item.name}</div>
@@ -85,8 +88,19 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         {formatKRW.format(item.price)} x {item.quantity}개
                       </div>
                     </div>
-                    <div className="font-medium ml-4 text-right">
-                      {formatKRW.format(item.price * item.quantity)}
+                    <div className="flex items-center gap-2">
+                      <div className="font-medium text-right">
+                        {formatKRW.format(item.price * item.quantity)}
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 rounded-full bg-pink-50 text-pink-500 hover:bg-pink-100 hover:text-pink-600"
+                        onClick={() => handleRemove(item.productId)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        <span className="sr-only">상품 삭제</span>
+                      </Button>
                     </div>
                   </div>
                 ))}
