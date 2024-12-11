@@ -16,25 +16,30 @@ import React, { use } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
+  // 1. URL 파라미터 처리
   const resolvedParams = use(params);
-
   const categorySlug = decodeURIComponent(resolvedParams.slug);
 
+  // 2. API 데이터 패칭
   const {
     data: categoryResponse,
     isLoading: isLoadingCategory,
     error: errorCategory,
   } = useGetCategoryQuery(categorySlug);
 
-  const category = categoryResponse?.data;
-
   const {
     data: productResponse,
     isLoading: isLoadingProduct,
-    isError: isErrorProduct,
+    error: errorProduct,
   } = useGetProductsQuery({ categorySlug });
 
-  if (isLoadingProduct || isLoadingCategory) {
+  // 3. 데이터 추출
+  const category = categoryResponse?.data;
+  const products = productResponse?.data;
+
+  // 4. 상태별 UI 렌더링
+  // 4-1. 로딩 상태
+  if (isLoadingCategory || isLoadingProduct) {
     return (
       <LoadingMessage
         message="로딩 중"
@@ -43,7 +48,8 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
     );
   }
 
-  if (errorCategory || isErrorProduct) {
+  // 4-2. 에러 상태 (API 오류)
+  if (errorCategory || errorProduct) {
     return (
       <ErrorMessage
         message="카테고리 또는 상품을 불러오는데 실패했습니다"
@@ -52,6 +58,7 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
     );
   }
 
+  // 4-3. 카테고리가 존재하지 않는 경우
   if (!category) {
     return (
       <WarningMessage
@@ -61,24 +68,30 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
     );
   }
 
-  if (!productResponse?.data) {
+  // 4-4. 상품이 없는 경우
+  if (!products?.length) {
+    // 배열의 길이 체크 추가
     return (
       <InfoMessage
-        message="데이터가 없습니다"
+        message="상품이 없습니다"
         description="현재 이 카테고리에 등록된 상품이 없습니다."
       />
     );
   }
 
+  // 5. 메인 UI 렌더링
   return (
     <FlexColumn spacing={2} marginY={2}>
+      {/* 카테고리 설명 */}
       <Card className="w-full border border-yellow-200 bg-yellow-50 shadow-none p-1">
         <div className="prose prose-sm max-w-none">
           <ReactMarkdown>{category.description}</ReactMarkdown>
         </div>
       </Card>
+
+      {/* 상품 목록 */}
       <ProductGrid gap={2} py={0}>
-        {productResponse.data.map((product) => (
+        {products.map((product) => (
           <ProductItemBuy
             key={product.id}
             productId={product.id}
