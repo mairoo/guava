@@ -1,73 +1,83 @@
+import { store } from '@/store';
 import { useLoginMutation } from '@/store/auth/api';
 import { setAuth } from '@/store/auth/slice';
 import { cartApi } from '@/store/cart/api';
 import { useAppDispatch } from '@/store/hooks';
 import { Auth } from '@/types/auth';
+import { CartItem } from '@/types/cart';
+import { isEqual } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface UseLoginOptions {
-  /**
-   * 로그인 후 리다이렉트할 경로
-   * @default '/'
-   */
   redirectTo?: string;
 }
 
 interface UseLoginReturn {
-  /**
-   * 로그인 처리 함수
-   */
   login: (data: Auth.SignInRequest) => Promise<void>;
-
-  /**
-   * 로그인 처리 중 여부
-   */
   isLoading: boolean;
-
-  /**
-   * 로그인 중 발생한 에러 메시지
-   */
   error: string | null;
-
-  /**
-   * 에러 상태 초기화
-   */
   clearError: () => void;
 }
 
 export const useLogin = ({
   redirectTo = '/',
 }: UseLoginOptions = {}): UseLoginReturn => {
-  // 1. 기본 훅 초기화
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  // 2. API 관련 상태
+  // API Hooks
   const [loginMutation, { isLoading: isLoginLoading }] = useLoginMutation();
-  const [trigger, { isLoading: isSyncCartLoading }] =
+  const [trigger, { isLoading: isFetchCartLoading }] =
     cartApi.endpoints.fetchCart.useLazyQuery();
+  const [syncCart, { isLoading: isSyncCartLoading }] =
+    cartApi.endpoints.syncCart.useMutation();
+
+  // Local States
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const clearError = () => setError(null);
 
+  /**
+   * 장바구니 데이터를 비교하여 백엔드 동기화 필요 여부를 판단
+   */
+  const needsSync = (
+    serverCart: CartItem[],
+    mergedCart: CartItem[],
+  ): boolean => {
+    // 수량이 다르면 동기화 필요
+    if (serverCart.length !== mergedCart.length) return true;
+
+    // 내용이 다르면 동기화 필요 (lodash.isEqual 깊은 비교 수행)
+    return !isEqual(
+      [...serverCart].sort((a, b) => a.productId - b.productId),
+      [...mergedCart].sort((a, b) => a.productId - b.productId),
+    );
+  };
+
   const handleLogin = async (data: Auth.SignInRequest) => {
-    // 이미 처리 중이면 중복 실행 방지
     if (isProcessing) return;
 
     try {
       setIsProcessing(true);
       clearError();
 
-      // 로그인 처리
+      // 1. 로그인 처리
       await loginMutation(data).unwrap();
       dispatch(setAuth(true));
 
-      // extraReducers에서 장바구니 병합 처리
-      await trigger();
+      // 2. 장바구니 데이터 가져오기
+      const fetchResult = await trigger().unwrap();
 
-      // 리다이렉트
+      // 3. Redux 스토어의 최신 상태 가져오기 (병합된 상태)
+      const mergedCart = store.getState().cart.items;
+
+      // 4. 서버 데이터와 병합된 데이터 비교 후 필요시 동기화
+      if (needsSync(fetchResult, mergedCart)) {
+        await syncCart(mergedCart).unwrap();
+      }
+
       router.push(redirectTo);
     } catch (error: any) {
       setError(
@@ -81,7 +91,8 @@ export const useLogin = ({
 
   return {
     login: handleLogin,
-    isLoading: isProcessing || isLoginLoading || isSyncCartLoading,
+    isLoading:
+      isProcessing || isLoginLoading || isFetchCartLoading || isSyncCartLoading,
     error,
     clearError,
   };
