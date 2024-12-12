@@ -103,16 +103,11 @@ export const cartSlice = createSlice({
     builder.addMatcher(
       cartApi.endpoints.fetchCart.matchFulfilled,
       (state, { payload }) => {
-        const serverItems = payload;
-        const localItems = state.items;
+        const items = state.items;
 
-        state.items = [];
+        state.items = [...payload];
 
-        serverItems.forEach((serverItem) => {
-          state.items.push({ ...serverItem });
-        });
-
-        localItems.forEach((localItem) => {
+        items.forEach((localItem) => {
           const existingItem = state.items.find(
             (item) => item.productId === localItem.productId,
           );
