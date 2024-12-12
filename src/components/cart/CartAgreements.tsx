@@ -5,7 +5,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { CartAgreements as ICartAgreements } from '@/types/cart';
-import { useEffect, useState } from 'react';
 
 interface Props {
   value: ICartAgreements;
@@ -24,22 +23,6 @@ export const CartAgreements = ({
   errors,
   isSubmitting,
 }: Props) => {
-  const [allChecked, setAllChecked] = useState(false);
-
-  // 모든 동의 항목이 체크되었는지 확인
-  useEffect(() => {
-    const isAllChecked = Object.values(value).every((checked) => checked);
-    setAllChecked(isAllChecked);
-  }, [value]);
-
-  // 전체 동의 처리
-  const handleAllAgreements = (checked: boolean) => {
-    Object.keys(value).forEach((key) => {
-      onChangeAction(key as keyof ICartAgreements, checked);
-    });
-    setAllChecked(checked);
-  };
-
   const agreements = [
     {
       id: 'termsOfService',
@@ -67,27 +50,12 @@ export const CartAgreements = ({
     },
   ];
 
+  const isAllChecked = Object.values(value).every((checked) => checked);
+
   return (
     <div className="space-y-4">
       <Card className="lg:border-0 lg:shadow-none">
         <CardContent className="pt-6 p-3 space-y-6">
-          {/* 전체 동의 체크박스 */}
-          <div className="flex items-start space-x-2 pb-4 border-b">
-            <Checkbox
-              id="all-agreements"
-              checked={allChecked}
-              onCheckedChange={(checked) =>
-                handleAllAgreements(checked as boolean)
-              }
-            />
-            <Label
-              htmlFor="all-agreements"
-              className="text-base font-medium cursor-pointer"
-            >
-              전체 동의
-            </Label>
-          </div>
-
           {/* 개별 동의 항목들 */}
           {agreements.map(
             ({ id, title, description, isRequired, isWarning }) => (
@@ -128,7 +96,7 @@ export const CartAgreements = ({
 
       <Button
         type="submit"
-        disabled={isSubmitting || !allChecked}
+        disabled={isSubmitting || !isAllChecked}
         className="w-full py-6 text-lg text-white bg-slate-700 hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
       >
         {isSubmitting ? (

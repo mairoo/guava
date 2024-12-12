@@ -12,7 +12,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { useSyncCartMutation } from '@/store/cart/api';
-import { useAppSelector } from '@/store/hooks';
+import { clearCart } from '@/store/cart/slice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useCreateOrderMutation } from '@/store/order/api';
 import { Orders, PAYMENT_METHODS, PaymentMethod } from '@/types/order';
 import { formatKRW } from '@/utils';
@@ -57,6 +58,7 @@ const schema = yup.object().shape({
 
 const CartPage = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { isAuthenticated } = useAuth();
   const cartItems = useAppSelector((state) => state.cart.items);
   const [createOrder] = useCreateOrderMutation();
@@ -115,10 +117,6 @@ const CartPage = () => {
         return;
       }
 
-      if (isAuthenticated) {
-        await syncCart(cartItems);
-      }
-
       const orderRequest: Orders.CreateOrderRequest = {
         items: cartItems.map((item) => ({
           productId: item.productId,
@@ -134,11 +132,21 @@ const CartPage = () => {
 
       const result = await createOrder(orderRequest).unwrap();
 
+      // 주문 성공 후 장바구니 비우기
+      dispatch(clearCart());
+
+      // 인증된 사용자의 경우 빈 장바구니로 서버 동기화
+      if (isAuthenticated) {
+        await syncCart([]);
+      }
+
       toast({
         title: '주문이 완료되었습니다',
         description: '주문 내역에서 확인하실 수 있습니다.',
+        duration: 1500,
+        className: 'bg-blue-100 border border-blue-300 shadow-lg',
       });
-      router.push(`/orders/${result.data.id}`);
+      router.push(`/orders/${result.data.orderNo}`);
     } catch (error) {
       console.error('Failed to submit order:', error);
       toast({
@@ -243,12 +251,9 @@ const CartPage = () => {
                 render={({ field }) => (
                   <CartAgreements
                     value={field.value}
-                    onChangeAction={(key, value) => {
-                      field.onChange({
-                        ...field.value,
-                        [key]: value,
-                      });
-                    }}
+                    onChangeAction={(key, value) =>
+                      field.onChange({ ...field.value, [key]: value })
+                    }
                     errors={errors.agreements}
                     isSubmitting={isSubmitting}
                   />
