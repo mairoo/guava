@@ -18,12 +18,12 @@ export const translateOrderStatus = (status: string): string => {
 export const translatePaymentMethod = (method: string): string => {
   const methodMap: { [key: string]: string } = {
     BANK_TRANSFER: '계좌이체 / 무통장입금',
-    ESCROW: '에스크로',
-    PAYPAL: '페이팔',
+    ESCROW: '에스크로 (KB)',
+    PAYPAL: '페이팔 (PayPal)',
     CREDIT_CARD: '신용카드',
     BANK_TRANSFER_PG: '계좌이체 (PG)',
     VIRTUAL_ACCOUNT: '가상계좌',
-    PHONE_BILL: '휴대폰결제',
+    PHONE_BILL: '휴대폰소액결제',
   };
 
   return methodMap[method] || method;
