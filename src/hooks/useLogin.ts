@@ -21,7 +21,9 @@ interface UseLoginReturn {
 }
 
 export const useLogin = ({
-  redirectTo = '/',
+  redirectTo = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search).get('from') || '/'
+    : '/',
 }: UseLoginOptions = {}): UseLoginReturn => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -38,6 +40,26 @@ export const useLogin = ({
   const [isProcessing, setIsProcessing] = useState(false);
 
   const clearError = () => setError(null);
+
+  // 리다이렉션 경로 검증 함수 추가
+  const validateRedirectPath = (path: string): string => {
+    // 외부 URL로의 리다이렉션 방지
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return '/';
+    }
+
+    // 인증 페이지로의 리다이렉션 방지
+    if (path.startsWith('/auth')) {
+      return '/';
+    }
+
+    // 빈 경로나 잘못된 경로 처리
+    if (!path || path === '/auth/sign-in') {
+      return '/';
+    }
+
+    return path;
+  };
 
   /**
    * 장바구니 데이터를 비교하여 백엔드 동기화 필요 여부를 판단
@@ -78,7 +100,9 @@ export const useLogin = ({
         await syncCart(mergedCart).unwrap();
       }
 
-      router.push(redirectTo);
+      // 검증된 경로로 리다이렉션
+      const safePath = validateRedirectPath(redirectTo);
+      router.replace(safePath);
     } catch (error: any) {
       setError(
         error.data?.message ||

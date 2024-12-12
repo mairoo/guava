@@ -12,6 +12,7 @@ import { Auth } from '@/types/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Key, Mail } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup'; // 폼 유효성 검사 스키마 정의
 
@@ -29,8 +30,14 @@ const schema = yup.object().shape({
 });
 
 const SignInPage = () => {
+  // URL 파라미터 접근을 위한 훅
+  const searchParams = useSearchParams();
+
+  // 리다이렉션 경로 결정
+  const redirectPath = searchParams?.get('from') || '/';
+
   // 1. 기본 훅 및 상태 관리
-  const { login, isLoading, error } = useLogin({ redirectTo: '/' });
+  const { login, isLoading, error } = useLogin({ redirectTo: redirectPath });
 
   // 2. 폼 설정
   const {
