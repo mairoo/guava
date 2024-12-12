@@ -60,17 +60,14 @@ const ProductInfo = ({ product }: ProductInfoProps) => (
       {product?.name || '상품 이름'} {product?.subtitle || '상품 가격'}
     </h2>
     <p className="text-sm text-gray-600">
-      정가:
-      <span className="line-through">
-        {formatKRW.format(product?.listPrice || 0)}
+      판매가: {formatKRW.format(product?.sellingPrice || 0)}
+      <span className="line-through ml-2">
+        ({formatKRW.format(product?.listPrice || 0)})
       </span>
-    </p>
-    <p className="text-sm text-gray-600">
-      판매가 {formatKRW.format(product?.sellingPrice || 0)}
     </p>
     {product && (
       <div className="text-sm text-gray-600 flex items-center gap-1">
-        할인율
+        할인율:
         <span className="text-red-500">
           {(
             ((product.listPrice - product.sellingPrice) / product.listPrice) *
