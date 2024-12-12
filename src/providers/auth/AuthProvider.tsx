@@ -10,7 +10,6 @@ import { hydrateCart } from '@/store/cart/slice';
 import { useAppDispatch } from '@/store/hooks';
 import { storage } from '@/utils';
 import { auth } from '@/utils/auth';
-import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 
 interface AuthProviderProps {
@@ -19,77 +18,82 @@ interface AuthProviderProps {
 
 /**
  * 전체 애플리케이션의 인증 상태를 관리하는 provider 컴포넌트
- * 자동 로그인, 토큰 갱신, 인증 상태 확인 등을 처리
+ * - 자동 로그인 처리
+ * - 토큰 갱신
+ * - 장바구니 동기화
  */
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [refresh] = useRefreshMutation(); // 토큰 갱신을 위한 API 훅
+  // RTK Query Hooks
+  const [refresh] = useRefreshMutation();
+
+  // Custom Hooks
   const { syncCart } = useCartSync();
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-  const isMounted = useMounted();
   const { isLoading, accessToken } = useAuth();
   const { logout } = useLogout({
     skipApi: true,
     redirect: true,
   });
+  const isMounted = useMounted();
+
+  // Redux
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     /**
-     * 초기 인증 상태를 확인하고 필요한 처리를 수행하는 함수
+     * 초기 인증 상태를 확인하고 필요한 처리를 수행
+     * - 인증 쿠키와 자동 로그인 설정 확인
+     * - 토큰 유효성 검사
+     * - 필요시 토큰 갱신
+     * - 장바구니 동기화
      */
     const initAuth = async () => {
       try {
-        // 인증 쿠키와 자동 로그인 설정 먼저 확인
+        // 인증 상태 확인
         const isAuthenticatedCookie = auth.isAuthenticated();
         const rememberMe = storage.getRememberMe();
 
-        // 둘 다 없으면 인증 체크 자체를 건너뜀 (비로그인 상태로 간주)
+        // 비로그인 상태 처리
         if (!isAuthenticatedCookie && !rememberMe) {
           dispatch(setLoading(false));
-
-          // 비회원도 로컬스토리지에 장바구니가 있으면 리덕스 스토어에 복원
-          dispatch(hydrateCart());
+          dispatch(hydrateCart()); // 로컬 장바구니 복원
           return;
         }
 
-        // 둘 중 하나만 있는 경우 - 불일치 상태이므로 로그아웃 처리
+        // 인증 상태 불일치 처리
         if (!isAuthenticatedCookie || !rememberMe) {
-          logout();
+          await logout();
           return;
         }
 
-        // 현재 토큰이 유효한지 확인 - 토큰 만료 1시간 전부터 갱신 시도
+        // 유효한 토큰이 있는 경우
         if (accessToken && !storage.isTokenExpiring(3600)) {
-          // 토큰이 유효한 경우에도 장바구니 동기화 실행
-          await syncCart();
+          dispatch(setLoading(false));
+          await syncCart(); // 장바구니 동기화
           return;
         }
 
+        // 토큰 갱신 처리
         dispatch(setLoading(true));
-
-        // 리프레시 토큰을 사용하여 새로운 액세스 토큰 발급
         const refreshResult = await refresh().unwrap();
+
         if (refreshResult) {
           dispatch(setCredentials(refreshResult));
           auth.setAuthCookie(refreshResult.data.expiresIn);
           storage.setLastRefreshTime(Date.now());
-
-          // 토큰 갱신 후 장바구니 동기화 실행
-          await syncCart();
         }
       } catch (error) {
         console.error('Auth initialization failed:', error);
-        logout(); // 오류 발생 시 로그아웃 처리
+        await logout();
       } finally {
         dispatch(setLoading(false));
       }
     };
 
-    // 컴포넌트가 마운트된 후에만 인증 초기화 실행
+    // 컴포넌트가 마운트된 후에만 초기화 실행
     if (isMounted) {
       initAuth();
     }
-  }, [dispatch, isMounted, refresh, router, accessToken]);
+  }, [dispatch, isMounted, refresh, accessToken]);
 
   // 로딩 중이거나 마운트되지 않은 경우 로딩 상태 표시
   if (!isMounted || isLoading) {

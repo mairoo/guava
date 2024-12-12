@@ -34,6 +34,7 @@ export const cartApi = createApi({
         return JSON.parse(response.data.cartData) as CartItem[];
       },
       providesTags: ['Cart'],
+      keepUnusedDataFor: 30,
     }),
 
     /**

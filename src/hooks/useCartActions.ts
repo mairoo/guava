@@ -1,10 +1,11 @@
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
+import { store } from '@/store';
 import { useSyncCartMutation } from '@/store/cart/api';
 import { addItem, removeItem, updateItemQuantity } from '@/store/cart/slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { CartItem } from '@/types/cart';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react'; // 장바구니 동기화 디바운스 시간 (밀리초)
 
 // 장바구니 동기화 디바운스 시간 (밀리초)
 const SYNC_DEBOUNCE_TIME = 2000;
@@ -35,7 +36,7 @@ export const useCartActions = () => {
   /**
    * 장바구니 서버 동기화 함수 (디바운스 처리)
    */
-  const debouncedSync = useCallback(async () => {
+  const debouncedSync = useCallback(async (): Promise<void> => {
     try {
       if (!isAuthenticated) return;
 
@@ -43,18 +44,27 @@ export const useCartActions = () => {
         clearTimeout(syncTimerRef.current);
       }
 
-      syncTimerRef.current = setTimeout(async () => {
-        const itemsToSync = cartItems.map((item) => ({
-          ...item,
-          quantity:
-            currentQuantitiesRef.current[item.productId] || item.quantity,
-        }));
-
-        await syncCart(itemsToSync).unwrap();
-        syncTimerRef.current = null;
-      }, SYNC_DEBOUNCE_TIME);
+      await new Promise<void>((resolve) => {
+        syncTimerRef.current = setTimeout(async () => {
+          try {
+            // Redux 가장 최신 장바구니 상태를 가지고 와야 한다.
+            const currentCart = store.getState().cart.items;
+            await syncCart(currentCart).unwrap();
+            syncTimerRef.current = null;
+            resolve();
+          } catch (error) {
+            console.error('Failed to sync cart:', error);
+            toast({
+              variant: 'destructive',
+              title: '장바구니 동기화 실패',
+              description: '잠시 후 다시 시도해주세요.',
+            });
+            resolve();
+          }
+        }, SYNC_DEBOUNCE_TIME);
+      });
     } catch (error) {
-      console.error('Failed to sync cart:', error);
+      console.error('Failed to setup sync:', error);
       toast({
         variant: 'destructive',
         title: '장바구니 동기화 실패',
