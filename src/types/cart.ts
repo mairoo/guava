@@ -17,15 +17,22 @@ export interface CartState {
   error: string | null;
 }
 
-export interface PaymentMethod {
-  id: string;
-  name: string;
-}
-
 export interface CartSyncRequest {
   cartData: string;
 }
 
 export interface CartResponse {
   cartData: string;
+}
+
+export interface CartAgreements {
+  termsOfService: boolean;
+  privacyPolicy: boolean;
+  paymentAgreement: boolean;
+}
+
+export interface CartAgreementErrors {
+  termsOfService?: { message?: string };
+  privacyPolicy?: { message?: string };
+  paymentAgreement?: { message?: string };
 }

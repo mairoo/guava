@@ -34,12 +34,12 @@ export const orderApi = createApi({
 
     createOrder: builder.mutation<
       ApiResponse<Orders.Order>,
-      { order: Partial<Orders.Order> }
+      Orders.CreateOrderRequest
     >({
-      query: ({ order }) => ({
+      query: (orderRequest) => ({
         url: '/orders',
         method: 'POST',
-        body: order,
+        body: orderRequest,
       }),
       invalidatesTags: ['Orders'],
     }),
