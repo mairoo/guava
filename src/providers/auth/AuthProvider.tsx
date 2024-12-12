@@ -1,11 +1,11 @@
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
-import { useFetchCart } from '@/hooks/useFetchCart';
 import { useLogout } from '@/hooks/useLogout';
 import { useMounted } from '@/hooks/useMounted';
 import { useRefreshMutation } from '@/store/auth/api';
 import { setCredentials, setLoading } from '@/store/auth/slice';
+import { cartApi } from '@/store/cart/api';
 import { hydrateCart } from '@/store/cart/slice';
 import { useAppDispatch } from '@/store/hooks';
 import { storage } from '@/utils';
@@ -20,14 +20,14 @@ interface AuthProviderProps {
  * 전체 애플리케이션의 인증 상태를 관리하는 provider 컴포넌트
  * - 자동 로그인 처리
  * - 토큰 갱신
- * - 백엔드 장바구니 불러오기
+ * - 백엔드 장바구니와 로컬 장바구니 병합
  */
 const AuthProvider = ({ children }: AuthProviderProps) => {
   // RTK Query Hooks
   const [refresh] = useRefreshMutation();
+  const [trigger] = cartApi.endpoints.fetchCart.useLazyQuery();
 
   // Custom Hooks
-  const { fetchCart } = useFetchCart();
   const { isLoading, accessToken } = useAuth();
   const { logout } = useLogout({
     skipApi: true,
@@ -44,7 +44,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
      * - 인증 쿠키와 자동 로그인 설정 확인
      * - 토큰 유효성 검사
      * - 필요시 토큰 갱신
-     * - 백엔드 장바구니 불러오기
+     * - 백엔드 장바구니 병합
      */
     const initAuth = async () => {
       try {
@@ -55,7 +55,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         // 비로그인 상태 처리
         if (!isAuthenticatedCookie && !rememberMe) {
           dispatch(setLoading(false));
-          dispatch(hydrateCart()); // 로컬 장바구니 복원
+          dispatch(hydrateCart()); // 로컬 장바구니만 복원
           return;
         }
 
@@ -68,7 +68,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         // 유효한 토큰이 있는 경우
         if (accessToken && !storage.isTokenExpiring(3600)) {
           dispatch(setLoading(false));
-          await fetchCart(); // 백엔드 장바구니 불러오기
+          // extraReducers에서 장바구니 병합 처리
+          await trigger();
           return;
         }
 
@@ -80,6 +81,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           dispatch(setCredentials(refreshResult));
           auth.setAuthCookie(refreshResult.data.expiresIn);
           storage.setLastRefreshTime(Date.now());
+          // 토큰 갱신 후 장바구니 병합
+          await trigger();
         }
       } catch (error) {
         console.error('Auth initialization failed:', error);
@@ -93,7 +96,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     if (isMounted) {
       initAuth();
     }
-  }, [dispatch, isMounted, refresh, accessToken]);
+  }, [dispatch, isMounted, refresh, accessToken, trigger]);
 
   // 로딩 중이거나 마운트되지 않은 경우 로딩 상태 표시
   if (!isMounted || isLoading) {

@@ -1,6 +1,6 @@
-import { useFetchCart } from '@/hooks/useFetchCart';
 import { useLoginMutation } from '@/store/auth/api';
 import { setAuth } from '@/store/auth/slice';
+import { cartApi } from '@/store/cart/api';
 import { useAppDispatch } from '@/store/hooks';
 import { Auth } from '@/types/auth';
 import { useRouter } from 'next/navigation';
@@ -45,9 +45,10 @@ export const useLogin = ({
 
   // 2. API 관련 상태
   const [loginMutation, { isLoading: isLoginLoading }] = useLoginMutation();
+  const [trigger, { isLoading: isSyncCartLoading }] =
+    cartApi.endpoints.fetchCart.useLazyQuery();
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const { fetchCart, isLoading: isSyncCartLoading } = useFetchCart();
 
   const clearError = () => setError(null);
 
@@ -63,8 +64,8 @@ export const useLogin = ({
       await loginMutation(data).unwrap();
       dispatch(setAuth(true));
 
-      // 백엔드 장바구니 불러오기
-      await fetchCart();
+      // extraReducers에서 장바구니 병합 처리
+      await trigger();
 
       // 리다이렉트
       router.push(redirectTo);
