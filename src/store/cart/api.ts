@@ -33,8 +33,11 @@ export const cartApi = createApi({
       transformResponse: (response: ApiResponse<CartResponse>) => {
         return JSON.parse(response.data.cartData) as CartItem[];
       },
+      transformErrorResponse: (response) => {
+        console.error('Cart fetch failed:', response);
+        return [];
+      },
       providesTags: ['Cart'],
-      keepUnusedDataFor: 30,
     }),
 
     /**
