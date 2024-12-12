@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { CartAgreements as ICartAgreements } from '@/types/cart';
+import { useState } from 'react';
 
 interface Props {
   value: ICartAgreements;
@@ -20,9 +21,14 @@ interface Props {
 export const CartAgreements = ({
   value,
   onChangeAction,
-  errors,
+  errors = {}, // 기본값을 빈 객체로 설정
   isSubmitting,
 }: Props) => {
+  // 각 체크박스의 터치 여부를 추적
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
+    {},
+  );
+
   const agreements = [
     {
       id: 'termsOfService',
@@ -48,15 +54,31 @@ export const CartAgreements = ({
       isRequired: true,
       isWarning: true,
     },
-  ];
+  ] as const;
+
+  const handleCheckboxChange = (
+    id: keyof ICartAgreements,
+    checked: boolean,
+  ) => {
+    // 체크박스가 클릭되었음을 기록
+    setTouchedFields((prev) => ({
+      ...prev,
+      [id]: true,
+    }));
+    onChangeAction(id, checked);
+  };
 
   const isAllChecked = Object.values(value).every((checked) => checked);
+
+  // 오류를 보여줄지 결정하는 함수
+  const shouldShowError = (id: keyof ICartAgreements) => {
+    return touchedFields[id] && errors[id]?.message;
+  };
 
   return (
     <div className="space-y-4">
       <Card className="lg:border-0 lg:shadow-none">
         <CardContent className="pt-6 p-3 space-y-6">
-          {/* 개별 동의 항목들 */}
           {agreements.map(
             ({ id, title, description, isRequired, isWarning }) => (
               <div key={id} className="flex items-start space-x-2">
@@ -64,12 +86,12 @@ export const CartAgreements = ({
                   id={id}
                   checked={value[id as keyof ICartAgreements]}
                   onCheckedChange={(checked) =>
-                    onChangeAction(
+                    handleCheckboxChange(
                       id as keyof ICartAgreements,
                       checked as boolean,
                     )
                   }
-                  aria-invalid={!!errors?.[id as keyof ICartAgreements]}
+                  aria-invalid={!!shouldShowError(id as keyof ICartAgreements)}
                 />
                 <Label
                   htmlFor={id}
@@ -82,7 +104,7 @@ export const CartAgreements = ({
                     {isRequired && <span className="text-red-500 ml-1">*</span>}
                   </span>
                   <span className="text-slate-500 block">{description}</span>
-                  {errors?.[id as keyof ICartAgreements] && (
+                  {shouldShowError(id as keyof ICartAgreements) && (
                     <span className="text-red-500 text-sm block">
                       {errors[id as keyof ICartAgreements]?.message}
                     </span>
@@ -110,3 +132,5 @@ export const CartAgreements = ({
     </div>
   );
 };
+
+export default CartAgreements;
