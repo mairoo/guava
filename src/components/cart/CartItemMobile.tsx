@@ -26,7 +26,7 @@ export const CartItemMobile = ({ item }: Props) => {
           >
             {item.name} {item.subtitle}
           </Link>
-          <span className="text-sm">{formatKRW.format(item.price)}</span>
+          <span className="text-sm">{formatKRW.format(item.sellingPrice)}</span>
         </div>
         <div className="flex items-center border rounded-lg w-full">
           <button
@@ -53,7 +53,7 @@ export const CartItemMobile = ({ item }: Props) => {
         </div>
         <div className="text-right">
           <span className="text-sm font-semibold">
-            {formatKRW.format(item.price * item.quantity)}
+            {formatKRW.format(item.sellingPrice * item.quantity)}
           </span>
         </div>
       </CardContent>

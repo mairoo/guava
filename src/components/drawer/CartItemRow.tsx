@@ -28,12 +28,12 @@ export const CartItemRow = ({ item, onOpenChangeAction }: CartItemRowProps) => {
           <br /> {item.subtitle}
         </Link>
         <div className="text-sm text-gray-500 mt-1">
-          {formatKRW.format(item.price)} x {item.quantity}개
+          {formatKRW.format(item.sellingPrice)} x {item.quantity}개
         </div>
       </div>
       <div className="flex items-center gap-2">
         <div className="font-medium text-right">
-          {formatKRW.format(item.price * item.quantity)}
+          {formatKRW.format(item.sellingPrice * item.quantity)}
         </div>
         <Button
           variant="ghost"

@@ -23,7 +23,7 @@ export const CartItemDesktop = ({ item }: Props) => {
       >
         {item.name} {item.subtitle}
       </Link>
-      <div className="text-sm text-right">{formatKRW.format(item.price)}</div>
+      <div className="text-sm text-right">{formatKRW.format(item.sellingPrice)}</div>
       <div className="text-sm text-center">
         <div className="inline-flex items-center border rounded-lg">
           <button
@@ -48,7 +48,7 @@ export const CartItemDesktop = ({ item }: Props) => {
         </div>
       </div>
       <div className="text-sm font-semibold text-right">
-        {formatKRW.format(item.price * item.quantity)}
+        {formatKRW.format(item.sellingPrice * item.quantity)}
       </div>
     </div>
   );

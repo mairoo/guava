@@ -102,7 +102,8 @@ const CategoryDetailPage = ({ params }: CategoryDetailParams) => {
               ((product.listPrice - product.sellingPrice) / product.listPrice) *
               100
             }
-            price={product.sellingPrice}
+            listPrice={product.listPrice}
+            sellingPrice={product.sellingPrice}
             thumbnail={`https://pincoin-s3.s3.amazonaws.com/media/${category.thumbnail}`}
           />
         ))}

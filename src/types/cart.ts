@@ -3,7 +3,8 @@ export interface CartItemBase {
   name: string;
   subtitle: string;
   code: string;
-  price: number;
+  listPrice: number;
+  sellingPrice: number;
 }
 
 export interface CartItem extends CartItemBase {

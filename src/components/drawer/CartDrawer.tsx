@@ -23,7 +23,7 @@ export const CartDrawer = ({ isOpen, onOpenChangeAction }: CartDrawerProps) => {
   const cartItems = useAppSelector((state) => state.cart.items);
 
   const totalAmount = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + item.sellingPrice * item.quantity,
     0,
   );
 

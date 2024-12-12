@@ -24,7 +24,7 @@ const CartPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('bank-transfer');
 
   const totalAmount = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + item.sellingPrice * item.quantity,
     0,
   );
 

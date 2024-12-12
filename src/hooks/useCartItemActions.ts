@@ -9,6 +9,7 @@ interface UseCartItemActionsProps {
     name: string;
     subtitle: string;
     code: string;
+    listPrice: number;
     sellingPrice: number;
   };
   initialQuantity?: number;
@@ -84,7 +85,8 @@ export const useCartItemActions = ({
       name: product.name,
       subtitle: product.subtitle || '',
       code: product.code,
-      price: product.sellingPrice,
+      listPrice: product.listPrice,
+      sellingPrice: product.sellingPrice,
       quantity: quantity,
     };
 

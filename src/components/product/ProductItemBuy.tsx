@@ -14,7 +14,8 @@ interface ProductItemBuyProps {
   subtitle: string;
   code: string;
   discountRate: number;
-  price: number;
+  listPrice: number;
+  sellingPrice: number;
 }
 
 export const ProductItemBuy = ({
@@ -24,7 +25,8 @@ export const ProductItemBuy = ({
   subtitle = '',
   code = '',
   discountRate = 1.0,
-  price = 0,
+  listPrice = 0,
+  sellingPrice = 0,
 }: ProductItemBuyProps) => {
   const { addToCart } = useCartItemActions({
     product: {
@@ -32,12 +34,13 @@ export const ProductItemBuy = ({
       name,
       subtitle,
       code,
-      sellingPrice: price,
+      listPrice: listPrice,
+      sellingPrice: sellingPrice,
     },
   });
 
   const formattedRate = discountRate.toFixed(2);
-  const formattedPrice = price.toLocaleString();
+  const formattedPrice = sellingPrice.toLocaleString();
 
   return (
     <Card className="w-full overflow-hidden shadow-none hover:shadow-md transition-shadow border-gray-200">
