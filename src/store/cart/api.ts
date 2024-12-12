@@ -27,7 +27,7 @@ export const cartApi = createApi({
      * - 캐시된 데이터가 있으면 재사용
      * - 데이터가 없거나 만료된 경우 서버에서 새로 조회
      */
-    getCart: builder.query<CartItem[], void>({
+    fetchCart: builder.query<CartItem[], void>({
       query: () => '/cart',
       // 응답 변환: JSON 문자열을 파싱하여 CartItem[] 으로 변환
       transformResponse: (response: ApiResponse<CartResponse>) => {
@@ -46,7 +46,7 @@ export const cartApi = createApi({
      * - PUT /cart/sync 엔드포인트 호출
      * - 클라이언트의 전체 장바구니 상태를 서버로 전송
      * - 응답으로 서버의 최신 상태를 받아서 동기화
-     * - 캐시를 무효화하여 getCart가 최신 데이터를 조회하도록 함
+     * - 캐시를 무효화하여 fetchCart가 최신 데이터를 조회하도록 함
      */
     syncCart: builder.mutation<CartItem[], CartItem[]>({
       query: (items) => ({
@@ -67,7 +67,4 @@ export const cartApi = createApi({
 });
 
 // 생성된 리액트 훅 익스포트
-export const {
-  useGetCartQuery, // 장바구니 조회 훅
-  useSyncCartMutation, // 장바구니 동기화 훅
-} = cartApi;
+export const { useFetchCartQuery, useSyncCartMutation } = cartApi;

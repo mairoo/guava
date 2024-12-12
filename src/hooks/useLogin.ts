@@ -1,4 +1,4 @@
-import { useCartSync } from '@/hooks/useCartSync';
+import { useFetchCart } from '@/hooks/useFetchCart';
 import { useLoginMutation } from '@/store/auth/api';
 import { setAuth } from '@/store/auth/slice';
 import { useAppDispatch } from '@/store/hooks';
@@ -47,7 +47,7 @@ export const useLogin = ({
   const [loginMutation, { isLoading: isLoginLoading }] = useLoginMutation();
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const { syncCart, isLoading: isSyncCartLoading } = useCartSync();
+  const { fetchCart, isLoading: isSyncCartLoading } = useFetchCart();
 
   const clearError = () => setError(null);
 
@@ -63,8 +63,8 @@ export const useLogin = ({
       await loginMutation(data).unwrap();
       dispatch(setAuth(true));
 
-      // 장바구니 동기화
-      await syncCart();
+      // 백엔드 장바구니 불러오기
+      await fetchCart();
 
       // 리다이렉트
       router.push(redirectTo);

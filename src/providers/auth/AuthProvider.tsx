@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
-import { useCartSync } from '@/hooks/useCartSync';
+import { useFetchCart } from '@/hooks/useFetchCart';
 import { useLogout } from '@/hooks/useLogout';
 import { useMounted } from '@/hooks/useMounted';
 import { useRefreshMutation } from '@/store/auth/api';
@@ -20,14 +20,14 @@ interface AuthProviderProps {
  * 전체 애플리케이션의 인증 상태를 관리하는 provider 컴포넌트
  * - 자동 로그인 처리
  * - 토큰 갱신
- * - 장바구니 동기화
+ * - 백엔드 장바구니 불러오기
  */
 const AuthProvider = ({ children }: AuthProviderProps) => {
   // RTK Query Hooks
   const [refresh] = useRefreshMutation();
 
   // Custom Hooks
-  const { syncCart } = useCartSync();
+  const { fetchCart } = useFetchCart();
   const { isLoading, accessToken } = useAuth();
   const { logout } = useLogout({
     skipApi: true,
@@ -44,7 +44,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
      * - 인증 쿠키와 자동 로그인 설정 확인
      * - 토큰 유효성 검사
      * - 필요시 토큰 갱신
-     * - 장바구니 동기화
+     * - 백엔드 장바구니 불러오기
      */
     const initAuth = async () => {
       try {
@@ -68,7 +68,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         // 유효한 토큰이 있는 경우
         if (accessToken && !storage.isTokenExpiring(3600)) {
           dispatch(setLoading(false));
-          await syncCart(); // 장바구니 동기화
+          await fetchCart(); // 백엔드 장바구니 불러오기
           return;
         }
 

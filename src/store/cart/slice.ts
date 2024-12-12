@@ -132,7 +132,7 @@ export const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      cartApi.endpoints.getCart.matchFulfilled,
+      cartApi.endpoints.fetchCart.matchFulfilled,
       /**
        * 서버에서 장바구니 데이터를 가져온 후 상태를 업데이트
        */
