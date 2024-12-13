@@ -36,7 +36,7 @@ const schema = yup.object().shape({
   paymentMethod: yup
     .string()
     .oneOf(
-      PAYMENT_METHODS.map((method) => method.id),
+      Object.keys(PAYMENT_METHODS) as PaymentMethod[],
       '결제 수단을 선택해주세요',
     )
     .required('결제 수단을 선택해주세요'),
@@ -171,17 +171,17 @@ const CartPage = () => {
                 value={field.value}
                 className={isMobile ? 'space-y-3' : 'grid grid-cols-3 gap-4'}
               >
-                {PAYMENT_METHODS.map((method) => (
-                  <div key={method.id} className="flex items-center space-x-3">
+                {Object.entries(PAYMENT_METHODS).map(([id, name]) => (
+                  <div key={id} className="flex items-center space-x-3">
                     <RadioGroupItem
-                      value={method.id}
-                      id={`${isMobile ? 'mobile' : 'desktop'}-${method.id}`}
+                      value={id}
+                      id={`${isMobile ? 'mobile' : 'desktop'}-${id}`}
                     />
                     <Label
-                      htmlFor={`${isMobile ? 'mobile' : 'desktop'}-${method.id}`}
+                      htmlFor={`${isMobile ? 'mobile' : 'desktop'}-${id}`}
                       className="cursor-pointer"
                     >
-                      <span className="font-medium">{method.name}</span>
+                      <span className="font-medium">{name}</span>
                     </Label>
                   </div>
                 ))}

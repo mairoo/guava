@@ -32,15 +32,15 @@ export const ORDER_STATUS = {
   VOIDED: '주문무효',
 } as const;
 
-export const PAYMENT_METHODS = [
-  { id: 'BANK_TRANSFER' as PaymentMethod, name: '계좌이체 / 무통장입금' },
-  { id: 'ESCROW' as PaymentMethod, name: '에스크로 (KB)' },
-  { id: 'PAYPAL' as PaymentMethod, name: '페이팔 (PayPal)' },
-  { id: 'CREDIT_CARD' as PaymentMethod, name: '신용카드' },
-  { id: 'BANK_TRANSFER_PG' as PaymentMethod, name: '계좌이체 (PG)' },
-  { id: 'VIRTUAL_ACCOUNT' as PaymentMethod, name: '가상계좌' },
-  { id: 'PHONE_BILL' as PaymentMethod, name: '휴대폰소액결제' },
-] as const;
+export const PAYMENT_METHODS = {
+  BANK_TRANSFER: '계좌이체 / 무통장입금',
+  ESCROW: '에스크로 (KB)',
+  PAYPAL: '페이팔 (PayPal)',
+  CREDIT_CARD: '신용카드',
+  BANK_TRANSFER_PG: '계좌이체 (PG)',
+  VIRTUAL_ACCOUNT: '가상계좌',
+  PHONE_BILL: '휴대폰소액결제',
+} as const;
 
 export namespace Orders {
   export interface OrderItem {

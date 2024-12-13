@@ -2,28 +2,29 @@
 
 import { FlexColumn, GridRow, TitledSection } from '@/components/layout';
 import { Card, CardContent } from '@/components/ui/card';
+import { useGetMyOrderQuery } from '@/store/order/api';
+import { ORDER_STATUS, PAYMENT_METHODS } from '@/types/order';
 import { formatDateTime, formatKRW } from '@/utils';
+import { useParams } from 'next/navigation';
 
 const OrderDetailPage = () => {
-  const orderResponse = {
-    timestamp: 1734008181404,
-    status: 200,
-    message: 'Success',
-    data: {
-      id: 1316653,
-      orderNo: 'e21da6c346604df7bdd68d8fddf0b171',
-      fullname: '서종화',
-      totalListPrice: 15000.0,
-      totalSellingPrice: 13950.0,
-      currency: 'KRW',
-      status: 'PAYMENT_PENDING',
-      paymentMethod: 'PAYPAL',
-      created: '2024-12-12T21:20:38.055635',
-      modified: '2024-12-12T21:20:38.055635',
-      suspicious: false,
-      removed: false,
-    },
-  };
+  const { uuid } = useParams();
+
+  if (!uuid || Array.isArray(uuid)) return <div>잘못된 주문번호입니다.</div>;
+
+  const {
+    data: orderResponse,
+    isLoading,
+    error,
+  } = useGetMyOrderQuery({
+    uuid: uuid,
+  });
+
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div>주문 정보를 불러오는데 실패했습니다.</div>;
+
+  const { data: order } = orderResponse ?? {};
+  if (!order) return null;
 
   const giftCards = [
     {
@@ -58,8 +59,6 @@ const OrderDetailPage = () => {
     },
   ];
 
-  const { data: order } = orderResponse;
-
   return (
     <FlexColumn>
       <TitledSection title="주문 상세보기" showBorder>
@@ -77,14 +76,19 @@ const OrderDetailPage = () => {
                   주문상태
                 </div>
                 <div className="text-sm bg-green-50 text-green-700 border-green-200">
-                  발송완료
+                  {ORDER_STATUS[order.status as keyof typeof ORDER_STATUS] ||
+                    order.status}
                 </div>
               </div>
               <div className="flex gap-2 mt-3">
                 <div className="text-sm text-gray-600 min-w-[100px] shrink-0">
                   입금/결제수단
                 </div>
-                <div className="text-sm">계좌이체 / 무통장입금</div>
+                <div className="text-sm">
+                  {PAYMENT_METHODS[
+                    order.paymentMethod as keyof typeof PAYMENT_METHODS
+                  ] || order.paymentMethod}
+                </div>
               </div>
               <div className="flex gap-2 mt-3">
                 <div className="text-sm text-gray-600 min-w-[100px] shrink-0">

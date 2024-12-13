@@ -24,9 +24,20 @@ export const orderApi = createApi({
       providesTags: ['Orders'],
     }),
 
-    getOrder: builder.query<ApiResponse<Orders.Order>, { id: number }>({
-      query: ({ id }) => ({
-        url: `/orders/${id}`,
+    getMyOrder: builder.query<ApiResponse<Orders.Order>, { uuid: string }>({
+      query: ({ uuid }) => ({
+        url: `/orders/${uuid}`,
+        method: 'GET',
+      }),
+      providesTags: ['Orders'],
+    }),
+
+    getMyOrderItems: builder.query<
+      ApiResponse<Orders.OrderItem[]>,
+      { uuid: string }
+    >({
+      query: ({ uuid }) => ({
+        url: `/orders/${uuid}/items`,
         method: 'GET',
       }),
       providesTags: ['Orders'],
@@ -68,7 +79,8 @@ export const orderApi = createApi({
 
 export const {
   useGetMyOrdersQuery,
-  useGetOrderQuery,
+  useGetMyOrderQuery,
+  useGetMyOrderItemsQuery,
   useCreateOrderMutation,
   useReorderMutation,
   useRequestRefundMutation,
