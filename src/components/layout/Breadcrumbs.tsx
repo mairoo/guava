@@ -4,6 +4,8 @@ import {
   BreadcrumbList,
 } from '@/components/ui/breadcrumb';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import React from 'react';
 
 interface BreadcrumbItem {
   text: string;
@@ -70,12 +72,12 @@ export const Breadcrumbs = ({
                 {item.text}
               </span>
             ) : (
-              <a
+              <Link
                 href={item.url ?? '#'}
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 {item.text}
-              </a>
+              </Link>
             )}
           </li>
         ))}

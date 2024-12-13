@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import { Container } from '../layout/Container';
 
@@ -24,9 +25,9 @@ export const FooterContent = () => {
           <div className="pt-4">
             <div className="flex flex-wrap gap-x-6 gap-y-1">
               {links.map(({ href, text }) => (
-                <a key={href} href={href} className="hover:text-gray-900">
+                <Link key={href} href={href} className="hover:text-gray-900">
                   {text}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -34,7 +35,9 @@ export const FooterContent = () => {
           <div className="h-4" />
 
           <div className="pb-4">
-            <p className="text-xl font-bold mb-4 text-orange-500">주식회사 핀코인</p>
+            <p className="text-xl font-bold mb-4 text-orange-500">
+              주식회사 핀코인
+            </p>
             <div className="flex flex-wrap gap-x-6 gap-y-1">
               {companyInfo.map((info) => (
                 <p key={info}>{info}</p>
