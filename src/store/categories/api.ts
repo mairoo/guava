@@ -4,10 +4,13 @@ import { ApiResponse } from '@/types/response';
 
 import { createApi } from '@reduxjs/toolkit/query/react';
 
+const CACHE_LIFETIME = 5 * 60;
+
 export const categoryApi = createApi({
   reducerPath: 'categoryApi',
   baseQuery: baseQueryWithRetry,
-  tagTypes: ['Categories'],
+  tagTypes: ['Category'],
+  keepUnusedDataFor: CACHE_LIFETIME,
   endpoints: (builder) => ({
     getCategory: builder.query<
       ApiResponse<Categories.Category>,
@@ -17,7 +20,9 @@ export const categoryApi = createApi({
         url: `/categories/${identifier}`,
         method: 'GET',
       }),
-      providesTags: ['Categories'],
+      providesTags: (_, __, identifier) => [
+        { type: 'Category', id: identifier },
+      ],
     }),
   }),
 });

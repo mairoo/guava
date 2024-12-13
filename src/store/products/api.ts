@@ -3,10 +3,13 @@ import { Products } from '@/types/product';
 import { ApiResponse } from '@/types/response';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
+const CACHE_LIFETIME = 5 * 60;
+
 export const productApi = createApi({
   reducerPath: 'productsApi',
   baseQuery: baseQueryWithRetry,
-  tagTypes: ['Products'],
+  tagTypes: ['ProductList', 'ProductDetail', 'SearchResults'],
+  keepUnusedDataFor: CACHE_LIFETIME,
   endpoints: (builder) => ({
     getProducts: builder.query<
       ApiResponse<Products.Product[]>,
@@ -19,7 +22,9 @@ export const productApi = createApi({
           categorySlug,
         },
       }),
-      providesTags: ['Products'],
+      providesTags: (_, __, { categorySlug }) => [
+        { type: 'ProductList', id: categorySlug || 'all' },
+      ],
     }),
 
     getProduct: builder.query<ApiResponse<Products.Product>, { id: number }>({
@@ -27,7 +32,7 @@ export const productApi = createApi({
         url: `/products/${id}`,
         method: 'GET',
       }),
-      providesTags: ['Products'],
+      providesTags: (_, __, { id }) => [{ type: 'ProductDetail', id }],
     }),
 
     searchProducts: builder.query<
@@ -42,7 +47,9 @@ export const productApi = createApi({
           keyword,
         },
       }),
-      providesTags: ['Products'],
+      providesTags: (_, __, { categorySlug, keyword }) => [
+        { type: 'SearchResults', id: `${categorySlug || 'all'}-${keyword}` },
+      ],
     }),
   }),
 });
