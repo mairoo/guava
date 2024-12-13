@@ -18,7 +18,7 @@ export const TableHeader = ({ columns }: { columns: string[] }) => {
 
   return (
     <div
-      className={`grid ${gridClass} gap-4 p-4 bg-lime-50 border-y font-medium`}
+      className={`grid ${gridClass} gap-4 p-4 bg-lime-50 border-y border-lime-300 font-medium`}
     >
       {columns.map((col, index) => (
         <div
