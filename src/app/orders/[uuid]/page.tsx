@@ -2,7 +2,7 @@
 
 import { FlexColumn, GridRow, TitledSection } from '@/components/layout';
 import { Card, CardContent } from '@/components/ui/card';
-import { useGetMyOrderQuery } from '@/store/order/api';
+import { useGetMyOrderItemsQuery, useGetMyOrderQuery } from '@/store/order/api';
 import { ORDER_STATUS, PAYMENT_METHODS } from '@/types/order';
 import { formatDateTime, formatKRW } from '@/utils';
 import { useParams } from 'next/navigation';
@@ -14,17 +14,28 @@ const OrderDetailPage = () => {
 
   const {
     data: orderResponse,
-    isLoading,
-    error,
+    isLoading: orderLoading,
+    error: orderError,
   } = useGetMyOrderQuery({
     uuid: uuid,
   });
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div>주문 정보를 불러오는데 실패했습니다.</div>;
+  const {
+    data: orderItemsResponse,
+    isLoading: itemsLoading,
+    error: itemsError,
+  } = useGetMyOrderItemsQuery({
+    uuid: uuid,
+  });
+
+  if (orderLoading || itemsLoading) return <div>로딩 중...</div>;
+  if (orderError || itemsError)
+    return <div>주문 정보를 불러오는데 실패했습니다.</div>;
 
   const { data: order } = orderResponse ?? {};
   if (!order) return null;
+
+  const { data: orderItems } = orderItemsResponse ?? {};
 
   const giftCards = [
     {
@@ -101,50 +112,31 @@ const OrderDetailPage = () => {
           <div>
             <div className="border md:border-0 rounded-lg">
               <div className="divide-y">
-                <Card className="border-0 shadow-none rounded-none">
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-center">
-                      <div className="text-sm font-medium">상품권 A</div>
-                      <span className="text-sm">{formatKRW.format(13950)}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-sm text-gray-600 mt-3">
-                      <span>수량: 1개</span>
-                      <span>{formatKRW.format(13950)}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-0 shadow-none rounded-none">
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-center">
-                      <div className="text-sm font-medium">상품권 A</div>
-                      <span className="text-sm">{formatKRW.format(13950)}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-sm text-gray-600 mt-3">
-                      <span>수량: 1개</span>
-                      <span>{formatKRW.format(13950)}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-0 shadow-none rounded-none">
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-center">
-                      <div className="text-sm font-medium">
-                        구글기프트카드 10만원
+                {orderItems?.map((item, index) => (
+                  <Card
+                    key={index}
+                    className="border-0 shadow-none rounded-none"
+                  >
+                    <CardContent className="p-6">
+                      <div className="flex justify-between items-center">
+                        <div className="text-sm font-medium">{item.name}</div>
+                        <span className="text-sm">
+                          {formatKRW.format(item.sellingPrice)}
+                        </span>
                       </div>
-                      <span className="text-sm">{formatKRW.format(13950)}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-sm text-gray-600 mt-3">
-                      <span>수량: 10000개</span>
-                      <span>{formatKRW.format(13950999)}</span>
-                    </div>
-                  </CardContent>
-                </Card>
+                      <div className="flex justify-between items-center text-sm text-gray-600 mt-3">
+                        <span>수량: {item.quantity}개</span>
+                        <span>
+                          {formatKRW.format(item.sellingPrice * item.quantity)}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
 
                 <div className="flex justify-end items-center p-6">
                   <span className="text-sm font-medium">
-                    합계금액: {formatKRW.format(13978899)}
+                    합계금액: {formatKRW.format(order.totalSellingPrice)}
                   </span>
                 </div>
               </div>
