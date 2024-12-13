@@ -2,8 +2,12 @@
 
 import { FlexColumn, GridRow, TitledSection } from '@/components/layout';
 import { Card, CardContent } from '@/components/ui/card';
-import { useGetMyOrderItemsQuery, useGetMyOrderQuery } from '@/store/order/api';
-import { ORDER_STATUS, PAYMENT_METHODS } from '@/types/order';
+import {
+  useGetMyOrderItemsQuery,
+  useGetMyOrderQuery,
+  useGetMyOrderVouchersQuery,
+} from '@/store/order/api';
+import { ORDER_STATUS, Orders, PAYMENT_METHODS } from '@/types/order';
 import { formatDateTime, formatKRW } from '@/utils';
 import { useParams } from 'next/navigation';
 
@@ -28,47 +32,51 @@ const OrderDetailPage = () => {
     uuid: uuid,
   });
 
-  if (orderLoading || itemsLoading) return <div>로딩 중...</div>;
-  if (orderError || itemsError)
+  const {
+    data: vouchersResponse,
+    isLoading: vouchersLoading,
+    error: vouchersError,
+  } = useGetMyOrderVouchersQuery({
+    uuid: uuid,
+  });
+
+  if (orderLoading || itemsLoading || vouchersLoading)
+    return <div>로딩 중...</div>;
+  if (orderError || itemsError || vouchersError)
     return <div>주문 정보를 불러오는데 실패했습니다.</div>;
 
   const { data: order } = orderResponse ?? {};
   if (!order) return null;
 
   const { data: orderItems } = orderItemsResponse ?? {};
+  const vouchers = vouchersResponse?.data ?? [];
 
-  const giftCards = [
-    {
-      id: 1,
-      name: '구글플레이기프트카드 5만원',
-      pin: 'GOOG-1234-5678-9ABC',
-      note: '123456',
-    },
-    {
-      id: 2,
-      name: '아이튠즈 기프트카드 3만원',
-      pin: 'ITNS-DEFG-HIJK-LMNO',
-      note: '123456',
-    },
-    {
-      id: 3,
-      name: '넷플릭스 기프트카드 10만원',
-      pin: 'NFLX-PQRS-TUVW-XYZ1',
-      note: '123456',
-    },
-    {
-      id: 4,
-      name: '플레이스테이션 기프트카드 5만원',
-      pin: 'PSN-2345-6789-ABCD',
-      note: '123456',
-    },
-    {
-      id: 5,
-      name: '닌텐도 기프트카드 3만원',
-      pin: 'NTDO-EFGH-IJKL-MNOP',
-      note: '123456',
-    },
-  ];
+  const getNumberedVouchers = (inputVouchers: Orders.Voucher[]) => {
+    let groupNumber = 1;
+    let itemNumber = 1;
+    let prevName = '';
+    let prevSubtitle = '';
+
+    return inputVouchers.map((voucher) => {
+      if (voucher.name !== prevName || voucher.subtitle !== prevSubtitle) {
+        if (prevName !== '') {
+          groupNumber++;
+          itemNumber = 1;
+        }
+        prevName = voucher.name;
+        prevSubtitle = voucher.subtitle;
+      } else {
+        itemNumber++;
+      }
+
+      return {
+        ...voucher,
+        numbering: `[${groupNumber}-${itemNumber}]`,
+      };
+    });
+  };
+
+  const numberedVouchers = getNumberedVouchers(vouchers);
 
   return (
     <FlexColumn>
@@ -149,11 +157,16 @@ const OrderDetailPage = () => {
         <Card className="md:border-0 md:shadow-none">
           <CardContent className="px-6 py-2">
             <div className="divide-y">
-              {giftCards.map((card) => (
-                <div key={card.id} className="md:grid md:grid-cols-12">
-                  <div className="text-sm py-3 col-span-3">{card.name}</div>
+              {numberedVouchers?.map((voucher, index) => (
+                <div key={index} className="md:grid md:grid-cols-12">
+                  <div className="text-sm py-3 col-span-3">
+                    <span className="mr-4">{voucher.numbering}</span>
+                    {voucher.name}
+                    {voucher.subtitle}
+                  </div>
                   <div className="text-sm py-3 md:border-l font-mono col-span-9 md:pl-6">
-                    {card.pin}
+                    {voucher.code}
+                    {voucher.remarks}
                   </div>
                 </div>
               ))}

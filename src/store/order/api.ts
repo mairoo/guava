@@ -43,6 +43,17 @@ export const orderApi = createApi({
       providesTags: ['Orders'],
     }),
 
+    getMyOrderVouchers: builder.query<
+      ApiResponse<Orders.Voucher[]>,
+      { uuid: string }
+    >({
+      query: ({ uuid }) => ({
+        url: `/orders/${uuid}/vouchers`,
+        method: 'GET',
+      }),
+      providesTags: ['Orders'],
+    }),
+
     createOrder: builder.mutation<
       ApiResponse<Orders.Order>,
       Orders.CreateOrderRequest
@@ -81,6 +92,7 @@ export const {
   useGetMyOrdersQuery,
   useGetMyOrderQuery,
   useGetMyOrderItemsQuery,
+  useGetMyOrderVouchersQuery,
   useCreateOrderMutation,
   useReorderMutation,
   useRequestRefundMutation,

@@ -74,6 +74,14 @@ export namespace Orders {
     items: OrderItem[];
   }
 
+  export interface Voucher {
+    name: string;
+    subtitle: string;
+    code: string;
+    remarks: string;
+    revoked: boolean;
+  }
+
   export interface OrderSearchCondition {
     startDate?: string;
     endDate?: string;
