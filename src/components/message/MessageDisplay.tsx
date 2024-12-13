@@ -34,6 +34,13 @@ const backgrounds = {
   loading: 'bg-gray-50',
 };
 
+const borders = {
+  error: 'border-red-200',
+  warning: 'border-amber-200',
+  info: 'border-blue-200',
+  loading: 'border-gray-200',
+};
+
 export const MessageDisplay = ({
   type,
   message,
@@ -45,7 +52,9 @@ export const MessageDisplay = ({
 
   return (
     <TopSpace size="lg" className={className} {...rest}>
-      <Card className={cn('max-w-lg w-full p-6', backgrounds[type])}>
+      <Card
+        className={cn('max-w-lg w-full p-6', backgrounds[type], borders[type])}
+      >
         <div className="flex flex-col items-center text-center gap-4">
           <Icon
             className={cn('w-12 h-12', colors[type], {
