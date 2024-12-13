@@ -1,5 +1,6 @@
 'use client';
 
+import { LoadingMessage } from '@/components/message';
 import { useAuth } from '@/hooks/useAuth';
 import { useLogout } from '@/hooks/useLogout';
 import { useMounted } from '@/hooks/useMounted';
@@ -102,7 +103,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   if (!isMounted || isLoading) {
     return (
       <div className="min-h-screen" aria-hidden="true">
-        {children}
+        <LoadingMessage
+          message="대한민국 1등 상품권 쇼핑몰 핀코인"
+          description="잠시만 기다려주세요."
+        />
       </div>
     );
   }
