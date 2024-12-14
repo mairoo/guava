@@ -7,9 +7,11 @@ import { useLoadingTimer } from '@/hooks/useLoadingTimer';
 import { useLogout } from '@/hooks/useLogout';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const SignOutPage = () => {
   const router = useRouter();
+  const [isTimerActive, setIsTimerActive] = useState(false);
   const {
     logout,
     isLoading: isLogoutLoading,
@@ -20,9 +22,10 @@ const SignOutPage = () => {
 
   const isLoading = useLoadingTimer({
     isLoading: isLogoutLoading,
-    minLoadingTime: 1500,
+    minLoadingTime: 700,
     onTimerComplete: () => {
       if (!error) {
+        setIsTimerActive(true);
         router.push('/auth/sign-in');
       }
     },
@@ -32,16 +35,7 @@ const SignOutPage = () => {
     await logout();
   };
 
-  const styles = {
-    button: {
-      base: 'w-full h-11 transition-colors',
-      primary: 'bg-teal-800 text-white hover:bg-teal-700',
-      secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-800',
-      loading: 'cursor-not-allowed opacity-70',
-    },
-  };
-
-  if (isLoading) {
+  if (isLoading || isTimerActive) {
     return (
       <TopSpace>
         <LoadingMessage
@@ -51,6 +45,15 @@ const SignOutPage = () => {
       </TopSpace>
     );
   }
+
+  const styles = {
+    button: {
+      base: 'w-full h-11 transition-colors',
+      primary: 'bg-teal-800 text-white hover:bg-teal-700',
+      secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-800',
+      loading: 'cursor-not-allowed opacity-70',
+    },
+  };
 
   return (
     <TopSpace>
