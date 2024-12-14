@@ -70,7 +70,7 @@ export namespace Orders {
     created: string;
     modified: string;
     suspicious: boolean;
-    removed: boolean;
+    isRemoved: boolean;
     items: OrderItem[];
   }
 
