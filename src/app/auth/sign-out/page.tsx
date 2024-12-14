@@ -3,15 +3,28 @@
 import { TitledSection, TopSpace } from '@/components/layout';
 import { ErrorMessage, LoadingMessage } from '@/components/message';
 import { Button } from '@/components/ui/button';
+import { useLoadingTimer } from '@/hooks/useLoadingTimer';
 import { useLogout } from '@/hooks/useLogout';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 
 const SignOutPage = () => {
   const router = useRouter();
-  const { logout, isLoading, error } = useLogout({
+  const {
+    logout,
+    isLoading: isLogoutLoading,
+    error,
+  } = useLogout({
     skipApi: false,
-    redirect: true,
+    redirect: false, // 비동기로 리다이렉트 되면 타이머가 무용지물
+  });
+
+  const isLoading = useLoadingTimer({
+    isLoading: isLogoutLoading,
+    minLoadingTime: 700,
+    onTimerComplete: () => {
+      router.push('/auth/sign-in'); // 타이머가 완료된 후 리다이렉트
+    },
   });
 
   const styles = {
