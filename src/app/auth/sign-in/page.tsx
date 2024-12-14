@@ -1,11 +1,12 @@
 'use client';
 
 import { TitledSection, TopSpace } from '@/components/layout';
-import { ErrorMessage } from '@/components/message';
+import { ErrorMessage, LoadingMessage } from '@/components/message';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useLoadingTimer } from '@/hooks/useLoadingTimer';
 import { useLogin } from '@/hooks/useLogin';
 import { cn } from '@/lib/utils';
 import { Auth } from '@/types/auth';
@@ -14,7 +15,7 @@ import { Key, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup'; // 폼 유효성 검사 스키마 정의
+import * as yup from 'yup';
 
 // 폼 유효성 검사 스키마 정의
 const schema = yup.object().shape({
@@ -38,7 +39,17 @@ const SignInPage = () => {
   const redirectPath = searchParams?.get('from') || '/';
 
   // 1. 기본 훅 및 상태 관리
-  const { login, isLoading, error } = useLogin();
+  const { login, isLoading: isLoginLoading, error } = useLogin();
+
+  const isLoading = useLoadingTimer({
+    isLoading: isLoginLoading,
+    minLoadingTime: 700,
+    onTimerComplete: () => {
+      // 타이머 완료 후 리다이렉트
+      const safePath = validateRedirectPath(redirectPath);
+      router.replace(safePath);
+    },
+  });
 
   // 2. 폼 설정
   const {
@@ -66,8 +77,6 @@ const SignInPage = () => {
    * @param data 사용자가 입력한 로그인 정보 (이메일, 비밀번호, 자동로그인 여부)
    */
   const onSubmit = async (data: Auth.SignInRequest) => {
-    if (isProcessing) return;
-
     try {
       await login(data);
       // 검증된 경로로 리다이렉션
@@ -110,6 +119,17 @@ const SignInPage = () => {
     },
     link: 'text-blue-600 hover:text-blue-800 transition-colors duration-200',
   };
+
+  if (isProcessing) {
+    return (
+      <TopSpace>
+        <LoadingMessage
+          message="로그인 처리 중"
+          description="잠시만 기다려주세요."
+        />
+      </TopSpace>
+    );
+  }
 
   // 6. 렌더링
   return (
