@@ -92,6 +92,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       } catch (error) {
         console.error('Auth initialization failed:', error);
         await logout();
+        // 여기는 오류 확인을 위해 일부러 리다이렉트 하지 않음
       } finally {
         dispatch(setLoading(false));
       }

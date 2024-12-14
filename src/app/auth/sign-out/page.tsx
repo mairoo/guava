@@ -20,17 +20,16 @@ const SignOutPage = () => {
 
   const isLoading = useLoadingTimer({
     isLoading: isLogoutLoading,
-    minLoadingTime: 700,
+    minLoadingTime: 1500,
     onTimerComplete: () => {
-      router.push('/auth/sign-in'); // 타이머가 완료된 후 리다이렉트
+      if (!error) {
+        router.push('/auth/sign-in');
+      }
     },
   });
 
   const handleLogout = async () => {
     await logout();
-    if (!error) {
-      router.push('/auth/sign-in');
-    }
   };
 
   const styles = {
