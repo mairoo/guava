@@ -7,11 +7,9 @@ import { useLoadingTimer } from '@/hooks/useLoadingTimer';
 import { useLogout } from '@/hooks/useLogout';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 const SignOutPage = () => {
   const router = useRouter();
-  const [isRedirecting, setIsRedirecting] = useState(false);
   const {
     logout,
     isLoading: isLogoutLoading,
@@ -22,23 +20,12 @@ const SignOutPage = () => {
   });
 
   const isLoading = useLoadingTimer({
-    isLoading: isLogoutLoading || isRedirecting,
+    isLoading: isLogoutLoading,
     minLoadingTime: 700,
     onTimerComplete: () => {
       router.push('/auth/sign-in'); // 타이머가 완료된 후 리다이렉트
     },
   });
-
-  const handleLogout = async () => {
-    setIsRedirecting(true); // 먼저 리다이렉트 상태 설정
-
-    try {
-      await logout();
-    } catch (error) {
-      setIsRedirecting(false); // 에러 발생 시에만 리다이렉트 상태 해제
-      // 에러는 useLogout 내부에서 이미 처리됨
-    }
-  };
 
   const styles = {
     button: {
@@ -49,7 +36,7 @@ const SignOutPage = () => {
     },
   };
 
-  if (isRedirecting || isLoading) {
+  if (isLoading) {
     return (
       <TopSpace>
         <LoadingMessage
@@ -95,7 +82,7 @@ const SignOutPage = () => {
             </Button>
             <Button
               type="button"
-              onClick={handleLogout}
+              onClick={logout}
               disabled={isLoading}
               className={cn(
                 styles.button.base,

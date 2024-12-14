@@ -86,11 +86,6 @@ export const useLogout = ({
       storage.clearLastRefreshTime();
       auth.removeCookie('isAuthenticated');
 
-      // redirect가 true일 경우에만 isProcessing을 true로 유지
-      if (!redirect) {
-        setIsProcessing(false);
-      }
-
       // 리다이렉트 처리
       if (redirect) {
         router.push('/auth/sign-in');
@@ -99,13 +94,14 @@ export const useLogout = ({
       console.error('로그아웃 중 오류 발생:', error);
       setError(error.data?.message || '로그아웃 중 오류가 발생했습니다.');
       auth.removeCookie('isAuthenticated'); // 실패해도 쿠키 제거
-      setIsProcessing(false); // 에러 발생 시에만 isProcessing을 false로 설정
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   return {
     logout,
-    isLoading: isProcessing || isLogoutLoading,
+    isLoading: isProcessing || isLogoutLoading, // 통합된 로딩 상태
     error,
     clearError,
   };
