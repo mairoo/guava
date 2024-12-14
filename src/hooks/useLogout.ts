@@ -4,7 +4,6 @@ import { clearCart } from '@/store/cart/slice';
 import { useAppDispatch } from '@/store/hooks';
 import { storage } from '@/utils';
 import { auth } from '@/utils/auth';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface UseLogoutOptions {
@@ -14,11 +13,6 @@ interface UseLogoutOptions {
    * - true: 세션 만료로 인한 자동 로그아웃 시 (AuthProvider)
    */
   skipApi?: boolean;
-
-  /**
-   * 로그아웃 후 로그인 페이지로 리다이렉트 여부
-   */
-  redirect?: boolean;
 }
 
 interface UseLogoutReturn {
@@ -51,10 +45,8 @@ interface UseLogoutReturn {
  */
 export const useLogout = ({
   skipApi = false,
-  redirect = true,
 }: UseLogoutOptions = {}): UseLogoutReturn => {
   // 1. 기본 훅 초기화
-  const router = useRouter();
   const dispatch = useAppDispatch();
 
   // 2. API 관련 상태
@@ -85,11 +77,6 @@ export const useLogout = ({
       storage.clearRememberMe();
       storage.clearLastRefreshTime();
       auth.removeCookie('isAuthenticated');
-
-      // 리다이렉트 처리
-      if (redirect) {
-        router.push('/auth/sign-in');
-      }
     } catch (error: any) {
       console.error('로그아웃 중 오류 발생:', error);
       setError(error.data?.message || '로그아웃 중 오류가 발생했습니다.');
@@ -101,7 +88,7 @@ export const useLogout = ({
 
   return {
     logout,
-    isLoading: isProcessing || isLogoutLoading, // 통합된 로딩 상태
+    isLoading: isProcessing || isLogoutLoading,
     error,
     clearError,
   };

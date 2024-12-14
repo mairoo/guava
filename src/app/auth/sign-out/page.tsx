@@ -16,7 +16,6 @@ const SignOutPage = () => {
     error,
   } = useLogout({
     skipApi: false,
-    redirect: false, // 비동기로 리다이렉트 되면 타이머가 무용지물
   });
 
   const isLoading = useLoadingTimer({
@@ -26,6 +25,13 @@ const SignOutPage = () => {
       router.push('/auth/sign-in'); // 타이머가 완료된 후 리다이렉트
     },
   });
+
+  const handleLogout = async () => {
+    await logout();
+    if (!error) {
+      router.push('/auth/sign-in');
+    }
+  };
 
   const styles = {
     button: {
@@ -82,7 +88,7 @@ const SignOutPage = () => {
             </Button>
             <Button
               type="button"
-              onClick={logout}
+              onClick={handleLogout}
               disabled={isLoading}
               className={cn(
                 styles.button.base,

@@ -12,6 +12,7 @@ import { hydrateCart } from '@/store/cart/slice';
 import { useAppDispatch } from '@/store/hooks';
 import { storage } from '@/utils';
 import { auth } from '@/utils/auth';
+import {useRouter} from 'next/navigation';
 import React, { useEffect } from 'react';
 
 interface AuthProviderProps {
@@ -25,6 +26,8 @@ interface AuthProviderProps {
  * - 백엔드 장바구니와 로컬 장바구니 병합
  */
 const AuthProvider = ({ children }: AuthProviderProps) => {
+  const router = useRouter();
+
   // RTK Query Hooks
   const [refresh] = useRefreshMutation();
   const [trigger] = cartApi.endpoints.fetchCart.useLazyQuery();
@@ -33,7 +36,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const { isLoading, accessToken } = useAuth();
   const { logout } = useLogout({
     skipApi: true,
-    redirect: true,
   });
   const isMounted = useMounted();
 
@@ -64,6 +66,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         // 인증 상태 불일치 처리
         if (!isAuthenticatedCookie || !rememberMe) {
           await logout();
+          router.push('/auth/sign-in');
           return;
         }
 
