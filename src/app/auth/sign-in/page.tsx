@@ -78,17 +78,20 @@ const SignInPage = () => {
     }
   };
 
-  // validateRedirectPath 함수도 SignInPage로 이동
   const validateRedirectPath = (path: string): string => {
-    if (path.startsWith('http://') || path.startsWith('https://')) {
+    // 외부 URL 차단
+    if (!path || path.startsWith('http')) {
       return '/';
     }
 
-    if (path.startsWith('/auth')) {
-      return '/';
-    }
+    // 이미 로그인한 사용자가 접근하면 안 되는 인증 페이지들
+    const restrictedAuthPaths = [
+      '/auth/sign-in',
+      '/auth/sign-up',
+      '/auth/find-password',
+    ];
 
-    if (!path || path === '/auth/sign-in') {
+    if (restrictedAuthPaths.includes(path)) {
       return '/';
     }
 
