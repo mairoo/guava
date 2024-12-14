@@ -6,12 +6,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { Auth } from '@/types/auth';
 import { CartItem } from '@/types/cart';
 import { isEqual } from 'lodash';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-
-interface UseLoginOptions {
-  redirectTo?: string;
-}
 
 interface UseLoginReturn {
   login: (data: Auth.SignInRequest) => Promise<void>;
@@ -20,12 +15,7 @@ interface UseLoginReturn {
   clearError: () => void;
 }
 
-export const useLogin = ({
-  redirectTo = typeof window !== 'undefined'
-    ? new URLSearchParams(window.location.search).get('from') || '/'
-    : '/',
-}: UseLoginOptions = {}): UseLoginReturn => {
-  const router = useRouter();
+export const useLogin = (): UseLoginReturn => {
   const dispatch = useAppDispatch();
 
   // API Hooks
@@ -40,26 +30,6 @@ export const useLogin = ({
   const [isProcessing, setIsProcessing] = useState(false);
 
   const clearError = () => setError(null);
-
-  // 리다이렉션 경로 검증 함수 추가
-  const validateRedirectPath = (path: string): string => {
-    // 외부 URL로의 리다이렉션 방지
-    if (path.startsWith('http://') || path.startsWith('https://')) {
-      return '/';
-    }
-
-    // 인증 페이지로의 리다이렉션 방지
-    if (path.startsWith('/auth')) {
-      return '/';
-    }
-
-    // 빈 경로나 잘못된 경로 처리
-    if (!path || path === '/auth/sign-in') {
-      return '/';
-    }
-
-    return path;
-  };
 
   /**
    * 장바구니 데이터를 비교하여 백엔드 동기화 필요 여부를 판단
@@ -99,10 +69,6 @@ export const useLogin = ({
       if (needsSync(fetchResult, mergedCart)) {
         await syncCart(mergedCart).unwrap();
       }
-
-      // 검증된 경로로 리다이렉션
-      const safePath = validateRedirectPath(redirectTo);
-      router.replace(safePath);
     } catch (error: any) {
       setError(
         error.data?.message ||

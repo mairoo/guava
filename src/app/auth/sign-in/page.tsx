@@ -12,7 +12,7 @@ import { Auth } from '@/types/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Key, Mail } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup'; // 폼 유효성 검사 스키마 정의
 
@@ -32,12 +32,13 @@ const schema = yup.object().shape({
 const SignInPage = () => {
   // URL 파라미터 접근을 위한 훅
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   // 리다이렉션 경로 결정
   const redirectPath = searchParams?.get('from') || '/';
 
   // 1. 기본 훅 및 상태 관리
-  const { login, isLoading, error } = useLogin({ redirectTo: redirectPath });
+  const { login, isLoading, error } = useLogin();
 
   // 2. 폼 설정
   const {
@@ -65,9 +66,33 @@ const SignInPage = () => {
    * @param data 사용자가 입력한 로그인 정보 (이메일, 비밀번호, 자동로그인 여부)
    */
   const onSubmit = async (data: Auth.SignInRequest) => {
-    // 이미 처리 중이면 중복 제출 방지
     if (isProcessing) return;
-    await login(data);
+
+    try {
+      await login(data);
+      // 검증된 경로로 리다이렉션
+      const safePath = validateRedirectPath(redirectPath);
+      router.replace(safePath);
+    } catch (error) {
+      // 에러는 useLogin 내부에서 처리되므로 여기서는 추가 처리 불필요
+    }
+  };
+
+  // validateRedirectPath 함수도 SignInPage로 이동
+  const validateRedirectPath = (path: string): string => {
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return '/';
+    }
+
+    if (path.startsWith('/auth')) {
+      return '/';
+    }
+
+    if (!path || path === '/auth/sign-in') {
+      return '/';
+    }
+
+    return path;
   };
 
   // 5. 스타일 정의
