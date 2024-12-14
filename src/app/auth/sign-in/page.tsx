@@ -44,11 +44,6 @@ const SignInPage = () => {
   const isLoading = useLoadingTimer({
     isLoading: isLoginLoading,
     minLoadingTime: 700,
-    onTimerComplete: () => {
-      // 타이머 완료 후 리다이렉트
-      const safePath = validateRedirectPath(redirectPath);
-      router.replace(safePath);
-    },
   });
 
   // 2. 폼 설정
