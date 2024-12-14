@@ -2,6 +2,7 @@
 
 import { Pagination } from '@/components/common';
 import { FlexColumn, GridRow, TitledSection } from '@/components/layout';
+import { ErrorMessage, LoadingMessage } from '@/components/message';
 import { InquiryList, LoginHistory, OrderList } from '@/components/order';
 import { useGetMyOrdersQuery } from '@/store/order/api';
 import React, { useState } from 'react';
@@ -61,9 +62,15 @@ const OrderListPage = () => {
     <FlexColumn>
       <TitledSection title="주문 및 발송 내역" showBorder>
         {isLoading ? (
-          <div>로딩 중...</div>
+          <LoadingMessage
+            message="로딩 중"
+            description="주문 내역을 불러오고 있습니다. 잠시만 기다려주세요."
+          />
         ) : error ? (
-          <div>주문 내역을 불러오는데 실패했습니다.</div>
+          <ErrorMessage
+            message="주문 내역을 불러오는데 실패했습니다"
+            description="잠시 후 다시 시도해주세요. 문제가 지속되면 고객센터로 문의해주세요."
+          />
         ) : (
           <>
             <OrderList orders={orders} />

@@ -1,6 +1,7 @@
 'use client';
 
 import { FlexColumn, GridRow, TitledSection } from '@/components/layout';
+import { ErrorMessage, LoadingMessage } from '@/components/message';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   useGetMyOrderItemsQuery,
@@ -40,10 +41,23 @@ const OrderDetailPage = () => {
     uuid: uuid,
   });
 
-  if (orderLoading || itemsLoading || vouchersLoading)
-    return <div>로딩 중...</div>;
-  if (orderError || itemsError || vouchersError)
-    return <div>주문 정보를 불러오는데 실패했습니다.</div>;
+  if (orderLoading || itemsLoading || vouchersLoading) {
+    return (
+      <LoadingMessage
+        message="로딩 중"
+        description="주문 정보를 불러오고 있습니다. 잠시만 기다려주세요."
+      />
+    );
+  }
+
+  if (orderError || itemsError || vouchersError) {
+    return (
+      <ErrorMessage
+        message="주문 정보를 불러오는데 실패했습니다"
+        description="잠시 후 다시 시도해주세요. 문제가 지속되면 고객센터로 문의해주세요."
+      />
+    );
+  }
 
   const { data: order } = orderResponse ?? {};
   if (!order) return null;
