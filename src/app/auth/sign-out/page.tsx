@@ -38,10 +38,12 @@ const SignOutPage = () => {
 
   if (isLoading) {
     return (
-      <LoadingMessage
-        message="로그아웃 처리 중"
-        description="잠시만 기다려주세요..."
-      />
+      <TopSpace>
+        <LoadingMessage
+          message="로그아웃 처리 중"
+          description="잠시만 기다려주세요."
+        />
+      </TopSpace>
     );
   }
 

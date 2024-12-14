@@ -1,4 +1,3 @@
-import { TopSpace } from '@/components/layout';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { AlertCircle, AlertTriangle, Info, Loader2 } from 'lucide-react';
@@ -11,8 +10,6 @@ interface MessageDisplayProps extends ComponentPropsWithoutRef<'div'> {
   message: string;
   description?: string;
   className?: string;
-  topSpace?: boolean; // topSpace 옵션 추가
-  topSpaceSize?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'; // size 옵션도 추가
 }
 
 const icons = {
@@ -48,45 +45,31 @@ export const MessageDisplay = ({
   message,
   description,
   className,
-  topSpace,
-  topSpaceSize = 'lg',
   ...rest
 }: MessageDisplayProps) => {
   const Icon = icons[type];
 
-  const Content = (
-    <Card
-      className={cn('max-w-lg w-full p-6', backgrounds[type], borders[type])}
-    >
-      <div className="flex flex-col items-center text-center gap-4">
-        <Icon
-          className={cn('w-12 h-12', colors[type], {
-            'animate-spin': type === 'loading',
-          })}
-        />
-        <div className="space-y-2">
-          <h3 className={cn('text-lg font-semibold', colors[type])}>
-            {message}
-          </h3>
-          {description && (
-            <p className="text-gray-600 text-sm">{description}</p>
-          )}
-        </div>
-      </div>
-    </Card>
-  );
-
-  if (topSpace) {
-    return (
-      <TopSpace size={topSpaceSize} className={className} {...rest}>
-        {Content}
-      </TopSpace>
-    );
-  }
-
   return (
     <div className={cn('w-full flex justify-center mt-2', className)} {...rest}>
-      {Content}
+      <Card
+        className={cn('max-w-lg w-full p-6', backgrounds[type], borders[type])}
+      >
+        <div className="flex flex-col items-center text-center gap-4">
+          <Icon
+            className={cn('w-12 h-12', colors[type], {
+              'animate-spin': type === 'loading',
+            })}
+          />
+          <div className="space-y-2">
+            <h3 className={cn('text-lg font-semibold', colors[type])}>
+              {message}
+            </h3>
+            {description && (
+              <p className="text-gray-600 text-sm">{description}</p>
+            )}
+          </div>
+        </div>
+      </Card>
     </div>
   );
 };
