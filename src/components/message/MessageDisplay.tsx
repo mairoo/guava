@@ -52,7 +52,7 @@ export const MessageDisplay = ({
   return (
     <div className={cn('w-full flex justify-center mt-2', className)} {...rest}>
       <Card
-        className={cn('max-w-lg w-full p-6', backgrounds[type], borders[type])}
+        className={cn('max-w-xl w-full p-6', backgrounds[type], borders[type])}
       >
         <div className="flex flex-col items-center text-center gap-4">
           <Icon
