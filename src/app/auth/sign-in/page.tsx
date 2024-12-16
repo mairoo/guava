@@ -10,12 +10,12 @@ import { useLoadingTimer } from '@/hooks/useLoadingTimer';
 import { useLogin } from '@/hooks/useLogin';
 import { cn } from '@/lib/utils';
 import { Auth } from '@/types/auth';
-import { ApiErrorResponse } from '@/types/response';
+import { ApiErrorResponse, ApiFieldError } from '@/types/response';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Key, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup'; // 폼 유효성 검사 스키마 정의
 
@@ -42,7 +42,8 @@ const SignInPage = () => {
 
   // 1. 기본 훅 및 상태 관리
   const { login, isLoading: isLoginLoading } = useLogin();
-  const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [generalError, setGeneralError] = useState<string | null>(null);
 
   // 2. 로딩 타이머 설정
   const isTimerActive = useLoadingTimer({
@@ -85,20 +86,26 @@ const SignInPage = () => {
       if ('data' in error) {
         const errorData = error.data as ApiErrorResponse;
 
-        // 필드 에러가 있는 경우
+        // 필드별 에러 처리
         if (errorData.errors?.length) {
-          setError(errorData.errors.map((err) => err.message).join('\n'));
+          const newFieldErrors: Record<string, string> = {};
+          errorData.errors.forEach((err: ApiFieldError) => {
+            newFieldErrors[err.field] = err.message;
+          });
+          setFieldErrors(newFieldErrors);
           return;
         }
 
-        // 일반 에러 메시지가 있는 경우
+        // 일반 에러 메시지 처리
         if (errorData.message) {
-          setError(errorData.message);
+          setGeneralError(errorData.message);
           return;
         }
       }
 
-      setError('로그인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      setGeneralError(
+        '로그인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
+      );
     }
   };
 
@@ -135,17 +142,13 @@ const SignInPage = () => {
     link: 'text-blue-600 hover:text-blue-800 transition-colors duration-200',
   };
 
-  useEffect(() => {
-    console.log('loginMutation state:', { isLoginLoading, error });
-  }, [isLoginLoading, error]);
-
-  console.log('SignInPage rendered', { isProcessing, isLoginLoading, error });
-
   // 8. 렌더링
   return (
     <TopSpace>
       <div className="w-full max-w-xl mx-auto space-y-4">
-        {error && <ErrorMessage message={error} />}
+        {generalError && (
+          <ErrorMessage message="로그인 실패" description={generalError} />
+        )}
         {isProcessing && (
           <LoadingMessage
             message="로그인 처리 중"
@@ -175,12 +178,15 @@ const SignInPage = () => {
                     className={cn(
                       styles.input.base,
                       'pl-10',
-                      errors.email && styles.input.error,
+                      (errors.email || fieldErrors['email']) &&
+                        styles.input.error,
                     )}
                   />
                 </div>
-                {errors.email && (
-                  <p className="text-sm text-red-500">{errors.email.message}</p>
+                {(errors.email || fieldErrors['email']) && (
+                  <p className="text-sm text-red-500">
+                    {fieldErrors['email'] || errors.email?.message}
+                  </p>
                 )}
               </div>
 
@@ -199,13 +205,14 @@ const SignInPage = () => {
                     className={cn(
                       styles.input.base,
                       'pl-10',
-                      errors.password && styles.input.error,
+                      (errors.password || fieldErrors['password']) &&
+                        styles.input.error,
                     )}
                   />
                 </div>
-                {errors.password && (
+                {(errors.password || fieldErrors['password']) && (
                   <p className="text-sm text-red-500">
-                    {errors.password.message}
+                    {fieldErrors['password'] || errors.password?.message}
                   </p>
                 )}
               </div>
