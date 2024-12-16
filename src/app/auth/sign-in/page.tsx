@@ -41,12 +41,13 @@ const SignInPage = () => {
   // 1. 기본 훅 및 상태 관리
   const { login, isLoading: isLoginLoading } = useLogin();
 
+  // 2. 로딩 타이머 설정
   const isTimerActive = useLoadingTimer({
     isLoading: isLoginLoading,
     minLoadingTime: 700,
   });
 
-  // 2. 폼 설정
+  // 3. 폼 설정
   const {
     register,
     handleSubmit,
@@ -64,11 +65,11 @@ const SignInPage = () => {
     reValidateMode: 'onSubmit',
   });
 
-  // 3. 전체 처리 상태 계산
+  // 4. 전체 처리 상태 계산
   const isProcessing = isSubmitting || isTimerActive;
 
   /**
-   * 4. 로그인 폼 제출 핸들러
+   * 5. 로그인 폼 제출 핸들러
    * @param data 사용자가 입력한 로그인 정보 (이메일, 비밀번호, 자동로그인 여부)
    */
   const onSubmit = async (data: Auth.SignInRequest) => {
@@ -102,7 +103,19 @@ const SignInPage = () => {
     return path;
   };
 
-  // 5. 스타일 정의
+  // 6. 로딩 상태일 때 표시할 UI
+  if (isProcessing) {
+    return (
+      <TopSpace>
+        <LoadingMessage
+          message="로그인 처리 중"
+          description="잠시만 기다려주세요."
+        />
+      </TopSpace>
+    );
+  }
+
+  // 7. 스타일 정의
   const styles = {
     input: {
       base: 'focus-visible:ring-0 focus-visible:ring-offset-0 border border-gray-400',
@@ -115,18 +128,7 @@ const SignInPage = () => {
     link: 'text-blue-600 hover:text-blue-800 transition-colors duration-200',
   };
 
-  if (isProcessing) {
-    return (
-      <TopSpace>
-        <LoadingMessage
-          message="로그인 처리 중"
-          description="잠시만 기다려주세요."
-        />
-      </TopSpace>
-    );
-  }
-
-  // 6. 렌더링
+  // 8. 렌더링
   return (
     <TopSpace>
       <TitledSection

@@ -7,13 +7,18 @@ import { useLoadingTimer } from '@/hooks/useLoadingTimer';
 import { useLogout } from '@/hooks/useLogout';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const SignOutPage = () => {
+  // 1. 기본 훅 및 상태 관리
   const router = useRouter();
   const { logout, isLoading: isLogoutLoading } = useLogout({
     skipApi: false,
   });
 
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // 2. 로딩 타이머 설정
   const isTimerActive = useLoadingTimer({
     isLoading: isLogoutLoading,
     minLoadingTime: 700,
@@ -22,15 +27,25 @@ const SignOutPage = () => {
     },
   });
 
+  /**
+   * 3. 로그아웃 처리 핸들러
+   * 로그아웃 버튼 클릭 시 실행되며 로그아웃 처리를 수행
+   */
   const handleLogout = async () => {
+    // 이미 처리 중이면 중복 실행 방지
+    if (isProcessing) return;
+
     try {
+      setIsProcessing(true);
       await logout();
     } catch (error) {
       // TODO: useLogout 에러 처리 안 하고 여기서 함
+      setIsProcessing(false);
     }
   };
 
-  if (isTimerActive) {
+  // 4. 로딩 상태일 때 표시할 UI
+  if (isProcessing || isTimerActive) {
     return (
       <TopSpace>
         <LoadingMessage
@@ -41,6 +56,7 @@ const SignOutPage = () => {
     );
   }
 
+  // 5. 스타일 정의
   const styles = {
     button: {
       base: 'w-full h-11 transition-colors',
@@ -50,6 +66,7 @@ const SignOutPage = () => {
     },
   };
 
+  // 6. 렌더링
   return (
     <TopSpace>
       <TitledSection
@@ -59,19 +76,21 @@ const SignOutPage = () => {
         className="w-full max-w-xl mx-auto"
       >
         <div className="space-y-4">
+          {/* 안내 메시지 */}
           <p className="text-center text-gray-600">
             정말 로그아웃 하시겠습니까?
           </p>
 
+          {/* 버튼 영역 */}
           <div className="grid grid-cols-2 gap-4">
             <Button
               type="button"
               onClick={() => router.back()}
-              disabled={isTimerActive}
+              disabled={isProcessing || isTimerActive}
               className={cn(
                 styles.button.base,
                 styles.button.secondary,
-                isTimerActive && styles.button.loading,
+                (isProcessing || isTimerActive) && styles.button.loading,
               )}
             >
               취소
@@ -79,14 +98,14 @@ const SignOutPage = () => {
             <Button
               type="button"
               onClick={handleLogout}
-              disabled={isTimerActive}
+              disabled={isProcessing || isTimerActive}
               className={cn(
                 styles.button.base,
                 styles.button.primary,
-                isTimerActive && styles.button.loading,
+                (isProcessing || isTimerActive) && styles.button.loading,
               )}
             >
-              {isTimerActive ? '로그아웃 중...' : '로그아웃'}
+              {isProcessing || isTimerActive ? '로그아웃 중...' : '로그아웃'}
             </Button>
           </div>
         </div>
