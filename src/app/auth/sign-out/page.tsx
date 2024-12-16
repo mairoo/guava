@@ -7,20 +7,17 @@ import { useLoadingTimer } from '@/hooks/useLoadingTimer';
 import { useLogout } from '@/hooks/useLogout';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 const SignOutPage = () => {
   const router = useRouter();
-  const [isTimerActive, setIsTimerActive] = useState(false);
   const { logout, isLoading: isLogoutLoading } = useLogout({
     skipApi: false,
   });
 
-  const isLoading = useLoadingTimer({
+  const isTimerActive = useLoadingTimer({
     isLoading: isLogoutLoading,
     minLoadingTime: 700,
     onTimerComplete: () => {
-      setIsTimerActive(true);
       router.push('/auth/sign-in');
     },
   });
@@ -33,7 +30,7 @@ const SignOutPage = () => {
     }
   };
 
-  if (isLoading || isTimerActive) {
+  if (isTimerActive) {
     return (
       <TopSpace>
         <LoadingMessage
@@ -70,11 +67,11 @@ const SignOutPage = () => {
             <Button
               type="button"
               onClick={() => router.back()}
-              disabled={isLoading}
+              disabled={isTimerActive}
               className={cn(
                 styles.button.base,
                 styles.button.secondary,
-                isLoading && styles.button.loading,
+                isTimerActive && styles.button.loading,
               )}
             >
               취소
@@ -82,14 +79,14 @@ const SignOutPage = () => {
             <Button
               type="button"
               onClick={handleLogout}
-              disabled={isLoading}
+              disabled={isTimerActive}
               className={cn(
                 styles.button.base,
                 styles.button.primary,
-                isLoading && styles.button.loading,
+                isTimerActive && styles.button.loading,
               )}
             >
-              {isLoading ? '로그아웃 중...' : '로그아웃'}
+              {isTimerActive ? '로그아웃 중...' : '로그아웃'}
             </Button>
           </div>
         </div>

@@ -41,7 +41,7 @@ const SignInPage = () => {
   // 1. 기본 훅 및 상태 관리
   const { login, isLoading: isLoginLoading } = useLogin();
 
-  const isLoading = useLoadingTimer({
+  const isTimerActive = useLoadingTimer({
     isLoading: isLoginLoading,
     minLoadingTime: 700,
   });
@@ -65,7 +65,7 @@ const SignInPage = () => {
   });
 
   // 3. 전체 처리 상태 계산
-  const isProcessing = isSubmitting || isLoading;
+  const isProcessing = isSubmitting || isTimerActive;
 
   /**
    * 4. 로그인 폼 제출 핸들러
