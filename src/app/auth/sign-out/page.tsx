@@ -1,7 +1,7 @@
 'use client';
 
 import { TitledSection, TopSpace } from '@/components/layout';
-import { LoadingMessage } from '@/components/message';
+import { ErrorMessage, LoadingMessage } from '@/components/message';
 import { Button } from '@/components/ui/button';
 import { useLoadingTimer } from '@/hooks/useLoadingTimer';
 import { useLogout } from '@/hooks/useLogout';
@@ -17,6 +17,7 @@ const SignOutPage = () => {
   });
 
   const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // 2. 로딩 타이머 설정
   const isTimerActive = useLoadingTimer({
@@ -36,15 +37,25 @@ const SignOutPage = () => {
     if (isProcessing) return;
 
     try {
+      setError(null);
       setIsProcessing(true);
       await logout();
-    } catch (error) {
-      // TODO: useLogout 에러 처리 안 하고 여기서 함
+    } catch (err: any) {
+      setError(err.data?.message || '로그아웃 처리 중 문제가 발생했습니다.');
       setIsProcessing(false);
     }
   };
 
-  // 4. 로딩 상태일 때 표시할 UI
+  // 4. 에러 상태 UI
+  if (error) {
+    return (
+      <TopSpace>
+        <ErrorMessage message="로그아웃 실패" description={error} />
+      </TopSpace>
+    );
+  }
+
+  // 5. 로딩 상태일 때 표시할 UI
   if (isProcessing || isTimerActive) {
     return (
       <TopSpace>
@@ -56,7 +67,7 @@ const SignOutPage = () => {
     );
   }
 
-  // 5. 스타일 정의
+  // 6. 스타일 정의
   const styles = {
     button: {
       base: 'w-full h-11 transition-colors',
@@ -66,7 +77,7 @@ const SignOutPage = () => {
     },
   };
 
-  // 6. 렌더링
+  // 7. 렌더링
   return (
     <TopSpace>
       <TitledSection
