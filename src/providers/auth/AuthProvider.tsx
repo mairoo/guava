@@ -65,8 +65,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
         // 인증 상태 불일치 처리
         if (!isAuthenticatedCookie || !rememberMe) {
-          await logout();
-          router.push('/auth/sign-in');
+          try {
+            await logout();
+            router.push('/auth/sign-in');
+          } catch (error) {
+            console.error('Logout failed during auth state mismatch:', error);
+            // 로그아웃 실패 시에도 로그인 페이지로 리다이렉트
+            router.push('/auth/sign-in');
+          }
           return;
         }
 

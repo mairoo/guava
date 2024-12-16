@@ -11,8 +11,6 @@ import { useState } from 'react';
 interface UseLoginReturn {
   login: (data: Auth.SignInRequest) => Promise<void>;
   isLoading: boolean;
-  error: string | null;
-  clearError: () => void;
 }
 
 export const useLogin = (): UseLoginReturn => {
@@ -26,10 +24,7 @@ export const useLogin = (): UseLoginReturn => {
     cartApi.endpoints.syncCart.useMutation();
 
   // Local States
-  const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-
-  const clearError = () => setError(null);
 
   /**
    * 장바구니 데이터를 비교하여 백엔드 동기화 필요 여부를 판단
@@ -53,7 +48,6 @@ export const useLogin = (): UseLoginReturn => {
 
     try {
       setIsProcessing(true);
-      clearError();
 
       // 1. 로그인 처리
       await loginMutation(data).unwrap();
@@ -70,11 +64,8 @@ export const useLogin = (): UseLoginReturn => {
         await syncCart(mergedCart).unwrap();
       }
     } catch (error: any) {
-      setError(
-        error.data?.message ||
-          '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.',
-      );
       setIsProcessing(false); // 에러 시에만 isProcessing = false
+      throw error;
     }
   };
 
@@ -82,7 +73,5 @@ export const useLogin = (): UseLoginReturn => {
     login: handleLogin,
     isLoading:
       isProcessing || isLoginLoading || isFetchCartLoading || isSyncCartLoading,
-    error,
-    clearError,
   };
 };

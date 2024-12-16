@@ -1,7 +1,7 @@
 'use client';
 
 import { TitledSection, TopSpace } from '@/components/layout';
-import { ErrorMessage, LoadingMessage } from '@/components/message';
+import { LoadingMessage } from '@/components/message';
 import { Button } from '@/components/ui/button';
 import { useLoadingTimer } from '@/hooks/useLoadingTimer';
 import { useLogout } from '@/hooks/useLogout';
@@ -12,11 +12,7 @@ import { useState } from 'react';
 const SignOutPage = () => {
   const router = useRouter();
   const [isTimerActive, setIsTimerActive] = useState(false);
-  const {
-    logout,
-    isLoading: isLogoutLoading,
-    error,
-  } = useLogout({
+  const { logout, isLoading: isLogoutLoading } = useLogout({
     skipApi: false,
   });
 
@@ -24,15 +20,17 @@ const SignOutPage = () => {
     isLoading: isLogoutLoading,
     minLoadingTime: 700,
     onTimerComplete: () => {
-      if (!error) {
-        setIsTimerActive(true);
-        router.push('/auth/sign-in');
-      }
+      setIsTimerActive(true);
+      router.push('/auth/sign-in');
     },
   });
 
   const handleLogout = async () => {
-    await logout();
+    try {
+      await logout();
+    } catch (error) {
+      // TODO: useLogout 에러 처리 안 하고 여기서 함
+    }
   };
 
   if (isLoading || isTimerActive) {
@@ -64,16 +62,9 @@ const SignOutPage = () => {
         className="w-full max-w-xl mx-auto"
       >
         <div className="space-y-4">
-          {error ? (
-            <ErrorMessage
-              message={error}
-              description="잠시 후 다시 시도해주세요. 문제가 지속되면 고객센터로 문의해주세요."
-            />
-          ) : (
-            <p className="text-center text-gray-600">
-              정말 로그아웃 하시겠습니까?
-            </p>
-          )}
+          <p className="text-center text-gray-600">
+            정말 로그아웃 하시겠습니까?
+          </p>
 
           <div className="grid grid-cols-2 gap-4">
             <Button

@@ -1,7 +1,7 @@
 'use client';
 
 import { TitledSection, TopSpace } from '@/components/layout';
-import { ErrorMessage, LoadingMessage } from '@/components/message';
+import { LoadingMessage } from '@/components/message';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -39,7 +39,7 @@ const SignInPage = () => {
   const redirectPath = searchParams?.get('from') || '/';
 
   // 1. 기본 훅 및 상태 관리
-  const { login, isLoading: isLoginLoading, error } = useLogin();
+  const { login, isLoading: isLoginLoading } = useLogin();
 
   const isLoading = useLoadingTimer({
     isLoading: isLoginLoading,
@@ -78,7 +78,7 @@ const SignInPage = () => {
       const safePath = validateRedirectPath(redirectPath);
       router.replace(safePath);
     } catch (error) {
-      // 에러는 useLogin 내부에서 처리되므로 여기서는 추가 처리 불필요
+      // TODO: useLogin 에러 처리 안 하고 여기서 함
     }
   };
 
@@ -135,13 +135,6 @@ const SignInPage = () => {
         spacing="space-y-4"
         className="w-full max-w-xl mx-auto"
       >
-        {/* 에러 메시지 */}
-        {error && (
-          <ErrorMessage
-            message={error}
-            description="입력하신 정보를 다시 확인하시거나, 비밀번호 찾기를 이용해주세요."
-          />
-        )}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* 이메일 입력 필드 */}
           <div className="space-y-2">

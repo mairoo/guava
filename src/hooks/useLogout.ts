@@ -16,30 +16,10 @@ interface UseLogoutOptions {
 }
 
 interface UseLogoutReturn {
-  /**
-   * 로그아웃 처리 함수
-   */
-  logout: () => Promise<void>;
-
-  /**
-   * 로그아웃 처리 중 여부
-   */
-  isLoading: boolean;
-
-  /**
-   * 로그아웃 중 발생한 에러 메시지
-   */
-  error: string | null;
-
-  /**
-   * 에러 상태 초기화
-   */
-  clearError: () => void;
+  logout: () => Promise<void>; // 로그아웃 처리 함수
+  isLoading: boolean; // 로그아웃 처리 중 여부
 }
 
-/**
- * 로그아웃 처리를 위한 커스텀 훅
- */
 /**
  * 로그아웃 처리를 위한 커스텀 훅
  */
@@ -51,10 +31,7 @@ export const useLogout = ({
 
   // 2. API 관련 상태
   const [logoutMutation, { isLoading: isLogoutLoading }] = useLogoutMutation();
-  const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-
-  const clearError = () => setError(null);
 
   const logout = async () => {
     // 이미 처리 중이면 중복 실행 방지
@@ -62,7 +39,6 @@ export const useLogout = ({
 
     try {
       setIsProcessing(true);
-      clearError();
 
       // 백엔드 로그아웃 API 호출
       if (!skipApi) {
@@ -78,9 +54,8 @@ export const useLogout = ({
       storage.clearLastRefreshTime();
       auth.removeCookie('isAuthenticated');
     } catch (error: any) {
-      console.error('로그아웃 중 오류 발생:', error);
-      setError(error.data?.message || '로그아웃 중 오류가 발생했습니다.');
       auth.removeCookie('isAuthenticated'); // 실패해도 쿠키 제거
+      throw error; // 훅 호출하는 쪽에서 에러 처리
     } finally {
       setIsProcessing(false);
     }
@@ -89,7 +64,5 @@ export const useLogout = ({
   return {
     logout,
     isLoading: isProcessing || isLogoutLoading,
-    error,
-    clearError,
   };
 };
