@@ -1,7 +1,7 @@
 'use client';
 
 import { TitledSection, TopSpace } from '@/components/layout';
-import { LoadingMessage } from '@/components/message';
+import { ErrorMessage, LoadingMessage } from '@/components/message';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -10,12 +10,14 @@ import { useLoadingTimer } from '@/hooks/useLoadingTimer';
 import { useLogin } from '@/hooks/useLogin';
 import { cn } from '@/lib/utils';
 import { Auth } from '@/types/auth';
+import { ApiErrorResponse } from '@/types/response';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Key, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import * as yup from 'yup'; // 폼 유효성 검사 스키마 정의
 
 // 폼 유효성 검사 스키마 정의
 const schema = yup.object().shape({
@@ -40,6 +42,7 @@ const SignInPage = () => {
 
   // 1. 기본 훅 및 상태 관리
   const { login, isLoading: isLoginLoading } = useLogin();
+  const [error, setError] = useState<string | null>(null);
 
   // 2. 로딩 타이머 설정
   const isTimerActive = useLoadingTimer({
@@ -66,7 +69,7 @@ const SignInPage = () => {
   });
 
   // 4. 전체 처리 상태 계산
-  const isProcessing = isSubmitting || isTimerActive;
+  const isProcessing = isSubmitting || isTimerActive || isLoginLoading;
 
   /**
    * 5. 로그인 폼 제출 핸들러
@@ -78,8 +81,24 @@ const SignInPage = () => {
       // 검증된 경로로 리다이렉션
       const safePath = validateRedirectPath(redirectPath);
       router.replace(safePath);
-    } catch (error) {
-      // TODO: useLogin 에러 처리 안 하고 여기서 함
+    } catch (error: any) {
+      if ('data' in error) {
+        const errorData = error.data as ApiErrorResponse;
+
+        // 필드 에러가 있는 경우
+        if (errorData.errors?.length) {
+          setError(errorData.errors.map((err) => err.message).join('\n'));
+          return;
+        }
+
+        // 일반 에러 메시지가 있는 경우
+        if (errorData.message) {
+          setError(errorData.message);
+          return;
+        }
+      }
+
+      setError('로그인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
     }
   };
 
@@ -103,18 +122,6 @@ const SignInPage = () => {
     return path;
   };
 
-  // 6. 로딩 상태일 때 표시할 UI
-  if (isProcessing) {
-    return (
-      <TopSpace>
-        <LoadingMessage
-          message="로그인 처리 중"
-          description="잠시만 기다려주세요."
-        />
-      </TopSpace>
-    );
-  }
-
   // 7. 스타일 정의
   const styles = {
     input: {
@@ -128,101 +135,120 @@ const SignInPage = () => {
     link: 'text-blue-600 hover:text-blue-800 transition-colors duration-200',
   };
 
+  useEffect(() => {
+    console.log('loginMutation state:', { isLoginLoading, error });
+  }, [isLoginLoading, error]);
+
+  console.log('SignInPage rendered', { isProcessing, isLoginLoading, error });
+
   // 8. 렌더링
   return (
     <TopSpace>
-      <TitledSection
-        title="로그인"
-        showBorder
-        spacing="space-y-4"
-        className="w-full max-w-xl mx-auto"
-      >
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* 이메일 입력 필드 */}
-          <div className="space-y-2">
-            <Label htmlFor="email">이메일</Label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <Mail className="w-5 h-5 text-gray-400" />
-              </div>
-              <Input
-                id="email"
-                type="email"
-                {...register('email')}
-                placeholder="이메일을 입력하세요"
-                className={cn(
-                  styles.input.base,
-                  'pl-10',
-                  errors.email && styles.input.error,
-                )}
-              />
-            </div>
-            {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
-            )}
-          </div>
-
-          {/* 비밀번호 입력 필드 */}
-          <div className="space-y-2">
-            <Label htmlFor="password">비밀번호</Label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <Key className="w-5 h-5 text-gray-400" />
-              </div>
-              <Input
-                id="password"
-                type="password"
-                {...register('password')}
-                placeholder="비밀번호를 입력하세요"
-                className={cn(
-                  styles.input.base,
-                  'pl-10',
-                  errors.password && styles.input.error,
-                )}
-              />
-            </div>
-            {errors.password && (
-              <p className="text-sm text-red-500">{errors.password.message}</p>
-            )}
-          </div>
-
-          {/* 자동 로그인 체크박스 */}
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="rememberMe"
-              checked={watch('rememberMe')}
-              onCheckedChange={(checked) => {
-                setValue('rememberMe', checked as boolean);
-              }}
-            />
-            <Label htmlFor="rememberMe" className="cursor-pointer">
-              로그인 상태 유지
-            </Label>
-          </div>
-
-          {/* 로그인 버튼 */}
-          <Button
-            type="submit"
-            disabled={isProcessing}
-            className={cn(
-              styles.button.base,
-              isProcessing && styles.button.loading,
-            )}
+      <div className="w-full max-w-xl mx-auto space-y-4">
+        {error && <ErrorMessage message={error} />}
+        {isProcessing && (
+          <LoadingMessage
+            message="로그인 처리 중"
+            description="잠시만 기다려주세요."
+          />
+        )}
+        {!isProcessing && (
+          <TitledSection
+            title="로그인"
+            showBorder
+            spacing="space-y-4"
+            className="w-full max-w-xl mx-auto"
           >
-            {isProcessing ? '로그인 중...' : '로그인'}
-          </Button>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              {/* 이메일 입력 필드 */}
+              <div className="space-y-2">
+                <Label htmlFor="email">이메일</Label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <Mail className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <Input
+                    id="email"
+                    type="email"
+                    {...register('email')}
+                    placeholder="이메일을 입력하세요"
+                    className={cn(
+                      styles.input.base,
+                      'pl-10',
+                      errors.email && styles.input.error,
+                    )}
+                  />
+                </div>
+                {errors.email && (
+                  <p className="text-sm text-red-500">{errors.email.message}</p>
+                )}
+              </div>
 
-          {/* 링크 영역 */}
-          <div className="flex justify-between pt-4 text-sm">
-            <Link href="/auth/find-password" className={styles.link}>
-              비밀번호 찾기
-            </Link>
-            <Link href="/auth/sign-up" className={styles.link}>
-              회원가입
-            </Link>
-          </div>
-        </form>
-      </TitledSection>
+              {/* 비밀번호 입력 필드 */}
+              <div className="space-y-2">
+                <Label htmlFor="password">비밀번호</Label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <Key className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <Input
+                    id="password"
+                    type="password"
+                    {...register('password')}
+                    placeholder="비밀번호를 입력하세요"
+                    className={cn(
+                      styles.input.base,
+                      'pl-10',
+                      errors.password && styles.input.error,
+                    )}
+                  />
+                </div>
+                {errors.password && (
+                  <p className="text-sm text-red-500">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              {/* 자동 로그인 체크박스 */}
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="rememberMe"
+                  checked={watch('rememberMe')}
+                  onCheckedChange={(checked) => {
+                    setValue('rememberMe', checked as boolean);
+                  }}
+                />
+                <Label htmlFor="rememberMe" className="cursor-pointer">
+                  로그인 상태 유지
+                </Label>
+              </div>
+
+              {/* 로그인 버튼 */}
+              <Button
+                type="submit"
+                disabled={isProcessing}
+                className={cn(
+                  styles.button.base,
+                  isProcessing && styles.button.loading,
+                )}
+              >
+                {isProcessing ? '로그인 중...' : '로그인'}
+              </Button>
+
+              {/* 링크 영역 */}
+              <div className="flex justify-between pt-4 text-sm">
+                <Link href="/auth/find-password" className={styles.link}>
+                  비밀번호 찾기
+                </Link>
+                <Link href="/auth/sign-up" className={styles.link}>
+                  회원가입
+                </Link>
+              </div>
+            </form>
+          </TitledSection>
+        )}
+      </div>
     </TopSpace>
   );
 };

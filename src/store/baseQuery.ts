@@ -88,6 +88,15 @@ export const baseQueryWithRetry: BaseQueryFn<
 
   // 401 에러(인증 실패) 처리
   if (result.error && result.error.status === 401) {
+    // 로그인 요청인 경우 401을 그대로 반환
+    if (
+      typeof args === 'object' &&
+      'url' in args &&
+      args.url === '/auth/sign-in'
+    ) {
+      return result;
+    }
+
     const lastRefreshTime = storage.getLastRefreshTime();
 
     // 자동 로그인이 비활성화되었거나 최근에 갱신을 시도했던 경우 로그아웃
