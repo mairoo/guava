@@ -2,6 +2,7 @@ import { useLogoutMutation } from '@/store/auth/api';
 import { setAuth } from '@/store/auth/slice';
 import { clearCart } from '@/store/cart/slice';
 import { useAppDispatch } from '@/store/hooks';
+import { orderApi } from '@/store/order/api';
 import { storage } from '@/utils';
 import { auth } from '@/utils/auth';
 import { useState } from 'react';
@@ -40,22 +41,20 @@ export const useLogout = ({
     try {
       setIsProcessing(true);
 
-      // 백엔드 로그아웃 API 호출
-      if (!skipApi) {
-        await logoutMutation().unwrap();
-      }
-
       // Redux 상태 초기화
       dispatch(setAuth(false));
       dispatch(clearCart());
+      dispatch(orderApi.util.resetApiState());
 
       // 로컬 데이터 정리
       storage.clearRememberMe();
       storage.clearLastRefreshTime();
       auth.removeCookie('isAuthenticated');
-    } catch (error: any) {
-      auth.removeCookie('isAuthenticated'); // 실패해도 쿠키 제거
-      throw error; // 훅 호출하는 쪽에서 에러 처리
+
+      // 백엔드 로그아웃 API 호출
+      if (!skipApi) {
+        await logoutMutation().unwrap();
+      }
     } finally {
       setIsProcessing(false);
     }
