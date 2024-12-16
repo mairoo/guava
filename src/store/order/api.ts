@@ -6,7 +6,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 export const orderApi = createApi({
   reducerPath: 'orderApi',
   baseQuery: baseQueryWithRetry,
-  tagTypes: ['Orders'],
+  tagTypes: ['OrderList', 'OrderDetail', 'OrderItems', 'OrderVouchers'],
   endpoints: (builder) => ({
     getMyOrders: builder.query<
       ApiResponse<Orders.OrdersResponse>,
@@ -21,7 +21,7 @@ export const orderApi = createApi({
           size,
         },
       }),
-      providesTags: ['Orders'],
+      providesTags: ['OrderList'],
     }),
 
     getMyOrder: builder.query<ApiResponse<Orders.Order>, { uuid: string }>({
@@ -29,7 +29,9 @@ export const orderApi = createApi({
         url: `/orders/${uuid}`,
         method: 'GET',
       }),
-      providesTags: ['Orders'],
+      providesTags: (_, __, arg) => [
+        { type: 'OrderDetail', id: arg.uuid },
+      ],
     }),
 
     getMyOrderItems: builder.query<
@@ -40,7 +42,9 @@ export const orderApi = createApi({
         url: `/orders/${uuid}/items`,
         method: 'GET',
       }),
-      providesTags: ['Orders'],
+      providesTags: (_, __, arg) => [
+        { type: 'OrderItems', id: arg.uuid },
+      ],
     }),
 
     getMyOrderVouchers: builder.query<
@@ -51,7 +55,9 @@ export const orderApi = createApi({
         url: `/orders/${uuid}/vouchers`,
         method: 'GET',
       }),
-      providesTags: ['Orders'],
+      providesTags: (_, __, arg) => [
+        { type: 'OrderVouchers', id: arg.uuid },
+      ],
     }),
 
     createOrder: builder.mutation<
@@ -63,7 +69,7 @@ export const orderApi = createApi({
         method: 'POST',
         body: orderRequest,
       }),
-      invalidatesTags: ['Orders'],
+      invalidatesTags: ['OrderList'],
     }),
 
     reorder: builder.mutation<ApiResponse<Orders.Order>, { orderId: number }>({
@@ -71,7 +77,7 @@ export const orderApi = createApi({
         url: `/orders/${orderId}/reorder`,
         method: 'POST',
       }),
-      invalidatesTags: ['Orders'],
+      invalidatesTags: ['OrderList'],
     }),
 
     requestRefund: builder.mutation<
@@ -83,7 +89,10 @@ export const orderApi = createApi({
         method: 'POST',
         body: { reason },
       }),
-      invalidatesTags: ['Orders'],
+      invalidatesTags: (_, __, arg) => [
+        'OrderList',
+        { type: 'OrderDetail', id: arg.orderId },
+      ],
     }),
   }),
 });
