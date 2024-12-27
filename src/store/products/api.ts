@@ -27,12 +27,12 @@ export const productApi = createApi({
       ],
     }),
 
-    getProduct: builder.query<ApiResponse<Products.Product>, { id: number }>({
-      query: ({ id }) => ({
-        url: `/products/${id}`,
+    getProduct: builder.query<ApiResponse<Products.Product>, { code: string }>({
+      query: ({ code }) => ({
+        url: `/products/${code}`,
         method: 'GET',
       }),
-      providesTags: (_, __, { id }) => [{ type: 'ProductDetail', id }],
+      providesTags: (_, __, { code }) => [{ type: 'ProductDetail', id: code }],
     }),
 
     searchProducts: builder.query<

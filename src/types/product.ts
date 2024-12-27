@@ -13,7 +13,7 @@ export namespace Products {
     position: number;
     status: ProductStatus;
     stock: ProductStock;
-    categoryId: number;
+    categorySlug: string;
   }
 
   // 관리자용 상품 정보 (일반 상품 정보 확장)

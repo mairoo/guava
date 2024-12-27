@@ -14,14 +14,14 @@ export const categoryApi = createApi({
   endpoints: (builder) => ({
     getCategory: builder.query<
       ApiResponse<Categories.Category>,
-      string | number
+      string
     >({
-      query: (identifier) => ({
-        url: `/categories/${identifier}`,
+      query: (slug) => ({
+        url: `/categories/${slug}`,
         method: 'GET',
       }),
-      providesTags: (_, __, identifier) => [
-        { type: 'Category', id: identifier },
+      providesTags: (_, __, slug) => [
+        { type: 'Category', id: slug },
       ],
     }),
   }),

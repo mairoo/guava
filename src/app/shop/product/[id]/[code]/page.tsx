@@ -19,6 +19,8 @@ import ReactMarkdown from 'react-markdown';
 
 // 상수 정의
 const MINIMUM_QUANTITY = 1;
+const DEFAULT_IMAGE = '/placeholders/170x100.svg';
+const DESKTOP_BREAKPOINT = '(min-width: 1280px)';
 
 interface QuantitySelectorProps {
   quantity: number;
@@ -36,7 +38,7 @@ const ProductImage = ({ thumbnail }: { thumbnail?: string }) => (
     <Image
       src={
         `https://pincoin-s3.s3.amazonaws.com/media/${thumbnail}` ||
-        '/placeholders/170x100.svg'
+        DEFAULT_IMAGE
       }
       alt="Product placeholder"
       fill
@@ -96,12 +98,12 @@ const ProductDescription = ({ description }: { description: string }) => (
  * 수량 선택 컴포넌트
  */
 const QuantitySelector = ({
-  quantity,
-  onIncrease,
-  onDecrease,
-  onQuantityChange,
-  onCartAdd,
-}: QuantitySelectorProps) => (
+                            quantity,
+                            onIncrease,
+                            onDecrease,
+                            onQuantityChange,
+                            onCartAdd,
+                          }: QuantitySelectorProps) => (
   <div className="space-y-2 w-full">
     <div className="text-sm">수량</div>
     <div className="w-full flex [&>*:not(:first-child)]:border-l-0">
@@ -145,14 +147,16 @@ const QuantitySelector = ({
 const ProductDetailPage = ({ params }: ProductDetailParams) => {
   // 1. URL 파라미터 처리
   const resolvedParams = use(params);
-  const id = parseInt(decodeURIComponent(resolvedParams.id));
+
+  console.log(resolvedParams);
+  const code = decodeURIComponent(resolvedParams.code);
 
   // 2. 상품 정보 조회
   const {
     data: productResponse,
     isLoading: isLoadingProduct,
     error: errorProduct,
-  } = useGetProductQuery({ id });
+  } = useGetProductQuery({ code });
   const product = productResponse?.data;
 
   // 3. 카테고리 정보 조회
@@ -160,8 +164,8 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
     data: categoryResponse,
     isLoading: isLoadingCategory,
     error: errorCategory,
-  } = useGetCategoryQuery(product?.categoryId || '', {
-    skip: !product?.categoryId,
+  } = useGetCategoryQuery(product?.categorySlug || '', {
+    skip: !product?.categorySlug,
   });
   const category = categoryResponse?.data;
 
@@ -175,7 +179,7 @@ const ProductDetailPage = ({ params }: ProductDetailParams) => {
   } = useCartItemActions({ product, initialQuantity: MINIMUM_QUANTITY });
 
   // 5. 반응형 처리
-  const { matches: isDesktop } = useMediaQuery('(min-width: 1280px)');
+  const { matches: isDesktop } = useMediaQuery(DESKTOP_BREAKPOINT);
 
   // 6. breadcrumb 아이템 동적 생성
   const breadcrumbItems = [
