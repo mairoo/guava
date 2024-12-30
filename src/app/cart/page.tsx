@@ -199,7 +199,7 @@ const CartPage = () => {
   );
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+    <div className="w-full">
       <FlexColumn>
         <TitledSection title="장바구니 / 주문결제" showBorder>
           {cartItems.length > 0 ? (
@@ -238,7 +238,7 @@ const CartPage = () => {
         </TitledSection>
 
         {cartItems.length > 0 && (
-          <>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <TitledSection title="입금 / 결제수단" showBorder>
               <PaymentMethodsView isMobile={false} />
               <PaymentMethodsView isMobile={true} />
@@ -268,10 +268,10 @@ const CartPage = () => {
                 </p>
               </div>
             </TitledSection>
-          </>
+          </form>
         )}
       </FlexColumn>
-    </form>
+    </div>
   );
 };
 
